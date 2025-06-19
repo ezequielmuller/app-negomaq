@@ -1,41 +1,42 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar class="justify-between">
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
         <q-separator vertical color="white" class="q-mt-sm q-mb-sm q-mr-md q-ml-md" />
-        <img
-          src="icons/app-logo-sfundo.png"
-          alt="Quasar Logo"
-          class="q-mr-sm"
-          style="width: 32px; height: 32px;">
-        <q-toolbar-title>
-          NegoMaq Couros
+
+        <q-toolbar-title class="row items-center justify-center">
+          <img src="icons/app-logo-sfundo.png" alt="Logo" style="width: 32px; height: 32px; margin-right: 8px;">
+          <span class="text-bold">NegoMaq Couros</span>
         </q-toolbar-title>
 
-        <q-separator vertical color="white" class="q-mt-sm q-mb-sm q-mr-sm" />
-        <div>
-          <q-btn name="logout" flat icon="logout" cursor="pointer" size="md" class="q-mr-sm" @click="sairSistema()" />
-        </div>
+        <q-separator vertical color="white" class="q-mt-sm q-mb-sm q-mr-md q-ml-md" />
+        <q-btn flat icon="logout" size="md" @click="sairSistema()" />
+
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header>
-          Essential Links
-        </q-item-label>
 
-        <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
-      </q-list>
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
+      <div class="drawer-content text-black">
+        <q-list>
+          <img src="icons/app-logo-sfundo.png" alt="Logo" style="width: 60px; height: 60px; margin-left: 115px" />
+
+          <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
+        </q-list>
+        <div class="drawer-bottom-btn">
+          <q-btn color="primary" icon="support_agent" label="FALE CONOSCO" @click="sairSistema()"
+            style="width: 100%;" />
+        </div>
+      </div>
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
 
-     <q-footer class="text-grey bg-black">
+    <q-footer class="text-grey bg-black">
       <!-- <div class="row q-col-gutter-md">
         <div class="col-12 flex justify-end items-center">
           <a href="https://github.com/ezequielmuller" target="_blank">
@@ -53,12 +54,14 @@
         </div>
       </div> -->
       <div class="row q-col-gutter-md justify-center items-center text-center">
-        <div class="col-md-4 col-sm-4 col-xs-12 flex justify-center items-center">
+        <!-- <div class="col-md-4 col-sm-4 col-xs-12 flex justify-center items-center">
           <q-icon name="code" size="sm" /> Ezequiel H. G. Muller - Developer
-        </div>
+        </div> -->
 
-        <div class="col-md-4 col-sm-4 col-xs-12 flex justify-center items-center">
-          <q-icon name="copyright" /> 2025 Ezequiel Muller - Todos os direitos reservados
+        <div class="col-12 flex justify-center items-center"
+          style="background-color: 'black'; color: 'grey'; text-align: 'center'; font-size: '0.8rem'; padding: 2.5,">
+          <q-icon name="copyright" /> 2025 Todos os direitos reservados - Ezequiel H. G. Muller | Enzo B. de Oliveira |
+          Lucas Blanger
         </div>
       </div>
     </q-footer>
@@ -71,47 +74,35 @@ import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink
 
 const linksList: EssentialLinkProps[] = [
   {
+    title: 'Inicio',
+    caption: 'Página Inicial',
+    icon: 'home',
+    link: '/home'
+  },
+  {
     title: 'Facas',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    caption: 'Facas de todos os tipos',
+    icon: 'restaurant',
+    link: '/facas'
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
+    title: 'Estojos de Facas',
+    caption: 'Estojos em couros para facas',
+    icon: 'width_wide',
     link: 'https://chat.quasar.dev'
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
+    title: 'Aventais',
+    caption: 'Aventais - Variados',
+    icon: 'dry_cleaning',
     link: 'https://forum.quasar.dev'
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
+    title: 'Artigos de Churrasco',
+    caption: 'Diversos artigos de churrasco',
+    icon: 'outdoor_grill',
     link: 'https://twitter.quasar.dev'
   },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
 ];
 
 const leftDrawerOpen = ref(false);
@@ -124,3 +115,16 @@ function sairSistema() {
   alert('Sair do sistema');
 }
 </script>
+
+<style scoped>
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.drawer-bottom-btn {
+  margin-top: auto;
+  padding: 10px;
+}
+</style>
