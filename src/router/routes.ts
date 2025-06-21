@@ -1,24 +1,34 @@
 const routes = [
   {
-    path: "/",
-    component: () => import("layouts/MainLayout.vue"),
+    path: '/',
+    component: () => import('layouts/LoginLayout.vue'),
     children: [
       {
-        path: "home",
-        name: "home",
-        component: () => import("pages/IndexPage.vue"),
-      },
-      {
-        path: "facas",
-        name: "facas",
-        component: () => import("pages/FacasPage.vue"),
+        path: '',
+        name: 'login',
+        component: () => import('pages/LoginPage.vue'),
       },
     ],
   },
-
   {
-    path: "/:catchAll(.*)*",
-    component: () => import("pages/ErrorNotFound.vue"),
+    path: '/app',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: 'home',
+        name: 'home',
+        component: () => import('pages/IndexPage.vue'),
+      },
+      {
+        path: 'facas',
+        name: 'facas',
+        component: () => import('pages/FacasPage.vue'),
+      },
+    ],
+  },
+  {
+    path: '/:catchAll(.*)*',
+    component: () => import('pages/ErrorNotFound.vue'),
   },
 ];
 
