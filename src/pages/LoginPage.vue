@@ -55,7 +55,7 @@ const entrarSistema = async () => {
   try {
     $q.loading.show({ message: 'Entrando...' })
 
-    await router.push({ name: 'home' })
+    await router.push('/home')
 
   } catch (error) {
     console.error('ERRO DE LOGIN => ', error)

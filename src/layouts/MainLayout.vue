@@ -22,7 +22,6 @@
       <div class="drawer-content text-black">
         <q-list>
           <img src="icons/app-logo-sfundo.png" alt="Logo" style="width: 60px; height: 60px; margin-left: 115px" />
-
           <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
         </q-list>
         <div class="drawer-bottom-btn">
@@ -34,43 +33,44 @@
 
     <q-page-container>
       <router-view />
-    </q-page-container>
 
-    <q-footer class="text-grey bg-black">
-      <!-- <div class="row q-col-gutter-md">
-        <div class="col-12 flex justify-end items-center">
-          <a href="https://github.com/ezequielmuller" target="_blank">
-            <q-btn color="#e7e7e7" icon="fab fa-github" size="md" />
-          </a>
-          <a href="https://linkedin.com/in/ezequielhgmuller" target="_blank">
-            <q-btn icon="fab fa-linkedin" size="md" color="#e7e7e7" />
-          </a>
-          <a href="https://www.instagram.com/ezequielmuller__/" target="_blank">
-            <q-btn icon="fab fa-instagram" size="md" color="#e7e7e7" />
-          </a>
-          <a href="https://www.instagram.com/ezequielmuller__/" target="_blank">
-            <q-btn icon="fab fa-x-twitter tex" size="md" lable="as" color="#e7e7e7" />
-          </a>
+      <div class="row q-col-gutter-md justify-center items-center text-center text-grey bg-black">
+        <div class="row q-col-gutter-md">
+          <div class="col-12 flex justify-end items-center">
+            <a href="" target="_blank">
+              <q-btn flat color="grey" icon="call" size="md" />
+            </a>
+            <a href="" target="_blank">
+              <q-btn flat color="grey" icon="attach_email" size="md" />
+            </a>
+          </div>
         </div>
-      </div> -->
-      <div class="row q-col-gutter-md justify-center items-center text-center">
-        <!-- <div class="col-md-4 col-sm-4 col-xs-12 flex justify-center items-center">
-          <q-icon name="code" size="sm" /> Ezequiel H. G. Muller - Developer
-        </div> -->
 
         <div class="col-12 flex justify-center items-center"
-          style="background-color: 'black'; color: 'grey'; text-align: 'center'; font-size: '0.8rem'; padding: 2.5,">
-          <q-icon name="copyright" /> 2025 Todos os direitos reservados - Ezequiel H. G. Muller | Enzo B. de Oliveira |
-          Lucas Blanger
+          style="text-align: center; font-size: 0.7rem; padding: 1.5rem">
+          <q-icon name="copyright" />
+          <span class="q-ml-xs">
+            2025 Todos os direitos reservados - Couros NegoMaq
+          </span>
         </div>
       </div>
-    </q-footer>
+    </q-page-container>
+
+    <!-- <q-footer class="text-grey bg-black">
+
+      ========== RODAPÉ ==========
+
+    </q-footer> -->
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar'
 import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
+const router = useRouter()
+const $q = useQuasar()
 
 const linksList: EssentialLinkProps[] = [
   {
@@ -89,31 +89,46 @@ const linksList: EssentialLinkProps[] = [
     title: 'Estojos de Facas',
     caption: 'Estojos em couros para facas',
     icon: 'width_wide',
-    link: 'https://chat.quasar.dev'
+    link: '/estojos-facas'
   },
   {
     title: 'Aventais',
     caption: 'Aventais - Variados',
     icon: 'dry_cleaning',
-    link: 'https://forum.quasar.dev'
+    link: 'aventais'
   },
   {
     title: 'Artigos de Churrasco',
     caption: 'Diversos artigos de churrasco',
     icon: 'outdoor_grill',
-    link: 'https://twitter.quasar.dev'
+    link: 'artigos-churrasco'
   },
 ];
 
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer() {
+const leftDrawerOpen = ref(true);
+const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
-function sairSistema() {
-  alert('Sair do sistema');
+const sairSistema = async () => {
+  try {
+    $q.loading.show({ message: 'Saindo...' })
+
+    localStorage.removeItem('usuario')
+    await router.push('/')
+  } catch (error) {
+    console.log('ERRO SAIR SISTEMA=> ', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Não foi possivel sair do Sistema!',
+      position: 'center',
+      timeout: 2000
+    })
+  } finally {
+    $q.loading.hide()
+  }
 }
+
 </script>
 
 <style scoped>
