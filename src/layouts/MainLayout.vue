@@ -2,7 +2,9 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar class="justify-between">
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
+
+        <q-btn icon="shopping_cart" flat dense class="q-mr-md" />
+        <q-btn icon="circle_notifications" flat dense @click="dialogInformacao = true" />
 
         <q-separator vertical color="white" class="q-mt-sm q-mb-sm q-mr-md q-ml-md" />
 
@@ -18,30 +20,17 @@
     </q-header>
 
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <div class="drawer-content text-black">
-        <q-list>
-          <img src="icons/app-logo-sfundo.png" alt="Logo" style="width: 60px; height: 60px; margin-left: 115px" />
-          <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
-        </q-list>
-        <div class="drawer-bottom-btn">
-          <q-btn color="primary" icon="support_agent" label="FALE CONOSCO" @click="sairSistema()"
-            style="width: 100%;" />
-        </div>
-      </div>
-    </q-drawer>
-
     <q-page-container>
       <router-view />
-
       <div class="row q-col-gutter-md justify-center items-center text-center text-grey bg-black">
         <div class="row q-col-gutter-md">
-          <div class="col-12 flex justify-end items-center">
-            <a href="" target="_blank">
-              <q-btn flat color="grey" icon="call" size="md" />
+          <div class="col-12">
+            <a href="https://api.whatsapp.com/send/?phone=5554996641291&text&type=phone_number&app_absent=0"
+              target="_blank" class="q-mx-sm">
+              <i class="fab fa-whatsapp fa-2x" style="color: #25D366;"></i>
             </a>
-            <a href="" target="_blank">
-              <q-btn flat color="grey" icon="attach_email" size="md" />
+            <a href="https://www.instagram.com/negomaq/" target="_blank" class="q-mx-sm">
+              <i class="fab fa-instagram fa-2x" style="color: #C13584;"></i>
             </a>
           </div>
         </div>
@@ -61,54 +50,50 @@
       ========== RODAPÉ ==========
 
     </q-footer> -->
+
+    <q-dialog v-model="dialogInformacao">
+      <q-card style="width: 400px; height: 400px;">
+
+        <q-card-section class="bg-primary text-white">
+          <div class="row items-center" style="gap: 8px;">
+            <q-icon name="circle_notifications" size="md" />
+            <div class="text-h6">Importantes</div>
+          </div>
+        </q-card-section>
+
+        <div class="q-pa-md">
+          <q-card-section style="border: 2px solid #ab0d06; border-radius: 8px;">
+            <div class="row items-center q-gutter-sm">
+              <img src="icons/leilao-fundo.png" alt="Grupo de Leilão" style="width: 100px; height: 100px;" />
+              <div style="font-size: 18px;">Grupo de Leilão</div>
+            </div>
+            <div align="right">
+              <q-btn icon="open_in_new" label="Entrar" color="primary" v-close-popup />
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="right" class="q-mt-md">
+            <q-btn label="Fechar" color="primary" v-close-popup />
+          </q-card-actions>
+        </div>
+
+      </q-card>
+    </q-dialog>
+
+
+
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar'
-import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
+import { ref } from 'vue'
+
 const router = useRouter()
 const $q = useQuasar()
 
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'Inicio',
-    caption: 'Página Inicial',
-    icon: 'home',
-    link: '/home'
-  },
-  {
-    title: 'Facas',
-    caption: 'Facas de todos os tipos',
-    icon: 'restaurant',
-    link: '/facas'
-  },
-  {
-    title: 'Estojos de Facas',
-    caption: 'Estojos em couros para facas',
-    icon: 'width_wide',
-    link: '/estojos-facas'
-  },
-  {
-    title: 'Aventais',
-    caption: 'Aventais - Variados',
-    icon: 'dry_cleaning',
-    link: 'aventais'
-  },
-  {
-    title: 'Artigos de Churrasco',
-    caption: 'Diversos artigos de churrasco',
-    icon: 'outdoor_grill',
-    link: 'artigos-churrasco'
-  },
-];
-
-const leftDrawerOpen = ref(true);
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
+const dialogInformacao = ref(false)
 
 const sairSistema = async () => {
   try {
