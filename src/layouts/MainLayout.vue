@@ -73,7 +73,7 @@
                 <img src="icons/leilao-fundo.png" alt="Grupo de Leilão"
                   style="width: 90px; height: 90px; border: 2px solid black; border-radius: 4px;" />
 
-                <q-btn color="positive" no-caps unelevated>
+                <q-btn color="positive" no-caps unelevated @click="abrirGrupoLeilao()">
                   <template v-slot:default>
                     <i class="fab fa-whatsapp fa-lg q-mr-sm" style="color: white;"></i>
                     <span class="text-white">ENTRAR</span>
@@ -126,6 +126,10 @@ const sairSistema = async () => {
   } finally {
     $q.loading.hide()
   }
+}
+
+const abrirGrupoLeilao = () => {
+  window.open('https://chat.whatsapp.com/FB2vjot6F5y1eYsM6nHwRM', '_blank')
 }
 
 </script>
