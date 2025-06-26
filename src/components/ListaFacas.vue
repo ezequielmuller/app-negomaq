@@ -40,10 +40,10 @@
 
       <q-card-section>
         <div class="row items-center justify-between">
-          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 10px" />
           <div style="font-size: 18px;" class="text-bold q-ml-md">
             R$ 75,99
           </div>
+          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 10px" />
         </div>
       </q-card-section>
     </q-card>

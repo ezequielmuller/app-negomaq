@@ -8,8 +8,15 @@
       </q-card-section>
 
       <q-card-section>
-        <q-input class="full-width" label="Email" v-model="email" />
+        <q-input class="full-width" label="Email" v-model="email">
+          <template #prepend>
+            <q-icon name="alternate_email" />
+          </template>
+        </q-input>
         <q-input class="full-width" label="Senha" v-model="senha" :type="ocultarSenha ? 'password' : 'text'">
+          <template #prepend>
+            <q-icon name="lock" />
+          </template>
           <template #append>
             <q-icon :name="ocultarSenha ? 'visibility_off' : 'visibility'" class="cursor-pointer"
               @click="ocultarSenha = !ocultarSenha" />
@@ -31,15 +38,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 const $q = useQuasar()
 const router = useRouter()
 
 const lembrarSenha = ref(false)
-const email = ref(null)
-const senha = ref(null)
+const email = ref('')
+const senha = ref('')
 const ocultarSenha = ref(true)
 
 const entrarSistema = async () => {
@@ -70,4 +77,25 @@ const entrarSistema = async () => {
   }
 }
 
+onMounted(() => {
+  const salvarLogin = localStorage.getItem('lembrarEmail')
+  const salvarSenha = localStorage.getItem('lembrarSenha')
+  if (salvarLogin) {
+    email.value = salvarLogin
+    lembrarSenha.value = true
+  }
+  if (salvarSenha) {
+    senha.value = salvarSenha
+  }
+})
+
+watch([lembrarSenha, email, senha], ([lembrar, emailVal, senhaVal]) => {
+  if (lembrar && emailVal) {
+    localStorage.setItem('lembrarEmail', emailVal)
+    localStorage.setItem('lembrarSenha', senhaVal)
+  } else if (!lembrar) {
+    localStorage.removeItem('lembrarEmail')
+    localStorage.removeItem('lembrarSenha')
+  }
+})
 </script>

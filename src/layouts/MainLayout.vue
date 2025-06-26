@@ -52,7 +52,7 @@
     </q-footer> -->
 
     <q-dialog v-model="dialogInformacao">
-      <q-card style="width: 400px; height: 400px;">
+      <q-card style="width: 400px; max-height: 90vh;" class="column no-wrap">
 
         <q-card-section class="bg-primary text-white">
           <div class="row items-center" style="gap: 8px;">
@@ -61,24 +61,38 @@
           </div>
         </q-card-section>
 
-        <div class="q-pa-md">
+        <div class="q-pa-md scroll" style="flex: 1;">
           <q-card-section style="border: 2px solid #ab0d06; border-radius: 8px;">
-            <div class="row items-center q-gutter-sm">
-              <img src="icons/leilao-fundo.png" alt="Grupo de Leilão" style="width: 100px; height: 100px;" />
-              <div style="font-size: 18px;">Grupo de Leilão</div>
-            </div>
-            <div align="right">
-              <q-btn icon="open_in_new" label="Entrar" color="primary" v-close-popup />
+            <div class="column q-gutter-md">
+              <div class="row items-center" style="gap: 8px;">
+                <q-icon name="error" color="black" size="sm" />
+                <div class="text-subtitle1">Entre no nosso grupo de Leilão</div>
+              </div>
+
+              <div class="row items-center justify-between">
+                <img src="icons/leilao-fundo.png" alt="Grupo de Leilão"
+                  style="width: 90px; height: 90px; border: 2px solid black; border-radius: 4px;" />
+
+                <q-btn color="positive" no-caps unelevated>
+                  <template v-slot:default>
+                    <i class="fab fa-whatsapp fa-lg q-mr-sm" style="color: white;"></i>
+                    <span class="text-white">ENTRAR</span>
+                  </template>
+                </q-btn>
+              </div>
             </div>
           </q-card-section>
-
-          <q-card-actions align="right" class="q-mt-md">
-            <q-btn label="Fechar" color="primary" v-close-popup />
-          </q-card-actions>
         </div>
+
+
+        <q-separator color="grey" style="height: 1px;" />
+        <q-card-actions align="right" class="q-pa-sm">
+          <q-btn label="Fechar" color="primary" v-close-popup icon="close" />
+        </q-card-actions>
 
       </q-card>
     </q-dialog>
+
 
 
 

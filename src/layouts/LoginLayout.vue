@@ -15,8 +15,19 @@
 
     <q-footer class="text-grey bg-black">
       <div class="row q-col-gutter-md justify-center items-center text-center">
-        <div class="col-12 flex justify-center items-center"
-          style="text-align: center; font-size: 0.7rem; padding: 1.5rem">
+
+        <div class="col-12 flex justify-center items-center q-mt-sm" style="text-align: center; font-size: 0.7rem;">
+          <a href="https://api.whatsapp.com/send/?phone=5554996641291&text&type=phone_number&app_absent=0"
+            target="_blank" class="q-mx-sm">
+            <i class="fab fa-whatsapp fa-2x" style="color: #25D366;"></i>
+          </a>
+          <a href="https://www.instagram.com/negomaq/" target="_blank" class="q-mx-sm">
+            <i class="fab fa-instagram fa-2x" style="color: #C13584;"></i>
+          </a>
+        </div>
+
+        <div class="col-12 flex justify-center items-center q-pt-sm"
+          style="text-align: center; font-size: 0.7rem; padding-bottom: 0.6rem;">
           <q-icon name="copyright" />
           <span class="q-ml-xs">
             2025 Todos os direitos reservados - Couros NegoMaq
