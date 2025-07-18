@@ -18,17 +18,18 @@
       </q-tab-panel>
 
       <q-tab-panel name="estojos">
-        <estojo-facas />
+        <estojo-facas :adicionarAoCarrinho="props.adicionarAoCarrinho" />
       </q-tab-panel>
 
       <q-tab-panel name="aventais">
-        <lista-aventais />
+        <lista-aventais :adicionarAoCarrinho="props.adicionarAoCarrinho" />
       </q-tab-panel>
 
       <q-tab-panel name="churrasco">
-        <artigos-churrasco />
+        <artigos-churrasco :adicionarAoCarrinho="props.adicionarAoCarrinho" />
       </q-tab-panel>
     </q-tab-panels>
+
   </q-page>
 </template>
 

@@ -44,7 +44,8 @@
           <div style="font-size: 18px;" class="text-bold q-ml-md">
             R$ 49,99
           </div>
-          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 10px" />
+          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 10px"
+            @click="props.adicionarAoCarrinho()" />
         </div>
       </q-card-section>
     </q-card>
@@ -53,6 +54,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+const props = defineProps<{
+  adicionarAoCarrinho: () => void
+}>()
 const pesquisa = ref(null)
 </script>
 <!-- Configurações para telas menores-->
