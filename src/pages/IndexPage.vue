@@ -14,7 +14,7 @@
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="facas">
-        <lista-facas />
+        <lista-facas :adicionarAoCarrinho="props.adicionarAoCarrinho" />
       </q-tab-panel>
 
       <q-tab-panel name="estojos">
@@ -29,7 +29,6 @@
         <artigos-churrasco />
       </q-tab-panel>
     </q-tab-panels>
-
   </q-page>
 </template>
 
@@ -40,6 +39,10 @@ import ArtigosChurrasco from 'src/components/ArtigosChurrasco.vue'
 import ListaFacas from 'src/components/ListaFacas.vue'
 import ListaAventais from 'src/components/ListaAventais.vue'
 import EstojoFacas from 'src/components/EstojoFacas.vue'
+
+const props = defineProps<{
+  adicionarAoCarrinho: () => void
+}>()
 
 const tab = ref('facas')
 </script>

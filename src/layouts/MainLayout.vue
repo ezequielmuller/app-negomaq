@@ -1,27 +1,38 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar class="justify-between">
+    <q-header elevated class="bg-primary text-white">
+      <q-toolbar class="q-px-md">
 
-        <q-btn icon="shopping_cart" flat dense class="q-mr-md" />
-        <q-btn icon="circle_notifications" flat dense @click="dialogInformacao = true" />
-
-        <q-separator vertical color="white" class="q-mt-sm q-mb-sm q-mr-md q-ml-md" />
-
-        <q-toolbar-title class="row items-center justify-center">
-          <img src="icons/app-logo-sfundo.png" alt="Logo" style="width: 32px; height: 32px; margin-right: 8px;">
-          <span class="text-bold">NegoMaq Couros</span>
+        <q-toolbar-title class="row items-center">
+          <img src="icons/app-logo-sfundo.png" alt="Logo"
+            style="width: 36px; height: 36px; margin-right: 12px; border-radius: 8px; box-shadow: 0 0 6px #0004;">
+          <span class="text-bold text-h6">NegoMaq Couros</span>
         </q-toolbar-title>
 
-        <q-separator vertical color="white" class="q-mt-sm q-mb-sm q-mr-md q-ml-md" />
-        <q-btn flat icon="logout" size="md" @click="sairSistema()" />
+        <div class="row items-center q-gutter-sm">
+          <q-btn round dense flat class="bg-white text-primary">
+            <q-icon name="shopping_cart" />
+            <q-badge v-if="cartCount > 0" color="warning" floating class="text-black shadow-lg"
+              style="font-weight: 700; font-size: 14px; min-width: 22px; height: 22px; border-radius: 12px; box-shadow: 0 0 8px rgba(255, 193, 7, 0.7);">
+              {{ cartCount }}
+            </q-badge>
+
+          </q-btn>
+
+          <q-btn round dense flat icon="circle_notifications" class="bg-white text-primary"
+            @click="dialogInformacao = true" />
+
+          <q-separator vertical color="white" size="3px" class="q-mx-md" />
+
+          <q-btn round dense flat icon="logout" class="bg-white text-negative" @click="sairSistema()" />
+        </div>
 
       </q-toolbar>
     </q-header>
 
-
     <q-page-container>
-      <router-view />
+      <router-view :adicionarAoCarrinho="adicionarAoCarrinho" />
+
       <div class="row q-col-gutter-md justify-center items-center text-center text-grey bg-black">
         <div class="row q-col-gutter-md">
           <div class="col-12">
@@ -44,12 +55,6 @@
         </div>
       </div>
     </q-page-container>
-
-    <!-- <q-footer class="text-grey bg-black">
-
-      ========== RODAPÉ ==========
-
-    </q-footer> -->
 
     <q-dialog v-model="dialogInformacao">
       <q-card style="width: 400px; max-height: 90vh;" class="column no-wrap">
@@ -84,7 +89,6 @@
           </q-card-section>
         </div>
 
-
         <q-separator color="grey" style="height: 1px;" />
         <q-card-actions align="right" class="q-pa-sm">
           <q-btn label="Fechar" color="primary" v-close-popup icon="close" />
@@ -92,10 +96,6 @@
 
       </q-card>
     </q-dialog>
-
-
-
-
   </q-layout>
 </template>
 
@@ -108,6 +108,11 @@ const router = useRouter()
 const $q = useQuasar()
 
 const dialogInformacao = ref(false)
+const cartCount = ref(0) // contador do carrinho
+
+const adicionarAoCarrinho = () => {
+  cartCount.value++
+}
 
 const sairSistema = async () => {
   try {
@@ -131,7 +136,6 @@ const sairSistema = async () => {
 const abrirGrupoLeilao = () => {
   window.open('https://chat.whatsapp.com/FB2vjot6F5y1eYsM6nHwRM', '_blank')
 }
-
 </script>
 
 <style scoped>
