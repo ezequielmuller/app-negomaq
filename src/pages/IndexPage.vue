@@ -29,7 +29,7 @@
         <artigos-churrasco :adicionarAoCarrinho="props.adicionarAoCarrinho" />
       </q-tab-panel>
     </q-tab-panels>
-
+    <q-separator class="q-mt-md q-mb-sm bg-primary" style="height: 2px;" />
   </q-page>
 </template>
 
