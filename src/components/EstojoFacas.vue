@@ -8,7 +8,11 @@
         <q-icon name="search" />
       </template>
     </q-input>
+
+    <q-btn color="primary" icon="attach_money" class="q-ml-lg q-mt-md" @click="dialogFiltros = true" />
+
   </div>
+
   <q-separator class="q-mt-md q-mb-mt" color="primary" style="height: 3px;" />
 
   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
@@ -51,14 +55,51 @@
       </q-card-section>
     </q-card>
   </div>
+
+  <!-- ======= // DIALOG FILTROS // ========= -->
+  <q-dialog v-model="dialogFiltros">
+    <q-card style="width: 400px; max-height: 50vh" class="column no-wrap">
+      <q-card-section class="bg-primary text-white">
+        <div class="row items-center" style="gap: 8px">
+          <q-icon name="attach_money" size="md" />
+          <div class="text-h6">Filtrar pelo Preço</div>
+        </div>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="row q-col-gutter-sm">
+          <div class="col-12">
+            <q-input dense flat outlined v-model="precoMin" label="Preço Mínimo" />
+          </div>
+          <div class="col-12">
+            <q-input dense flat outlined v-model="precoMax" label="Preço Máximo" />
+          </div>
+        </div>
+      </q-card-section>
+
+      <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
+
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
+        <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" />
+        <q-btn label="Buscar" color="primary" v-close-popup icon="search" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 const props = defineProps<{
   adicionarAoCarrinho: () => void
 }>()
+
 const pesquisa = ref(null)
+const precoMin = ref('')
+const precoMax = ref('')
+
+const dialogFiltros = ref(false)
 </script>
 
 <!-- Configurações para telas menores-->
