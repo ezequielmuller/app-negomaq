@@ -21,7 +21,8 @@
       <q-card-section style="display: flex; justify-content: center; align-items: center; padding-bottom: 0;">
         <img src="icons/aventais.jpeg" alt="aventais" style="width: 90%;
         max-width: 250px;
-        height: auto;
+        height: 200px;
+        max-height: 200px;
         object-fit: contain;
         border-radius: 10px;
         box-shadow: 0 2px 8px #0001;" />

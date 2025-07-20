@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <div class="text-h6 flex flex-center text-bold text-center">
-      Venha conferir nossos Produtos de Alta Qualidade!
+      Consulte nosso Catálogo de Produtos e Garanta já o seu!
     </div>
 
     <q-tabs v-model="tab" dense class="text-grey-7 q-mt-md" active-color="primary" indicator-color="primary"
@@ -29,7 +29,7 @@
         <artigos-churrasco :adicionarAoCarrinho="props.adicionarAoCarrinho" />
       </q-tab-panel>
     </q-tab-panels>
-    <q-separator class="q-mt-md q-mb-sm bg-primary" style="height: 2px;" />
+    <!-- <q-separator class="q-mt-md q-mb-sm bg-primary" style="height: 2px;" /> -->
   </q-page>
 </template>
 
@@ -40,6 +40,8 @@ import ArtigosChurrasco from 'src/components/ArtigosChurrasco.vue'
 import ListaFacas from 'src/components/ListaFacas.vue'
 import ListaAventais from 'src/components/ListaAventais.vue'
 import EstojoFacas from 'src/components/EstojoFacas.vue'
+
+// const carrinho = ref([])
 
 const props = defineProps<{
   adicionarAoCarrinho: () => void

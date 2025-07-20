@@ -8,6 +8,8 @@
         <q-icon name="search" />
       </template>
     </q-input>
+
+    <q-btn color="primary" icon="filter_alt" class="q-ml-lg q-mt-md " />
   </div>
   <q-separator class="q-mt-md q-mb-mt" color="primary" style="height: 3px;" />
 
@@ -22,7 +24,8 @@
       <q-card-section style="display: flex; justify-content: center; align-items: center; padding-bottom: 0;">
         <img src="icons/artigo-churrasco.jpg" alt="sal" style="width: 90%;
         max-width: 250px;
-        height: auto;
+        height: 200px;
+        max-height: 200px;
         object-fit: contain;
         border-radius: 10px;
         box-shadow: 0 2px 8px #0001;" />
@@ -61,6 +64,7 @@ const props = defineProps<{
 }>()
 const pesquisa = ref(null)
 </script>
+
 <!-- Configurações para telas menores-->
 <style scoped>
 .input-pesquisa {
