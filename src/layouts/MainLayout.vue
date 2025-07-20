@@ -5,24 +5,33 @@
         <q-toolbar-title class="row items-center">
           <img src="icons/app-logo-sfundo.png" alt="Logo"
             style="width: 36px; height: 36px; margin-right: 12px; border-radius: 8px;" />
-          <span class="text-bold text-h6">NegoMaq Couros</span>
+          <span class="text-bold text-h6">NegoMaq </span>
         </q-toolbar-title>
 
         <div class="row items-center q-gutter-sm">
+          <q-btn round dense flat icon="manage_accounts" class="bg-white text-primary" to="/user-page">
+            <q-tooltip>Painel de Usuário</q-tooltip>
+          </q-btn>
+
           <q-btn round dense flat class="bg-white text-primary" @click="menuCarrinho = true">
             <q-icon name="shopping_cart" />
             <q-badge v-if="cartCount > 0" color="warning" floating class="text-black shadow-lg flex flex-center"
               style="font-weight:700; font-size:14px; min-width:22px; height:22px; border-radius:12px; box-shadow:0 0 8px rgba(255,193,7,.7);">
               {{ cartCount }}
             </q-badge>
+            <q-tooltip>Meu Carrinho</q-tooltip>
           </q-btn>
 
           <q-btn round dense flat icon="circle_notifications" class="bg-white text-primary"
-            @click="dialogInformacao = true" />
+            @click="dialogInformacao = true">
+            <q-tooltip>Informações Adicionais</q-tooltip>
+          </q-btn>
 
           <q-separator vertical color="white" size="3px" class="q-mx-md" />
 
-          <q-btn round dense flat icon="logout" class="bg-white text-negative" @click="sairSistema()" />
+          <q-btn round dense flat icon="logout" class="bg-white text-negative" @click="sairSistema()">
+            <q-tooltip>Sair do Sistema</q-tooltip>
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -45,12 +54,6 @@
             </a>
           </div>
         </div>
-
-        <q-page-sticky position="bottom-right" :offset="[18, 18]">
-          <q-btn fab color="green" @click="enviarWhatsapp()">
-            <i class="fab fa-whatsapp fa-2x text-white"></i>
-          </q-btn>
-        </q-page-sticky>
 
         <div class="col-12 flex justify-center items-center"
           style="text-align:center; font-size:0.7rem; padding:1.5rem;">
@@ -196,22 +199,6 @@ const sairSistema = async () => {
     $q.loading.hide()
   }
 }
-
-const enviarWhatsapp = () => {
-  const nome = 'Lucas'
-  const numero = '548449-5095'
-  const celularFormatado = numero.replace(/\D/g, '');
-
-  const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado;
-
-  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`;
-  const mensagemCodificada = encodeURIComponent(mensagem);
-
-  const url = `https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`;
-
-  window.open(url, '_blank');
-};
-
 
 const abrirGrupoLeilao = () => {
   window.open('https://chat.whatsapp.com/FB2vjot6F5y1eYsM6nHwRM', '_blank')

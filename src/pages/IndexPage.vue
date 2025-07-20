@@ -30,6 +30,11 @@
       </q-tab-panel>
     </q-tab-panels>
     <!-- <q-separator class="q-mt-md q-mb-sm bg-primary" style="height: 2px;" /> -->
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn fab color="green" @click="enviarWhatsapp()">
+        <i class="fab fa-whatsapp fa-2x text-white"></i>
+      </q-btn>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -48,6 +53,22 @@ const props = defineProps<{
 }>()
 
 const tab = ref('facas')
+
+const enviarWhatsapp = () => {
+  const nome = 'Lucas'
+  const numero = '548449-5095'
+  const celularFormatado = numero.replace(/\D/g, '');
+
+  const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado;
+
+  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`;
+  const mensagemCodificada = encodeURIComponent(mensagem);
+
+  const url = `https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`;
+
+  window.open(url, '_blank');
+};
+
 </script>
 
 
