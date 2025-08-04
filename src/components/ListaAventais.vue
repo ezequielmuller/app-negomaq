@@ -45,7 +45,7 @@
     </q-card>
   </div>
   <div v-else class="text-center q-mt-md">
-    Nenhum produto encontrado 😢
+    Nenhum produto encontrado
   </div>
 
   <!--=======// DIALOG FILTROS //=========-->
