@@ -105,7 +105,7 @@ const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
     const result = await api.get('/produtos')
-    produtos.value = result
+    produtos.value = result.data
     $q.loading.hide()
   } catch (error) {
     console.log("Erro==> ", error)
