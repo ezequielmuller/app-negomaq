@@ -10,11 +10,8 @@
       </template>
     </q-input>
 
-
     <q-btn color="primary" icon="attach_money" class="q-ml-lg q-mt-md" @click="dialogFiltros = true" />
   </div>
-
-  <q-separator class="q-mt-md q-mb-mt" color="primary" style="height: 3px;" />
 
   <q-separator class="q-mt-md q-mb-mt" color="primary" style="height: 3px;" />
 
@@ -48,8 +45,10 @@
     </q-card>
   </div>
 
-  <div v-else class="text-center q-mt-md">
-    Nenhum produto encontrado 😢
+  <div v-else class="text-center text-grey q-mt-md flex flex-center"
+    style="flex-direction: column; align-items: center;">
+    <q-icon name="error" size="xl" color="grey" />
+    <span class="text-bold q-mt-sm">Nenhum produto encontrado!</span>
   </div>
 
   <!--=======// DIALOG FILTROS //=========-->
