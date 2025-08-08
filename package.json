@@ -2,7 +2,7 @@
   "name": "app-negomaq",
   "version": "0.0.1",
   "description": "Sistema de venda de faca",
-  "productName": "NegoMaq App",
+  "productName": "Sistema NegoMaq",
   "author": "Ezequiel Muller <zikimuller017@gmail.com>",
   "type": "module",
   "private": true,
