@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center" padding>
-    <q-card style="width: 350px; height: 650px" class="flex flex-column items-center justify-center">
+    <q-card style="width: 350px; height: 700px" class="flex flex-column items-center justify-center">
       <div class="flex flex-center q-mt-md" style="width: 100%; justify-content: center;">
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa"
           style="width: 150px; height: 150px; display: block; margin: 0 auto;" />
@@ -24,6 +24,14 @@
           </template>
         </q-input>
 
+        <!-- Telefone com formatação correta -->
+        <q-input class="full-width" label="Telefone" :model-value="telefone" @update:model-value="formatarTelefone"
+          maxlength="15">
+          <template #prepend>
+            <q-icon name="phone" />
+          </template>
+        </q-input>
+
         <q-input class="full-width" label="Senha" v-model="senha" :type="ocultarSenha ? 'password' : 'text'">
           <template #prepend>
             <q-icon name="lock" />
@@ -35,9 +43,13 @@
         </q-input>
 
         <q-input class="full-width" label="Confirmar Senha" v-model="confirmarSenha"
-          :type="ocultarSenha ? 'password' : 'text'">
+          :type="ocultarConfirmarSenha ? 'password' : 'text'">
           <template #prepend>
             <q-icon name="lock" />
+          </template>
+          <template #append>
+            <q-icon :name="ocultarConfirmarSenha ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+              @click="ocultarConfirmarSenha = !ocultarConfirmarSenha" />
           </template>
         </q-input>
       </q-card-section>
@@ -66,16 +78,38 @@ const router = useRouter();
 
 const nome = ref("");
 const email = ref("");
+const telefone = ref("");
 const senha = ref("");
 const confirmarSenha = ref("");
 const ocultarSenha = ref(true);
+const ocultarConfirmarSenha = ref(true);
+
+function formatarTelefone(valor: string | number | null) {
+  if (valor === null) {
+    telefone.value = '';
+    return;
+  }
+  let v = String(valor).replace(/\D/g, "");
+  if (v.length > 11) v = v.slice(0, 11);
+
+  if (v.length > 0) {
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+    if (v.length > 9) {
+      v = v.replace(/(\d{5})(\d{4})$/, "$1-$2");
+    } else if (v.length > 8) {
+      v = v.replace(/(\d{4})(\d{4})$/, "$1-$2");
+    }
+  }
+  telefone.value = v;
+}
+
 
 const voltarLogin = async () => {
   await router.push("/");
 };
 
 const cadastrar = async () => {
-  if (!nome.value || !email.value || !senha.value || !confirmarSenha.value) {
+  if (!nome.value || !email.value || !telefone.value || !senha.value || !confirmarSenha.value) {
     $q.notify({
       type: "warning",
       message: "Preencha todos os campos",
