@@ -25,11 +25,13 @@
         <q-toggle label="Lembrar senha" color="primary" v-model="lembrarSenha" class="q-mt-sm" />
       </q-card-section>
 
-      <q-card-section class="flex flex-center">
+      <q-card-section class="flex flex-center column">
         <q-btn color="primary" label="ENTRAR" class="full-width" style="border-radius: 10px" @click="entrarSistema()" />
-        <div class="q-mt-md flex items-center">
+        <div class="q-mt-md flex items-center justify-center" style="width: 100%; font-size: 14px;">
           <p class="q-mb-none">Não tem uma Conta?</p>
-          <span class="text-primary text-bold q-ml-xs">Cadastre-se!</span>
+          <span class="text-primary text-bold q-ml-xs cursor-pointer" @click="irParaCadastro">
+            Cadastre-se!
+          </span>
         </div>
       </q-card-section>
     </q-card>
@@ -41,6 +43,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+
 const $q = useQuasar()
 const router = useRouter()
 
@@ -75,6 +78,10 @@ const entrarSistema = async () => {
   } finally {
     $q.loading.hide()
   }
+}
+
+const irParaCadastro = async () => {
+  await router.push('/cadastro')  // ajuste a rota conforme seu projeto
 }
 
 onMounted(() => {
