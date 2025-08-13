@@ -1,9 +1,9 @@
 <template>
-  <div class="text-h6 flex flex-center text-bold">
+  <div class="text-h6 text-center text-bold q-mt-md">
     Facas
   </div>
 
-  <div class="flex flex-center q-mt-md q-mb-mt">
+  <div class="flex justify-center q-mt-md q-mb-md">
     <q-input flat v-model="pesquisa" label="Pesquise por Produtos!" class="input-pesquisa">
       <template #prepend>
         <q-icon name="search" />
@@ -11,43 +11,40 @@
     </q-input>
   </div>
 
-  <div class="q-mt-xl" style="max-width: 400px; margin: 0 auto;">
-    <div class="flex flex-center text-bold q-mt-md" style="font-size: 16px;">Filtro de Preço</div>
+  <div class="max-w-[400px] mx-auto q-mt-xl">
+    <div class="text-center text-bold text-[16px] q-mb-sm">Filtro de Preço</div>
     <q-slider v-model="precoInicial" color="primary" :min="50" :max="400" :step="50" markers label
-      :label-value="`R$ ${precoInicial}`" />
+      :label-value="`R$ ${precoInicial}`" class="q-mb-md" />
     <q-slider v-model="precoFinal" color="primary" :min="precoInicial" :max="400" :step="50" markers label
       :label-value="`R$ ${precoFinal}`" />
-
-    <div class="slider-labels text-bold"
-      style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 4px;">
-    </div>
   </div>
-  <q-separator class="q-mt-md q-mb-mt" color="primary" style="height: 3px;" />
+
+  <q-separator class="q-my-md" color="primary" style="height: 3px;" />
 
   <!-- Lista de produtos -->
   <div v-if="produtosFiltrados.length" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
-    <q-card v-for="produto in produtosFiltrados.filter(p => p.categoria === 'facas')" :key="produto.id"
+    <q-card v-for="produto in produtosFiltrados" :key="produto.id" class="q-mt-md"
       style="width: 350px; max-width: 95vw; min-width: 220px; display: flex; flex-direction: column;">
-      <q-card-section style="display: flex; justify-content: center; align-items: center; padding-bottom: 0;">
-        <img :src="produto.img || ''" :alt="produto.nome"
-          style="width: 90%; max-width: 250px; height: auto; object-fit: contain; border-radius: 10px; box-shadow: 0 2px 8px #0001;" />
+      <!-- Imagem -->
+      <q-card-section class="flex justify-center items-center h-[200px] pb-0">
+        <img src="/public/icons/faca.webp" :alt="produto.nome"
+          class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md" />
       </q-card-section>
 
-      <q-card-section>
-        <div style="font-size: 18px;" class="text-bold">
+      <!-- Texto e botão -->
+      <q-card-section class="flex flex-col flex-1">
+        <div class="text-bold text-[18px]">
           {{ produto.nome }}
         </div>
-        <div class="q-mt-sm" style="font-size: 14px;">
+        <div class="text-[14px] q-mt-sm">
           {{ produto.descricao }}
         </div>
-      </q-card-section>
 
-      <q-card-section>
-        <div class="row items-center justify-between">
-          <div style="font-size: 18px;" class="text-bold q-ml-md">
+        <div class="row items-center justify-between q-mt-auto q-pt-sm gap-2">
+          <div class="text-bold text-primary text-[18px]">
             R$ {{ formatarPreco(produto.preco) }}
           </div>
-          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 10px"
+          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="rounded-[10px]"
             @click="props.adicionarAoCarrinho" />
         </div>
       </q-card-section>
@@ -55,10 +52,9 @@
   </div>
 
   <!-- Nenhum produto encontrado -->
-  <div v-else class="text-center text-grey q-mt-md flex flex-center"
-    style="flex-direction: column; align-items: center;">
+  <div v-else class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
     <q-icon name="error" size="xl" color="grey" />
-    <span class="text-bold q-mt-sm">Nenhum produto encontrado!</span>
+    <span class="font-bold q-mt-sm">Nenhum produto encontrado!</span>
   </div>
 </template>
 
@@ -77,7 +73,6 @@ const props = defineProps<{
 const pesquisa = ref('')
 const precoInicial = ref(50)
 const precoFinal = ref(400)
-
 const produtos = ref<Produto[]>([])
 
 const produtosFiltrados = computed(() => {
