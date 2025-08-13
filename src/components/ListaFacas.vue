@@ -25,13 +25,12 @@
   <div v-if="produtosFiltrados.length" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
     <q-card v-for="produto in produtosFiltrados" :key="produto.id" class="q-mt-md"
       style="width: 350px; max-width: 95vw; min-width: 220px; display: flex; flex-direction: column;">
-      <!-- Imagem -->
+
       <q-card-section class="flex justify-center items-center h-[200px] pb-0">
         <img src="/public/icons/faca.webp" :alt="produto.nome"
           class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md" />
       </q-card-section>
 
-      <!-- Texto e botão -->
       <q-card-section class="flex flex-col flex-1">
         <div class="text-bold text-[18px]">
           {{ produto.nome }}
@@ -50,8 +49,6 @@
       </q-card-section>
     </q-card>
   </div>
-
-  <!-- Nenhum produto encontrado -->
   <div v-else class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
     <q-icon name="error" size="xl" color="grey" />
     <span class="font-bold q-mt-sm">Nenhum produto encontrado!</span>
