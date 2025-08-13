@@ -15,72 +15,38 @@
 
   <q-separator class="q-mt-md q-mb-mt" color="primary" style="height: 3px;" />
 
+  <!-- Lista de produtos -->
   <div v-if="produtosFiltrados.length" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
     <q-card v-for="produto in produtosFiltrados" :key="produto.id" class="q-mt-md"
       style="width: 350px; max-width: 95vw; min-width: 220px; display: flex; flex-direction: column;">
 
-      <q-card-section style="display: flex; justify-content: center; align-items: center; padding-bottom: 0;">
-        <img :src="produto.img || ''" :alt="produto.nome"
-          style="width: 90%; max-width: 250px; height: auto; object-fit: contain; border-radius: 10px; box-shadow: 0 2px 8px #0001;" />
+      <q-card-section class="flex justify-center items-center h-[200px] pb-0">
+        <img src="/public/icons/estojo.webp" :alt="produto.nome"
+          class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md" />
       </q-card-section>
 
-      <q-card-section>
-        <div style="font-size: 18px;" class="text-bold">
+      <q-card-section class="flex flex-col flex-1">
+        <div class="text-bold text-[18px]">
           {{ produto.nome }}
         </div>
-        <div class="q-mt-sm" style="font-size: 14px;">
+        <div class="text-[14px] q-mt-sm">
           {{ produto.descricao }}
         </div>
-      </q-card-section>
 
-      <q-card-section>
-        <div class="row items-center justify-between">
-          <div style="font-size: 18px;" class="text-bold q-ml-md">
+        <div class="row items-center justify-between q-mt-auto q-pt-sm gap-2">
+          <div class="text-bold text-primary text-[18px]">
             R$ {{ formatarPreco(produto.preco) }}
           </div>
-          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 10px"
-            @click="props.adicionarAoCarrinho()" />
+          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="rounded-[10px]"
+            @click="props.adicionarAoCarrinho" />
         </div>
       </q-card-section>
     </q-card>
   </div>
-
-  <div v-else class="text-center text-grey q-mt-md flex flex-center"
-    style="flex-direction: column; align-items: center;">
+  <div v-else class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
     <q-icon name="error" size="xl" color="grey" />
-    <span class="text-bold q-mt-sm">Nenhum produto encontrado!</span>
+    <span class="font-bold q-mt-sm">Nenhum produto encontrado!</span>
   </div>
-
-  <!--=======// DIALOG FILTROS //=========-->
-  <q-dialog v-model="dialogFiltros">
-    <q-card style="width: 400px; max-height: 50vh" class="column no-wrap">
-      <q-card-section class="bg-primary text-white">
-        <div class="row items-center" style="gap: 8px">
-          <q-icon name="attach_money" size="md" />
-          <div class="text-h6">Filtrar pelo Preço</div>
-        </div>
-      </q-card-section>
-
-      <q-card-section>
-        <div class="row q-col-gutter-sm">
-          <div class="col-12">
-            <q-input dense flat outlined v-model="precoMin" label="Preço Mínimo" />
-          </div>
-          <div class="col-12">
-            <q-input dense flat outlined v-model="precoMax" label="Preço Máximo" />
-          </div>
-        </div>
-      </q-card-section>
-
-      <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
-
-      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-        <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" />
-        <q-btn label="Buscar" color="primary" v-close-popup icon="search" />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
-
 </template>
 
 <script setup lang="ts">
@@ -96,8 +62,8 @@ const props = defineProps<{
 }>()
 
 const pesquisa = ref('')
-const precoMin = ref('')
-const precoMax = ref('')
+// const precoMin = ref('')
+// const precoMax = ref('')
 
 const dialogFiltros = ref(false)
 const produtos = ref<Produto[]>([])

@@ -55,7 +55,7 @@
 import { ref, onMounted, computed } from 'vue'
 import api from 'src/services/api'
 import type { Produto } from 'src/types/types'
-import { useQuasar } from 'quasar'
+import { useQuasar } from 'quasar';
 
 const $q = useQuasar()
 
@@ -64,9 +64,11 @@ const props = defineProps<{
 }>()
 
 const pesquisa = ref('')
-// const precoInicial = ref(50)
-// const precoFinal = ref(400)
+// const precoMin = ref('')
+// const precoMax = ref('')
+
 const dialogFiltros = ref(false)
+
 const produtos = ref<Produto[]>([])
 
 const listarProdutos = async () => {
@@ -74,8 +76,9 @@ const listarProdutos = async () => {
     $q.loading.show({ message: 'Buscando Produtos...' })
     const result = await api.get('/produtos')
     produtos.value = result.data
+    $q.loading.hide()
   } catch (error) {
-    console.log('Erro==> ', error)
+    console.log("Erro==> ", error)
     $q.notify({
       type: 'negative',
       position: 'bottom',
@@ -86,7 +89,6 @@ const listarProdutos = async () => {
     $q.loading.hide()
   }
 }
-
 const produtosFiltrados = computed(() =>
   produtos.value.filter(
     (p) =>
@@ -94,11 +96,9 @@ const produtosFiltrados = computed(() =>
       p.nome.toLowerCase().includes(pesquisa.value.toLowerCase())
   )
 )
-
 function formatarPreco(preco: string | number) {
   return Number(preco).toFixed(2).replace('.', ',')
 }
-
 onMounted(async () => {
   await listarProdutos()
 })

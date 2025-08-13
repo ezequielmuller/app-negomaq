@@ -72,21 +72,14 @@ const precoInicial = ref(50)
 const precoFinal = ref(400)
 const produtos = ref<Produto[]>([])
 
-const produtosFiltrados = computed(() => {
-  return produtos.value.filter((p) => {
-    const nomeOk = p.nome.toLowerCase().includes(pesquisa.value.toLowerCase())
-    const precoOk = Number(p.preco) >= precoInicial.value && Number(p.preco) <= precoFinal.value
-    return nomeOk && precoOk
-  })
-})
-
 const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
     const result = await api.get('/produtos')
     produtos.value = result.data
+    $q.loading.hide()
   } catch (error) {
-    console.log('Erro==> ', error)
+    console.log("Erro==> ", error)
     $q.notify({
       type: 'negative',
       position: 'bottom',
@@ -97,15 +90,21 @@ const listarProdutos = async () => {
     $q.loading.hide()
   }
 }
-
+const produtosFiltrados = computed(() =>
+  produtos.value.filter(
+    (p) =>
+      p.categoria === 'facas' &&
+      p.nome.toLowerCase().includes(pesquisa.value.toLowerCase())
+  )
+)
 function formatarPreco(preco: string | number) {
   return Number(preco).toFixed(2).replace('.', ',')
 }
-
 onMounted(async () => {
   await listarProdutos()
 })
 </script>
+
 
 <style scoped>
 .input-pesquisa {
