@@ -1,13 +1,13 @@
-export type Produto = {
-  id: string;
+export interface Produto {
+  id: number;
   nome: string;
   descricao: string;
   preco: number;
-  categoria: 'facas' | 'estojos' | 'aventais' | 'churrascos';
+  categoria: string;
   img?: string;
-  estoque: number;
-};
+}
 
+export type ProdutoPayload = Omit<Produto, 'id'>;
 export type Usuario = {
   id: string;
   nome: string;
