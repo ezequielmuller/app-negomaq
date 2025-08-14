@@ -43,6 +43,8 @@
 import { ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import api from 'src/services/api'
+import axios from 'axios'
 
 const $q = useQuasar()
 const router = useRouter()
@@ -62,26 +64,47 @@ const entrarSistema = async () => {
     })
     return
   }
+
   try {
     $q.loading.show({ message: 'Entrando...' })
 
+    await api.post('auth/login', {
+      email: email.value,
+      senha: senha.value
+    })
+
+    $q.notify({
+      type: 'positive',
+      message: 'Login efetuado com sucesso!',
+      position: 'center',
+      timeout: 1500
+    })
+
     await router.push('/home')
 
-  } catch (error) {
-    console.error('ERRO DE LOGIN => ', error)
-    $q.notify({
-      type: 'negative',
-      message: 'Não foi possível fazer Login!',
-      position: 'center',
-      timeout: 2500
-    })
-  } finally {
-    $q.loading.hide()
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error('ERRO DE LOGIN => ', error.response?.data || error.message)
+      $q.notify({
+        type: 'negative',
+        message: error.response?.data?.mensagem || 'Não foi possível fazer Login!',
+        position: 'center',
+        timeout: 2500
+      })
+    } else {
+      console.error(error)
+      $q.notify({
+        type: 'negative',
+        message: 'Erro inesperado!',
+        position: 'center',
+        timeout: 2500
+      })
+    }
   }
 }
 
 const irParaCadastro = async () => {
-  await router.push('/cadastro')  // ajuste a rota conforme seu projeto
+  await router.push('/cadastro')
 }
 
 onMounted(() => {
@@ -105,4 +128,5 @@ watch([lembrarSenha, email, senha], ([lembrar, emailVal, senhaVal]) => {
     localStorage.removeItem('lembrarSenha')
   }
 })
+
 </script>

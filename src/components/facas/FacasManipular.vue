@@ -11,21 +11,20 @@
       <q-card-section>
         <div class="row q-col-gutter-sm">
           <div class="col-12">
-            <q-input dense flat outlined v-model="nome" label="Nome do Produto" />
+            <q-input dense flat outlined v-model="form.nome" label="Nome do Produto" />
           </div>
           <div class="col-12">
-            <q-input dense flat outlined v-model="descricao" label="Descrição" type="textarea" />
+            <q-input dense flat outlined v-model="form.descricao" label="Descrição" type="textarea" />
           </div>
           <div class="col-6">
-            <q-input dense flat outlined v-model="preco" label="Preço do Produto" />
+            <q-input dense flat outlined v-model="form.preco" label="Preço do Produto" type="number" />
           </div>
           <div class="col-6">
-            <q-select dense flat outlined v-model="categoria" :options="categorias" option-label="label"
+            <q-select dense flat outlined v-model="form.categoria" :options="categorias" option-label="label"
               option-value="value" emit-value map-options label="Categoria" />
-
           </div>
           <div class="col-12">
-            <q-file v-model="img" label="Imagem" multiple accept="image/*" outlined flat dense>
+            <q-file v-model="form.imgArquivos" label="Imagem" multiple accept="image/*" outlined flat dense>
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
               </template>
@@ -55,20 +54,26 @@
       <q-card-section>
         <div class="row q-col-gutter-sm">
           <div class="col-12">
-            <q-input dense flat outlined v-model="nomeEditado" label="Nome do Produto" />
+            <q-input dense flat outlined v-model="form.nome" label="Nome do Produto" />
           </div>
           <div class="col-12">
-            <q-input dense flat outlined v-model="descricaoEditado" label="Descrição" type="textarea" />
+            <q-input dense flat outlined v-model="form.descricao" label="Descrição" type="textarea" />
           </div>
           <div class="col-6">
-            <q-input dense flat outlined v-model="precoEditado" label="Preço do Produto" />
+            <q-input dense flat outlined v-model="form.preco" label="Preço do Produto" type="number" />
           </div>
           <div class="col-6">
-            <q-select dense flat outlined v-model="categoriaEditado" :options="categorias" option-label="label"
-              option-value="value" label="Categoria" />
+            <q-select dense flat outlined v-model="form.categoria" :options="categorias" option-label="label"
+              option-value="value" emit-value map-options label="Categoria" />
           </div>
+
+          <div class="col-12" v-if="imgUrl">
+            <q-img :src="imgUrl" style="height: 120px; border-radius: 12px" />
+          </div>
+
           <div class="col-12">
-            <q-file v-model="imgEditado" label="Imagem" multiple accept="image/*" outlined flat dense>
+            <q-file v-model="form.imgArquivos" label="Nova imagem (opcional)" multiple accept="image/*" outlined flat
+              dense>
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
               </template>
@@ -81,50 +86,59 @@
 
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
         <q-btn outline label="Fechar" color="primary" v-close-popup />
-        <q-btn label="Gravar" color="primary" @click="editarFaca" icon="save" />
+        <q-btn label="Salvar" color="primary" @click="editarFaca" icon="save" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
+
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { criarProduto, atualizarProduto } from 'src/services/produtoService'
 
-const props = defineProps<{ dialogGravar: boolean, dialogEditar: boolean }>()
-const emit = defineEmits(['update:dialogGravar', 'update:dialogEditar'])
+interface Produto {
+  id?: string
+  nome: string
+  descricao: string
+  categoria: string
+  preco: number
+  estoque?: number
+  img?: string
+}
 
+type ArquivosImagem = File[] | null
+
+const props = defineProps<{
+  dialogGravar: boolean
+  dialogEditar: boolean
+  produto?: Produto | null
+}>()
+
+const emit = defineEmits(['update:dialogGravar', 'update:dialogEditar', 'atualizarLista'])
 
 const dialogGravar = ref(props.dialogGravar)
 const dialogEditar = ref(props.dialogEditar)
+const produtoId = ref<string | null>(null)
+const imgUrl = ref<string | null>(null)
+
 const $q = useQuasar()
 
-watch(() => props.dialogGravar, val => {
-  dialogGravar.value = val
+const form = ref<{
+  nome: string
+  descricao: string
+  preco: number | string
+  categoria: string
+  estoque: number | string
+  imgArquivos: ArquivosImagem
+}>({
+  nome: '',
+  descricao: '',
+  preco: 0,
+  categoria: '',
+  estoque: 0,
+  imgArquivos: null
 })
-watch(dialogGravar, val => {
-  emit('update:dialogGravar', val)
-})
-watch(() => props.dialogEditar, val => {
-  dialogEditar.value = val
-})
-watch(dialogEditar, val => {
-  emit('update:dialogEditar', val)
-})
-
-
-const nome = ref('')
-const descricao = ref('')
-const preco = ref('')
-const categoria = ref('')
-const img = ref(null)
-
-const nomeEditado = ref('')
-const descricaoEditado = ref('')
-const precoEditado = ref('')
-const categoriaEditado = ref('')
-const imgEditado = ref(null)
-const produtoId = ref<number | null>(null)
 
 const categorias = [
   { label: 'Facas', value: 'facas' },
@@ -133,20 +147,46 @@ const categorias = [
   { label: 'Churrascos', value: 'churrascos' }
 ]
 
+watch(() => props.produto, (novo) => {
+  if (novo) {
+    form.value = {
+      nome: novo.nome,
+      descricao: novo.descricao,
+      preco: novo.preco,
+      categoria: novo.categoria,
+      estoque: novo.estoque ?? 0,
+      imgArquivos: null
+    }
+    produtoId.value = novo.id || null
+    imgUrl.value = novo.img || null
+  } else {
+    form.value = { nome: '', descricao: '', preco: 0, categoria: '', estoque: 0, imgArquivos: null }
+    produtoId.value = null
+    imgUrl.value = null
+  }
+}, { immediate: true })
+
+watch(() => props.dialogGravar, val => { dialogGravar.value = val })
+watch(dialogGravar, val => { emit('update:dialogGravar', val) })
+watch(() => props.dialogEditar, val => { dialogEditar.value = val })
+watch(dialogEditar, val => { emit('update:dialogEditar', val) })
+
 const gravarFaca = async () => {
   try {
     $q.loading.show({ message: 'Cadastrando Produto...' })
     const data = {
-      nome: nome.value,
-      descricao: descricao.value,
-      preco: Number(preco.value),
-      categoria: categoria.value
+      nome: form.value.nome,
+      descricao: form.value.descricao,
+      preco: Number(form.value.preco),
+      categoria: form.value.categoria,
+      estoque: Number(form.value.estoque)
     }
     await criarProduto(data)
     $q.notify({ type: 'positive', message: 'Produto criado!' })
+    emit('atualizarLista')
     dialogGravar.value = false
   } catch {
-    $q.notify({ type: 'negative', message: 'Erro ao editar produto!' })
+    $q.notify({ type: 'negative', message: 'Erro ao criar produto!' })
   } finally {
     $q.loading.hide()
   }
@@ -154,14 +194,18 @@ const gravarFaca = async () => {
 
 const editarFaca = async () => {
   try {
+    if (!produtoId.value) throw new Error('ID do produto não definido')
     $q.loading.show({ message: 'Alterando Produto...' })
-    const data = { nome: nomeEditado.value, descricao: descricaoEditado.value, preco: Number(precoEditado.value), categoria: categoriaEditado.value }
-    if (produtoId.value !== null) {
-      await atualizarProduto(String(produtoId.value), data)
-    } else {
-      throw new Error('ID do produto não definido')
+    const data = {
+      nome: form.value.nome,
+      descricao: form.value.descricao,
+      preco: Number(form.value.preco),
+      categoria: form.value.categoria,
+      estoque: Number(form.value.estoque)
     }
+    await atualizarProduto(produtoId.value, data)
     $q.notify({ type: 'positive', message: 'Produto atualizado!' })
+    emit('atualizarLista')
     dialogEditar.value = false
   } catch {
     $q.notify({ type: 'negative', message: 'Erro ao editar produto!' })
@@ -169,5 +213,4 @@ const editarFaca = async () => {
     $q.loading.hide()
   }
 }
-
 </script>

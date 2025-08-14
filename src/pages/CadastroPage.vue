@@ -72,6 +72,8 @@
 import { ref } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
+import api from "src/services/api";
+import axios from "axios";
 
 const $q = useQuasar();
 const router = useRouter();
@@ -129,22 +131,58 @@ const cadastrar = async () => {
   try {
     $q.loading.show({ message: "Cadastrando..." });
 
-    // Simula chamada async (ex: API)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const payload = {
+      nome: nome.value,
+      email: email.value,
+      telefone: telefone.value,
+      senha: senha.value,
+    };
+
+    const { data } = await api.post("auth/registrar", payload);
 
     $q.loading.hide();
-    $q.notify({
-      type: "positive",
-      message: "Cadastro realizado com sucesso!",
-      position: "center",
-    });
 
-    await voltarLogin();
+    if (data.sucesso) {
+      $q.notify({
+        type: "positive",
+        message: "Teste verde",
+        position: "center",
+      });
+      await voltarLogin();
+    } else {
+      $q.notify({
+        type: "negative",
+        message: data.mensagem || "Erro no cadastro",
+        position: "center",
+      });
+    }
+  } catch (error: unknown) {
+    $q.loading.hide();
 
-  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const mensagem = error.response?.data?.mensagem || "Erro desconhecido";
+      $q.notify({
+        type: "negative",
+        message: mensagem,
+        position: "center",
+      });
+    }
+    else if (error instanceof Error) {
+      $q.notify({
+        type: "negative",
+        message: error.message || "Erro desconhecido",
+        position: "center",
+      });
+    }
+    else {
+      $q.notify({
+        type: "negative",
+        message: "Erro ao conectar à API",
+        position: "center",
+      });
+    }
+
     console.error("Erro ao cadastrar => ", error);
-    $q.notify({ type: "negative", message: "Erro ao cadastrar", position: "center" });
-    $q.loading.hide();
   }
 };
 </script>

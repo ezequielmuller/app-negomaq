@@ -15,6 +15,11 @@ export const criarProduto = async (produto: ProdutoPayload) => {
   }
 };
 
+export const listarProdutos = async () => {
+  const { data } = await api.get('/produtos');
+  return data;
+};
+
 export const deletarProduto = async (id: string) => {
   try {
     await api.delete(`/admin/produtos/${id}`, {
