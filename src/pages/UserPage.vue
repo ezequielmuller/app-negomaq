@@ -59,12 +59,13 @@
           <q-table :rows="produtosFiltrados" :columns="colunas" row-key="id" flat bordered dense>
             <template v-slot:body-cell-acoes="props">
               <q-td class="text-center">
-                <div style="display: flex; justify-content: flex-start; gap: 6px;">
+                <div style="display: flex; justify-content: flex-start; gap: 12px; padding-left: 24px;">
                   <q-btn flat round dense icon="edit" color="primary" @click="abrirEditarProduto(props.row)" />
                   <q-btn flat round dense icon="delete" color="negative" @click="removerProduto(props.row)" />
                 </div>
               </q-td>
             </template>
+
           </q-table>
 
           <q-btn color="primary" icon="add" label="Adicionar Produto" class="q-mt-md" @click="novoProduto" />
@@ -165,7 +166,7 @@ const colunas: QTableColumn[] = [
   { name: 'categoria', label: 'Categoria', field: 'categoria', align: 'left' },
   { name: 'preco', label: 'Preço', field: 'preco', align: 'right' },
   { name: 'estoque', label: 'Estoque', field: 'estoque', align: 'right' },
-  { name: 'acoes', label: 'Ações', field: 'acoes', align: 'center' }
+  { name: 'acoes', label: '', field: 'acoes', align: 'center' }
 ]
 
 const produtosFiltrados = computed(() => {

@@ -29,6 +29,7 @@
             </q-badge>
             <q-tooltip>Meu Carrinho</q-tooltip>
           </q-btn>
+
         </div>
 
         <q-btn dense flat round icon="menu" class="lt-md" @click="menuMobile = true" />
@@ -106,30 +107,35 @@
       <q-separator />
       <q-scroll-area class="col q-pa-sm">
         <q-list separator>
-          <q-item v-for="i in 3" :key="i" class="cart-item">
+          <q-item v-for="(item, index) in carrinho" :key="index" class="cart-item">
             <q-item-section avatar>
-              <img src="icons/estojo.webp" alt="estojo" style="width:80px; height:80px; border-radius:8px;" />
+              <img :src="item.img || ''" :alt="item.nome" style="width:80px; height:80px; border-radius:8px;"
+                fit="contain" />
             </q-item-section>
 
             <q-item-section>
-              <div class="row justify-between">
-                <div style="font-size: 18px;" class="text-bold">Estojo em Couro - Personalizado</div>
-                <div class="q-mt-md" style="font-size: 14px;">
-                  Uma ótima opção de estojo para facas! <b>EM COURO</b> e <b>Personalizada</b>
-                </div>
-              </div>
-
-              <div class="row items-center justify-between q-mt-sm">
-                <div style="font-size: 18px;" class="text-bold q-ml-md">R$ 49,99</div>
-              </div>
+              <div style="font-size: 18px;" class="text-bold">{{ item.nome }}</div>
+              <div style="font-size: 14px;">{{ item.descricao }}</div>
+              <div class="text-bold q-mt-sm">{{ item.preco }}</div>
 
               <div class="row justify-end q-mt-xs">
-                <q-btn color="negative" icon="delete" outline size="sm" label="Remover" style="border-radius:8px;" />
+                <q-btn color="negative" icon="delete" outline size="sm" label="Remover"
+                  @click="removerDoCarrinho(index)" style="border-radius:8px;" />
               </div>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="carrinho.length === 0">
+            <q-item-section class="text-center text-grey">
+              Carrinho vazio
             </q-item-section>
           </q-item>
         </q-list>
       </q-scroll-area>
+
+      <q-separator />
+      <div class="q-pa-md">
+        <q-btn color="primary" class="full-width" label="Finalizar Compra" @click="finalizarCompra" />
+      </div>
     </q-drawer>
   </q-layout>
 </template>
@@ -140,9 +146,16 @@ import { ref } from 'vue'
 const menuMobile = ref(false)
 const menuCarrinho = ref(false)
 const cartCount = ref(0)
+const carrinho = ref<Produto[]>([])
 
-const adicionarAoCarrinho = () => {
-  cartCount.value++
+interface Produto {
+  id: string
+  nome: string
+  descricao: string
+  categoria: string
+  preco: number
+  estoque: number
+  img?: string
 }
 
 const enviarWhatsapp = () => {
@@ -154,6 +167,31 @@ const enviarWhatsapp = () => {
   const mensagemCodificada = encodeURIComponent(mensagem)
   window.open(`https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`, '_blank')
 }
+
+const adicionarAoCarrinho = (produto: Produto) => {
+  carrinho.value.push(produto)
+  menuCarrinho.value = true
+}
+
+const removerDoCarrinho = (index: number) => {
+  carrinho.value.splice(index, 1)
+}
+
+const finalizarCompra = () => {
+  if (carrinho.value.length === 0) {
+    alert('Seu carrinho está vazio!')
+    return
+  }
+
+  const mensagem = encodeURIComponent(
+    `Olá, quero comprar:\n${carrinho.value.map(p => `- ${p.nome} (${p.preco})`).join('\n')}`
+  )
+  window.open(`https://wa.me/5599999999999?text=${mensagem}`, '_blank')
+
+  carrinho.value = []
+  menuCarrinho.value = false
+}
+
 </script>
 
 <style scoped>
