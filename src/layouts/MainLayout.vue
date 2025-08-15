@@ -1,19 +1,37 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated class="bg-primary text-white">
-      <q-toolbar class="q-px-md">
+    <q-header elevated class="bg-white text-black">
+      <q-toolbar class="q-px-lg">
+
         <q-toolbar-title class="row items-center">
-          <img src="icons/app-logo-sfundo.png" alt="Logo"
-            style="width: 36px; height: 36px; margin-right: 12px; border-radius: 8px;" />
-          <span class="text-bold text-h6">NegoMaq </span>
+          <span class="text-bold text-h6">NegoMaq</span>
         </q-toolbar-title>
 
-        <div class="row items-center q-gutter-sm">
-          <q-btn round dense flat icon="manage_accounts" class="bg-white text-primary" to="/user-page">
+        <div class="row items-center q-gutter-md gt-sm">
+          <router-link to="/" class="no-underline text-grey-8" style="color: #666; text-decoration: none;">
+            Home
+          </router-link>
+          <router-link to="/facas-page" class="no-underline text-grey-8" style="color: #666; text-decoration: none;">
+            Facas
+          </router-link>
+          <router-link to="/estojo-page" class="no-underline text-grey-8" style="color: #666; text-decoration: none;">
+            Estojos
+          </router-link>
+          <router-link to="/avental-page" class="no-underline text-grey-8" style="color: #666; text-decoration: none;">
+            Aventais
+          </router-link>
+          <router-link to="/artigo-churrasco-page" class="no-underline text-grey-8"
+            style="color: #666; text-decoration: none;">
+            Artigos de Churrasco
+          </router-link>
+        </div>
+
+        <div class="row items-center q-gutter-sm q-ml-md gt-sm">
+          <q-btn round dense flat icon="manage_accounts" class="text-grey-8" to="/user-page">
             <q-tooltip>Painel de Usuário</q-tooltip>
           </q-btn>
 
-          <q-btn round dense flat class="bg-white text-primary" @click="menuCarrinho = true">
+          <q-btn round dense flat class="text-grey" @click="menuCarrinho = true">
             <q-icon name="shopping_cart" />
             <q-badge v-if="cartCount > 0" color="warning" floating class="text-black shadow-lg flex flex-center"
               style="font-weight:700; font-size:14px; min-width:22px; height:22px; border-radius:12px; box-shadow:0 0 8px rgba(255,193,7,.7);">
@@ -21,62 +39,74 @@
             </q-badge>
             <q-tooltip>Meu Carrinho</q-tooltip>
           </q-btn>
-
-          <q-btn round dense flat icon="circle_notifications" class="bg-white text-primary"
-            @click="dialogInformacao = true">
-            <q-tooltip>Informações Adicionais</q-tooltip>
-          </q-btn>
-
-          <q-separator vertical color="white" size="3px" class="q-mx-md" />
-
-          <q-btn round dense flat icon="logout" class="bg-white text-negative" @click="sairSistema()">
-            <q-tooltip>Sair do Sistema</q-tooltip>
-          </q-btn>
         </div>
+
+        <q-btn dense flat round icon="menu" class="lt-md" @click="menuMobile = true" />
       </q-toolbar>
     </q-header>
 
+    <q-drawer v-model="menuMobile" side="right" bordered class="column justify-between">
+      <!-- Lista -->
+      <q-list>
+        <q-item clickable to="/">
+          <q-item-section avatar><q-icon name="home" /></q-item-section>
+          <q-item-section>Home</q-item-section>
+        </q-item>
+
+        <q-item clickable to="/facas-page">
+          <q-item-section avatar><q-icon name="restaurant" /></q-item-section>
+          <q-item-section>Facas</q-item-section>
+        </q-item>
+
+        <q-item clickable to="/estojo-page">
+          <q-item-section avatar><q-icon name="work" /></q-item-section>
+          <q-item-section>Estojos</q-item-section>
+        </q-item>
+
+        <q-item clickable to="/avental-page">
+          <q-item-section avatar><q-icon name="checkroom" /></q-item-section>
+          <q-item-section>Aventais</q-item-section>
+        </q-item>
+
+        <q-item clickable to="/artigo-churrasco-page">
+          <q-item-section avatar><q-icon name="outdoor_grill" /></q-item-section>
+          <q-item-section>Artigos de Churrasco</q-item-section>
+        </q-item>
+
+        <q-separator />
+
+        <q-item clickable to="/user-page">
+          <q-item-section avatar><q-icon name="manage_accounts" /></q-item-section>
+          <q-item-section>Painel de Usuário</q-item-section>
+        </q-item>
+
+        <q-item clickable @click="menuCarrinho = true">
+          <q-item-section avatar><q-icon name="shopping_cart" /></q-item-section>
+          <q-item-section>Meu Carrinho</q-item-section>
+          <q-item-section side v-if="cartCount > 0">
+            <q-badge color="warning" class="text-black">{{ cartCount }}</q-badge>
+          </q-item-section>
+        </q-item>
+      </q-list>
+
+      <!-- Rodapé -->
+      <div class="q-pa-md text-center bg-primary text-white text-bold">
+        NegoMaq
+      </div>
+    </q-drawer>
+
+
     <q-page-container>
       <router-view :adicionarAoCarrinho="adicionarAoCarrinho" />
-
-      <div class="row q-col-gutter-md justify-center items-center text-center text-grey bg-black">
-        <div class="row q-col-gutter-md">
-          <div class="col-12">
-            <a href="https://api.whatsapp.com/send/?phone=5554996641291&text&type=phone_number&app_absent=0"
-              target="_blank" class="q-mx-sm">
-              <i class="fab fa-whatsapp fa-2x" style="color:#25d366"></i>
-            </a>
-            <a href="https://www.instagram.com/negomaq/" target="_blank" class="q-mx-sm">
-              <i class="fab fa-instagram fa-2x" style="color:#c13584"></i>
-            </a>
-            <a href="tel:+5554996641291" class="q-mx-sm">
-              <i class="fas fa-phone fa-2x" style="color: #999999 "></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="col-12 flex justify-center items-center"
-          style="text-align:center; font-size:0.7rem; padding:1.5rem;">
-
-          <span class="q-mr-xs "> Erechim/RS - Brasil -</span>
-          <q-icon name="copyright" />
-          <span class="q-ml-xs">2025 Todos os direitos reservados - Couros NegoMaq</span>
-        </div>
-      </div>
     </q-page-container>
 
-    <!-- ======= // CARRINHO // ========= -->
     <q-drawer v-model="menuCarrinho" side="right" overlay bordered class="bg-white cart-drawer column no-wrap"
       style="width: 500px;">
-
       <q-toolbar class="bg-primary text-white q-pa-xs">
         <q-btn flat dense round icon="close" @click="menuCarrinho = false" />
-        <q-toolbar-title>
-          Meu Carrinho
-        </q-toolbar-title>
+        <q-toolbar-title>Meu Carrinho</q-toolbar-title>
       </q-toolbar>
       <q-separator />
-
       <q-scroll-area class="col q-pa-sm">
         <q-list separator>
           <q-item v-for="i in 3" :key="i" class="cart-item">
@@ -112,97 +142,22 @@
 
         </q-list>
       </q-scroll-area>
-
-      <q-separator />
-      <div class="q-pa-md column q-gutter-sm">
-        <div class="row items-center justify-between text-subtitle1">
-          <span class="text-bold">Total R$250,00</span>
-        </div>
-        <q-btn unelevated color="positive" label="Finalizar Compra" icon="shopping_bag" class="full-width"
-          style="border-radius: 10px;" />
-      </div>
     </q-drawer>
-
-    <!-- ======= // DIALOG INFORMAÇÕES // ========= -->
-    <q-dialog v-model="dialogInformacao">
-      <q-card style="width: 400px; max-height: 90vh" class="column no-wrap">
-        <q-card-section class="bg-primary text-white">
-          <div class="row items-center" style="gap: 8px">
-            <q-icon name="circle_notifications" size="md" />
-            <div class="text-h6">Importantes</div>
-          </div>
-        </q-card-section>
-
-        <div class="q-pa-md scroll" style="flex: 1">
-          <q-card-section style="border: 2px solid #ab0d06; border-radius: 8px">
-            <div class="column q-gutter-md">
-              <div class="row items-center" style="gap: 8px">
-                <q-icon name="error" color="black" size="sm" />
-                <div class="text-subtitle1">Entre no nosso grupo de Leilão</div>
-              </div>
-
-              <div class="row items-center justify-between">
-                <img src="icons/leilao-fundo.png" alt="Grupo de Leilão"
-                  style="width: 90px; height: 90px; border: 2px solid black; border-radius: 4px" />
-
-                <q-btn color="positive" no-caps unelevated @click="abrirGrupoLeilao()">
-                  <template #default>
-                    <i class="fab fa-whatsapp fa-lg q-mr-sm" style="color: white"></i>
-                    <span class="text-white">ENTRAR</span>
-                  </template>
-                </q-btn>
-              </div>
-            </div>
-          </q-card-section>
-        </div>
-
-        <q-separator color="grey" style="height: 1px" />
-        <q-card-actions align="right" class="q-pa-sm">
-          <q-btn label="Fechar" color="primary" v-close-popup icon="close" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 
-const router = useRouter()
-const $q = useQuasar()
-
-const dialogInformacao = ref(false)
+const menuMobile = ref(false)
 const menuCarrinho = ref(false)
-const cartCount = ref(0) // contador do carrinho
+const cartCount = ref(0)
 
 const adicionarAoCarrinho = () => {
   cartCount.value++
 }
 
-const sairSistema = async () => {
-  try {
-    $q.loading.show({ message: 'Saindo...' })
-    localStorage.removeItem('usuario')
-    await router.push('/')
-  } catch (error) {
-    console.log('ERRO SAIR SISTEMA=> ', error)
-    $q.notify({
-      type: 'negative',
-      message: 'Não foi possivel sair do Sistema!',
-      position: 'center',
-      timeout: 2000
-    })
-  } finally {
-    $q.loading.hide()
-  }
-}
 
-const abrirGrupoLeilao = () => {
-  window.open('https://chat.whatsapp.com/FB2vjot6F5y1eYsM6nHwRM', '_blank')
-}
 </script>
 
 <style scoped>
@@ -215,5 +170,22 @@ const abrirGrupoLeilao = () => {
 .drawer-bottom-btn {
   margin-top: auto;
   padding: 10px;
+}
+
+:deep(a.router-link-active),
+:deep(a.router-link-exact-active) {
+  color: var(--q-primary) !important;
+}
+
+:deep(a:hover) {
+  color: var(--q-primary) !important;
+}
+
+.router-link-exact-active {
+  color: var(--q-primary) !important;
+}
+
+router-link:hover {
+  color: var(--q-primary) !important;
 }
 </style>
