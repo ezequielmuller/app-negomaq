@@ -1,6 +1,6 @@
 <template>
   <div class="text-h6 flex flex-center text-bold">
-    Artigos para Churrasco
+    Estojos de Facas
   </div>
 
   <div class="flex flex-center q-mt-md">

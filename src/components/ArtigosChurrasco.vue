@@ -1,6 +1,6 @@
 <template>
   <div class="text-h6 flex flex-center text-bold">
-    Estojos
+    Artigos de Churrascos
   </div>
 
   <div class="flex flex-center q-mt-md">
