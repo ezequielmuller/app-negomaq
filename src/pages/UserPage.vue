@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <div class="row items-center">
-      <q-btn flat round color="primary" icon="arrow_back" size="md" to="/home" />
+      <q-btn flat round color="primary" icon="arrow_back" size="md" to="/" />
       <div class="text-h5 text-bold q-ml-sm">Painel do Usuário</div>
     </div>
 

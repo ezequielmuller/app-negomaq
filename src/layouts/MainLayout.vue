@@ -4,7 +4,7 @@
       <q-toolbar class="q-px-lg">
 
         <q-toolbar-title class="row items-center">
-          <span class="text-bold text-h6">NegoMaq</span>
+          <span class="text-bold text-h6 text-primary">NegoMaq</span>
         </q-toolbar-title>
 
         <div class="row items-center q-gutter-md gt-sm">
@@ -31,10 +31,11 @@
             <q-tooltip>Painel de Usuário</q-tooltip>
           </q-btn>
 
-          <q-btn round dense flat class="text-grey" @click="menuCarrinho = true">
+          <q-btn round dense flat class="text-grey-8" @click="menuCarrinho = true">
             <q-icon name="shopping_cart" />
-            <q-badge v-if="cartCount > 0" color="warning" floating class="text-black shadow-lg flex flex-center"
-              style="font-weight:700; font-size:14px; min-width:22px; height:22px; border-radius:12px; box-shadow:0 0 8px rgba(255,193,7,.7);">
+            <q-badge v-if="cartCount > 0" color="warning" floating class="text-black flex flex-center"
+              style=" font-weight: 700; font-size: 13px; width: 24px;
+              height: 24px; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.3); top: -6px; right: -6px; position: absolute;">
               {{ cartCount }}
             </q-badge>
             <q-tooltip>Meu Carrinho</q-tooltip>
