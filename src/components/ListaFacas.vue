@@ -47,7 +47,7 @@
             nome: produto.nome,
             descricao: produto.descricao,
             preco: `R$ ${formatarPreco(produto.preco)}`,
-            img: '/icons/faca.webp'
+            img: produto.img || '/icons/faca.webp'
           })" />
 
         </div>

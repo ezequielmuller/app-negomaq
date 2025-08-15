@@ -39,8 +39,12 @@
           <div class="text-bold text-primary text-[18px]">
             R$ {{ formatarPreco(produto.preco) }}
           </div>
-          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="rounded-[10px]"
-            @click="props.adicionarAoCarrinho" />
+          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="rounded-[10px]" @click="props.adicionarAoCarrinho({
+            nome: produto.nome,
+            descricao: produto.descricao,
+            preco: `R$ ${formatarPreco(produto.preco)}`,
+            img: produto.img || '/icons/faca.webp'
+          })" />
         </div>
       </q-card-section>
     </q-card>
@@ -60,8 +64,14 @@ import { useQuasar } from 'quasar';
 const $q = useQuasar()
 
 const props = defineProps<{
-  adicionarAoCarrinho: () => void
+  adicionarAoCarrinho: (produto: {
+    nome: string
+    descricao: string
+    preco: string
+    img: string
+  }) => void
 }>()
+
 
 const pesquisa = ref('')
 // const precoMin = ref('')
