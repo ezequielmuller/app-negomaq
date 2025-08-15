@@ -8,34 +8,23 @@
         </q-toolbar-title>
 
         <div class="row items-center q-gutter-md gt-sm">
-          <router-link to="/" class="no-underline text-grey-8" style="color: #666; text-decoration: none;">
-            Home
-          </router-link>
-          <router-link to="/facas-page" class="no-underline text-grey-8" style="color: #666; text-decoration: none;">
-            Facas
-          </router-link>
-          <router-link to="/estojo-page" class="no-underline text-grey-8" style="color: #666; text-decoration: none;">
-            Estojos
-          </router-link>
-          <router-link to="/avental-page" class="no-underline text-grey-8" style="color: #666; text-decoration: none;">
-            Aventais
-          </router-link>
-          <router-link to="/artigo-churrasco-page" class="no-underline text-grey-8"
-            style="color: #666; text-decoration: none;">
-            Artigos de Churrasco
-          </router-link>
+          <router-link :to="{ name: 'home' }" class="no-underline text-grey-8">Home</router-link>
+          <router-link :to="{ name: 'home-facas-page' }" class="no-underline text-grey-8">Facas</router-link>
+          <router-link :to="{ name: 'home-estojo-page' }" class="no-underline text-grey-8">Estojos</router-link>
+          <router-link :to="{ name: 'home-avental-page' }" class="no-underline text-grey-8">Aventais</router-link>
+          <router-link :to="{ name: 'home-artigo-churrasco-page' }" class="no-underline text-grey-8">Artigos de
+            Churrasco</router-link>
         </div>
 
         <div class="row items-center q-gutter-sm q-ml-md gt-sm">
-          <q-btn round dense flat icon="manage_accounts" class="text-grey-8" to="/user-page">
+          <q-btn round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }" class="text-grey-8">
             <q-tooltip>Painel de Usuário</q-tooltip>
           </q-btn>
 
           <q-btn round dense flat class="text-grey-8" @click="menuCarrinho = true">
             <q-icon name="shopping_cart" />
             <q-badge v-if="cartCount > 0" color="warning" floating class="text-black flex flex-center"
-              style=" font-weight: 700; font-size: 13px; width: 24px;
-              height: 24px; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.3); top: -6px; right: -6px; position: absolute;">
+              style=" font-weight: 700; font-size: 13px; width: 24px; height: 24px; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.3); top: -6px; right: -6px; position: absolute;">
               {{ cartCount }}
             </q-badge>
             <q-tooltip>Meu Carrinho</q-tooltip>
@@ -43,40 +32,40 @@
         </div>
 
         <q-btn dense flat round icon="menu" class="lt-md" @click="menuMobile = true" />
+
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="menuMobile" side="right" bordered class="column justify-between">
-      <!-- Lista -->
       <q-list>
-        <q-item clickable to="/">
+        <q-item clickable :to="{ name: 'home' }">
           <q-item-section avatar><q-icon name="home" /></q-item-section>
           <q-item-section>Home</q-item-section>
         </q-item>
 
-        <q-item clickable to="/facas-page">
+        <q-item clickable :to="{ name: 'home-facas-page' }">
           <q-item-section avatar><q-icon name="restaurant" /></q-item-section>
           <q-item-section>Facas</q-item-section>
         </q-item>
 
-        <q-item clickable to="/estojo-page">
+        <q-item clickable :to="{ name: 'home-estojo-page' }">
           <q-item-section avatar><q-icon name="work" /></q-item-section>
           <q-item-section>Estojos</q-item-section>
         </q-item>
 
-        <q-item clickable to="/avental-page">
+        <q-item clickable :to="{ name: 'home-avental-page' }">
           <q-item-section avatar><q-icon name="checkroom" /></q-item-section>
           <q-item-section>Aventais</q-item-section>
         </q-item>
 
-        <q-item clickable to="/artigo-churrasco-page">
+        <q-item clickable :to="{ name: 'home-artigo-churrasco-page' }">
           <q-item-section avatar><q-icon name="outdoor_grill" /></q-item-section>
           <q-item-section>Artigos de Churrasco</q-item-section>
         </q-item>
 
         <q-separator />
 
-        <q-item clickable to="/user-page">
+        <q-item clickable :to="{ name: 'home-user-page' }">
           <q-item-section avatar><q-icon name="manage_accounts" /></q-item-section>
           <q-item-section>Painel de Usuário</q-item-section>
         </q-item>
@@ -90,17 +79,24 @@
         </q-item>
       </q-list>
 
-      <!-- Rodapé -->
       <div class="q-pa-md text-center bg-primary text-white text-bold">
         NegoMaq
       </div>
     </q-drawer>
 
-
     <q-page-container>
-      <router-view :adicionarAoCarrinho="adicionarAoCarrinho" />
+      <q-page-sticky position="bottom-right" :offset="[18, 18]" style="z-index: 9999;">
+        <q-btn fab color="green" @click="enviarWhatsapp()">
+          <i class="fab fa-whatsapp fa-2x text-white"></i>
+        </q-btn>
+      </q-page-sticky>
+
+      <router-view v-slot="{ Component }" :key="$route.fullPath">
+        <component :is="Component" :adicionar-ao-carrinho="adicionarAoCarrinho" />
+      </router-view>
     </q-page-container>
 
+    <!-- DRAWER CARRINHO -->
     <q-drawer v-model="menuCarrinho" side="right" overlay bordered class="bg-white cart-drawer column no-wrap"
       style="width: 500px;">
       <q-toolbar class="bg-primary text-white q-pa-xs">
@@ -112,27 +108,19 @@
         <q-list separator>
           <q-item v-for="i in 3" :key="i" class="cart-item">
             <q-item-section avatar>
-              <img src="icons/estojo.webp" alt="estojo" style="width:80px; height:80px; border-radius:8px;"
-                fit="contain" />
+              <img src="icons/estojo.webp" alt="estojo" style="width:80px; height:80px; border-radius:8px;" />
             </q-item-section>
 
             <q-item-section>
               <div class="row justify-between">
-                <div style="font-size: 18px;" class="text-bold">
-                  Estojo em Couro - Personalizado
-                </div>
+                <div style="font-size: 18px;" class="text-bold">Estojo em Couro - Personalizado</div>
                 <div class="q-mt-md" style="font-size: 14px;">
-                  Uma ótima opção de estojo para facas para usar na cozinha da sua casa! <b>EM COURO</b> e
-                  <b>Personalizada</b>
+                  Uma ótima opção de estojo para facas! <b>EM COURO</b> e <b>Personalizada</b>
                 </div>
               </div>
 
               <div class="row items-center justify-between q-mt-sm">
-                <div class="row items-center justify-between">
-                  <div style="font-size: 18px;" class="text-bold q-ml-md">
-                    R$ 49,99
-                  </div>
-                </div>
+                <div style="font-size: 18px;" class="text-bold q-ml-md">R$ 49,99</div>
               </div>
 
               <div class="row justify-end q-mt-xs">
@@ -140,7 +128,6 @@
               </div>
             </q-item-section>
           </q-item>
-
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -158,35 +145,24 @@ const adicionarAoCarrinho = () => {
   cartCount.value++
 }
 
-
+const enviarWhatsapp = () => {
+  const nome = 'Lucas'
+  const numero = '548449-5095'
+  const celularFormatado = numero.replace(/\D/g, '')
+  const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado
+  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
+  const mensagemCodificada = encodeURIComponent(mensagem)
+  window.open(`https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`, '_blank')
+}
 </script>
 
 <style scoped>
-.drawer-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.drawer-bottom-btn {
-  margin-top: auto;
-  padding: 10px;
-}
-
 :deep(a.router-link-active),
 :deep(a.router-link-exact-active) {
   color: var(--q-primary) !important;
 }
 
 :deep(a:hover) {
-  color: var(--q-primary) !important;
-}
-
-.router-link-exact-active {
-  color: var(--q-primary) !important;
-}
-
-router-link:hover {
   color: var(--q-primary) !important;
 }
 </style>
