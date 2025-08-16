@@ -21,7 +21,7 @@
       style="width: 350px; max-width: 95vw; min-width: 220px; display: flex; flex-direction: column;">
 
       <q-card-section class="flex justify-center items-center h-[200px] pb-0">
-        <img src="/public/icons/estojo.webp" :alt="produto.nome"
+        <img :src="produto.img || '/icons/estojo.webp'" :alt="produto.nome"
           class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md" />
       </q-card-section>
 
