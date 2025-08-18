@@ -82,7 +82,7 @@
       </q-list>
 
       <div class="q-pa-md text-center bg-primary text-white text-bold">
-        NegoMaq
+        NegoMaq - V.1.0.0
       </div>
     </q-drawer>
 
@@ -248,5 +248,10 @@ const abrirNotificacao = () => {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
   }
+}
+
+:deep(.q-item:hover) {
+  background-color: var(--q-primary);
+  color: white !important;
 }
 </style>
