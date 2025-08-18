@@ -15,10 +15,10 @@
           <router-link :to="{ name: 'home-avental-page' }" class="no-underline text-white">Aventais</router-link>
           <router-link :to="{ name: 'home-artigo-churrasco-page' }" class="no-underline text-white">Artigos de
             Churrasco</router-link>
-        </div>
 
-        <q-separator vertical color="white"
-          style="margin-left: 10px; margin-right: 10px; margin-top: 8px; margin-bottom: 8px;" />
+          <q-separator vertical color="white"
+            style="margin-left: 10px; margin-right: 10px; margin-top: 17px; margin-bottom: 1px;" />
+        </div>
 
         <div class="row items-center q-gutter-sm gt-sm">
           <q-btn round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }" class="text-white">
