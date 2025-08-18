@@ -17,7 +17,10 @@
             Churrasco</router-link>
         </div>
 
-        <div class="row items-center q-gutter-sm q-ml-md gt-sm">
+        <q-separator vertical color="white"
+          style="margin-left: 10px; margin-right: 10px; margin-top: 8px; margin-bottom: 8px;" />
+
+        <div class="row items-center q-gutter-sm gt-sm">
           <q-btn round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }" class="text-white">
             <q-tooltip>Painel de Usuário</q-tooltip>
           </q-btn>
