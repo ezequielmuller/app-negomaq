@@ -37,7 +37,7 @@
 
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
         <q-btn outline label="Fechar" color="primary" v-close-popup />
-        <q-btn label="Gravar" color="primary" @click="gravarFaca" icon="save" />
+        <q-btn label="Gravar" color="primary" @click="gravarProduto" icon="save" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -86,7 +86,7 @@
 
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
         <q-btn outline label="Fechar" color="primary" v-close-popup />
-        <q-btn label="Salvar" color="primary" @click="editarFaca" icon="save" />
+        <q-btn label="Salvar" color="primary" @click="editarProduto" icon="save" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -96,16 +96,7 @@
 import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { criarProduto, atualizarProduto } from 'src/services/produtoService'
-
-interface Produto {
-  id?: string
-  nome: string
-  descricao: string
-  categoria: string
-  preco: number
-  estoque?: number
-  img?: string
-}
+import type { Produto } from 'src/types/types'
 
 type ArquivosImagem = File[] | null
 
@@ -171,7 +162,7 @@ watch(dialogGravar, val => { emit('update:dialogGravar', val) })
 watch(() => props.dialogEditar, val => { dialogEditar.value = val })
 watch(dialogEditar, val => { emit('update:dialogEditar', val) })
 
-const gravarFaca = async () => {
+const gravarProduto = async () => {
   try {
     $q.loading.show({ message: 'Cadastrando Produto...' })
     const data = {
@@ -192,7 +183,7 @@ const gravarFaca = async () => {
   }
 }
 
-const editarFaca = async () => {
+const editarProduto = async () => {
   try {
     if (!produtoId.value) throw new Error('ID do produto não definido')
     $q.loading.show({ message: 'Alterando Produto...' })
