@@ -112,38 +112,50 @@
 
     <!-- MENU CARRINHO -->
     <q-drawer v-model="menuCarrinho" side="right" overlay bordered class="bg-white cart-drawer column no-wrap"
-      style="width: 500px;">
+      style="width: 450px;">
       <q-toolbar class="bg-primary text-white q-pa-xs">
         <q-btn flat dense round icon="close" @click="menuCarrinho = false" />
         <q-toolbar-title>Meu Carrinho</q-toolbar-title>
       </q-toolbar>
-      <q-separator />
-      <q-scroll-area class="col q-pa-sm">
+
+      <q-scroll-area class="col q-pa-md">
         <q-list separator>
-          <q-item v-for="i in 3" :key="i" class="cart-item">
+          <q-item v-for="(item, index) in carrinho" :key="index" class="cart-item q-pa-sm" clickable
+            style="border-radius: 12px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.2s;"
+            @mouseover="hoverIndex = index" @mouseleave="hoverIndex = null">
             <q-item-section avatar>
-              <img src="icons/estojo.webp" alt="estojo" style="width:80px; height:80px; border-radius:8px;" />
+              <img :src="item.img || ''" :alt="item.nome"
+                style="width:80px; height:80px; border-radius:12px; object-fit: cover;" />
             </q-item-section>
-
-            <q-item-section>
-              <div class="row justify-between">
-                <div style="font-size: 18px;" class="text-bold">Estojo em Couro - Personalizado</div>
-                <div class="q-mt-md" style="font-size: 14px;">
-                  Uma ótima opção de estojo para facas! <b>EM COURO</b> e <b>Personalizada</b>
-                </div>
+            <q-item-section class="q-ml-sm">
+              <div class="text-bold text-h6">{{ item.nome }}</div>
+              <div class="text-subtitle2 text-grey">{{ item.descricao }}</div>
+              <div class="text-h6 font-bold q-mt-xs" :class="{
+                'text-white': hoverIndex === index,
+                'text-primary': hoverIndex !== index
+              }">
+                {{ item.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
               </div>
-
-              <div class="row items-center justify-between q-mt-sm">
-                <div style="font-size: 18px;" class="text-bold q-ml-md">R$ 49,99</div>
+              <div class="row justify-end q-mt-sm">
+                <q-btn color="negative" icon="delete" round dense flat @click="removerDoCarrinho(index)" />
               </div>
+            </q-item-section>
+          </q-item>
 
-              <div class="row justify-end q-mt-xs">
-                <q-btn color="negative" icon="delete" outline size="sm" label="Remover" style="border-radius:8px;" />
-              </div>
+          <q-item v-if="carrinho.length === 0">
+            <q-item-section class="text-center text-grey">
+              Seu carrinho está vazio
             </q-item-section>
           </q-item>
         </q-list>
       </q-scroll-area>
+
+      <q-separator />
+
+      <div class="q-pa-md">
+        <q-btn color="primary" class="full-width" label="Finalizar Compra" @click="finalizarCompra" unelevated
+          rounded />
+      </div>
     </q-drawer>
 
     <!-- DIALOG DE NOTIFICAÇÕES -->
@@ -179,9 +191,7 @@
             </q-card-section>
           </q-card>
         </q-card-section>
-
         <q-separator style="height: 3px;" class="bg-amber-9 q-mx-md" />
-
         <q-card-actions align="right" class="q-mr-sm q-mb-xs">
           <q-btn icon="close" outline label="Fechar" color="amber-9" v-close-popup style="border-radius: 8px;" />
         </q-card-actions>
@@ -198,9 +208,18 @@ const menuMobile = ref(false)
 const menuCarrinho = ref(false)
 const dialogNotificacao = ref(false)
 const cartCount = ref(0)
+const hoverIndex = ref<number | null>(null)
 
-const adicionarAoCarrinho = () => {
-  cartCount.value++
+const carrinho = ref<Produto[]>([])
+
+interface Produto {
+  id: string
+  nome: string
+  descricao: string
+  categoria: string
+  preco: number
+  estoque: number
+  img?: string
 }
 
 const enviarWhatsapp = () => {
@@ -220,6 +239,28 @@ const abrirGrupoLeilao = () => {
 const abrirNotificacao = () => {
   dialogNotificacao.value = true
 }
+
+const adicionarAoCarrinho = (produto: Produto) => {
+  carrinho.value.push(produto)
+  menuCarrinho.value = true
+}
+
+const removerDoCarrinho = (index: number) => {
+  carrinho.value.splice(index, 1)
+}
+
+const finalizarCompra = () => {
+  if (carrinho.value.length === 0) {
+    alert('Seu carrinho está vazio!')
+    return
+  }
+  const mensagem = encodeURIComponent(
+    `Olá, quero comprar:\n${carrinho.value.map(p => `- ${p.nome} (${p.preco})`).join('\n')}`
+  )
+  window.open(`https://wa.me/5599999999999?text=${mensagem}`, '_blank')
+  carrinho.value = []
+  menuCarrinho.value = false
+}
 </script>
 
 <style scoped>
@@ -232,6 +273,7 @@ const abrirNotificacao = () => {
   color: white !important;
 }
 
+/* Badge pulsante */
 .soft-pulse-badge {
   animation: soft-pulse 1s infinite ease-in-out;
 }
@@ -256,5 +298,37 @@ const abrirNotificacao = () => {
 :deep(.q-item:hover) {
   background-color: var(--q-primary);
   color: white !important;
+}
+
+.cart-item {
+  background-color: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cart-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.cart-drawer {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cart-item img {
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.cart-item q-btn {
+  border-radius: 50%;
+}
+
+.cart-item .text-primary {
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 </style>
