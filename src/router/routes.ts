@@ -39,10 +39,10 @@ const routes = [
   },
 
   {
-    path: '/login',
+    path: '',
     component: () => import('layouts/LoginLayout.vue'),
     children: [
-      { path: '', name: 'login', component: () => import('pages/LoginPage.vue') },
+      { path: 'login', name: 'login', component: () => import('pages/LoginPage.vue') },
       { path: 'cadastro', name: 'cadastro', component: () => import('pages/CadastroPage.vue') },
     ],
   },
