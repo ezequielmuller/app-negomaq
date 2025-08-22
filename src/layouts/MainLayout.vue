@@ -115,46 +115,51 @@
       style="width: 450px;">
       <q-toolbar class="bg-primary text-white q-pa-xs">
         <q-btn flat dense round icon="close" @click="menuCarrinho = false" />
-        <q-toolbar-title>Meu Carrinho</q-toolbar-title>
+        <q-toolbar-title style="font-size: 18px;">Meu Carrinho</q-toolbar-title>
       </q-toolbar>
 
       <q-scroll-area class="col q-pa-md">
         <q-list separator>
-          <q-item v-for="(item, index) in carrinho" :key="index" class="cart-item q-pa-sm" clickable
-            style="border-radius: 12px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.2s;"
-            @mouseover="hoverIndex = index" @mouseleave="hoverIndex = null">
+
+          <q-item v-for="(item, index) in carrinho" :key="index" class="cart-item q-pa-sm"
+            style="border-radius: 12px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.2s;">
+
             <q-item-section avatar>
               <img :src="item.img || ''" :alt="item.nome"
                 style="width:80px; height:80px; border-radius:12px; object-fit: cover;" />
             </q-item-section>
-            <q-item-section class="q-ml-sm">
-              <div class="text-bold text-h6">{{ item.nome }}</div>
-              <div class="text-subtitle2 text-grey">{{ item.descricao }}</div>
-              <div class="text-h6 font-bold q-mt-xs" :class="{
-                'text-white': hoverIndex === index,
-                'text-primary': hoverIndex !== index
-              }">
-                {{ item.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
-              </div>
-              <div class="row justify-end q-mt-sm">
+
+            <q-item-section class="q-ml-sm scroll">
+              <div class="text-bold" style="font-size: 16px;">{{ item.nome }}</div>
+              <div class="text-grey">{{ item.descricao }}</div>
+              <div class="text-bold q-mt-xs" style="font-size: 16px;">{{ item.preco }}</div>
+              <div class="row justify-between q-mt-sm">
+                <q-btn flat color="negative" icon="add" round size="sm" @click="quantidadeProduto++"
+                  style="width: 20px;" />
+                <span class="q-mt-sm">{{ quantidadeProduto }}</span>
+                <q-btn flat color="negative" icon="remove" size="sm" round @click=" quantidadeProduto--" />
+                <q-separator vertical color="primary" />
                 <q-btn color="negative" icon="delete" round dense flat @click="removerDoCarrinho(index)" />
               </div>
             </q-item-section>
           </q-item>
 
-          <q-item v-if="carrinho.length === 0">
-            <q-item-section class="text-center text-grey">
-              Seu carrinho está vazio
-            </q-item-section>
-          </q-item>
+          <div v-if="carrinho.length === 0"
+            class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
+            <q-icon name="production_quantity_limits" size="md" color="grey" />
+            <span class="font-bold q-mt-sm">Seu carrinho esta vazio!</span>
+          </div>
         </q-list>
       </q-scroll-area>
 
       <q-separator />
 
-      <div class="q-pa-md">
-        <q-btn color="primary" class="full-width" label="Finalizar Compra" @click="finalizarCompra" unelevated
-          rounded />
+      <div class="q-pa-md" style="padding-top: 8px;">
+        <div class="row text-bold" style="font-size: 16px;">Subtotal: {{ formatCurrency(0) }}</div>
+        <div class="q-mt-mt" style="padding-top: 8px;">
+          <q-btn color="primary" class="full-width " label="Finalizar Compra" @click="finalizarCompra" unelevated
+            rounded :disable="carrinho.length === 0" />
+        </div>
       </div>
     </q-drawer>
 
@@ -202,15 +207,16 @@
 </template>
 
 <script setup lang="ts">
+import { formatPrice } from 'src/config/formatPrice'
 import { ref } from 'vue'
 
 const menuMobile = ref(false)
 const menuCarrinho = ref(false)
 const dialogNotificacao = ref(false)
 const cartCount = ref(0)
-const hoverIndex = ref<number | null>(null)
 
 const carrinho = ref<Produto[]>([])
+const quantidadeProduto = ref(1)
 
 interface Produto {
   id: string
@@ -224,7 +230,7 @@ interface Produto {
 
 const enviarWhatsapp = () => {
   const nome = 'Lucas'
-  const numero = '548449-5095'
+  const numero = '55548449-5095'
   const celularFormatado = numero.replace(/\D/g, '')
   const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado
   const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
@@ -257,10 +263,15 @@ const finalizarCompra = () => {
   const mensagem = encodeURIComponent(
     `Olá, quero comprar:\n${carrinho.value.map(p => `- ${p.nome} (${p.preco})`).join('\n')}`
   )
-  window.open(`https://wa.me/5599999999999?text=${mensagem}`, '_blank')
+  window.open(`https://wa.me/555484495095?text=${mensagem}`, '_blank')
   carrinho.value = []
   menuCarrinho.value = false
 }
+
+function formatCurrency(value: number) {
+  return formatPrice(value)
+}
+
 </script>
 
 <style scoped>
@@ -278,27 +289,6 @@ const finalizarCompra = () => {
   animation: soft-pulse 1s infinite ease-in-out;
 }
 
-@keyframes soft-pulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
-  }
-
-  50% {
-    transform: scale(1.2);
-    box-shadow: 0 0 12px 6px rgba(255, 0, 0, 0.3);
-  }
-
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
-  }
-}
-
-:deep(.q-item:hover) {
-  background-color: var(--q-primary);
-  color: white !important;
-}
 
 .cart-item {
   background-color: #ffffff;
@@ -309,26 +299,15 @@ const finalizarCompra = () => {
 }
 
 .cart-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  background-color: gainsboro
 }
 
 .cart-drawer {
   border-radius: 12px;
-  overflow: hidden;
 }
 
 .cart-item img {
   border-radius: 12px;
   object-fit: cover;
-}
-
-.cart-item q-btn {
-  border-radius: 50%;
-}
-
-.cart-item .text-primary {
-  font-weight: 700;
-  font-size: 1.1rem;
 }
 </style>
