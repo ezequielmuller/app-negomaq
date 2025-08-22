@@ -40,50 +40,86 @@
         <div class="col-12 col-md-12 col-xs-12 col-sm-12 flex justify-center q-mt-sm q-mt-md-none">
           <q-btn color="primary" icon="edit" label="Editar Perfil" @click="abrirDialogEditarUsuario"
             style="border-radius: 8px;" />
+          <q-btn outline color="primary" icon="logout" label="Sair" @click="sairSistema()" style="border-radius: 8px;"
+            class="q-ml-sm" />
         </div>
       </div>
     </q-card>
 
-    <div class="col-12 q-mt-md">
-      <div class="text-h6 q-mb-md">Lista de Produtos</div>
+    <div v-if="admin == false">
+      <div class="text-h6 row q-mb-xs">Lista de Produtos</div>
 
-      <q-input v-model="filtroNome" label="Pesquisar por nome" dense outlined class="q-mb-sm" debounce="300" />
-      <q-select v-model="filtroCategoria" :options="categorias" label="Filtrar por categoria" dense outlined emit-value
-        map-options class="q-mb-md" />
+      <div class="row q-col-gutter-sm">
+        <div class="col-md-4 col-sm-4 col-xs-12">
+          <q-input v-model="filtroNome" label="Pesquisar por nome" dense outlined debounce="300" />
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12">
+          <q-select v-model="filtroCategoria" :options="categorias" label="Filtrar por categoria" dense outlined
+            emit-value map-options />
+        </div>
+        <div class="row justify-end col-md-4 col-sm-4 col-xs-12">
+          <q-btn color="primary" icon="add" label="Adicionar Produto" @click="novoProduto"
+            style="border-radius: 8px;" />
+        </div>
+      </div>
+      <div class="col-12 q-mt-md">
+        <q-table dense :rows="produtosFiltrados" :columns="columns" row-key="id" no-data-label="Sem Produtos"
+          separator="cell" virtual-scroll style="height: 450px;" flat bordered>
+          <template v-slot:header="props">
+            <q-tr :props="props" class="bg-grey-4 text-bold">
+              <q-th v-for="col in props.cols" :key="col.name" :props="props">
+                {{ col.label }}
+              </q-th>
+            </q-tr>
+          </template>
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td key="nome" :props="props">
+                {{ props.row.nome ?? '#' }}
+              </q-td>
+              <q-td key="descricao" :props="props">
+                {{ props.row.descricao ?? "#" }}
+              </q-td>
+              <q-td key="preco" :props="props">
+                {{ formatCurrency(props.row.preco) }}
+              </q-td>
+              <q-td key="categoria" :props="props">
+                {{ props.row.categoria.toUpperCase() }}
+              </q-td>
+              <q-td key="estoque" :props="props">
+                {{ props.row.estoque }}
+              </q-td>
+              <q-td key="actions" :props="props">
+                <q-btn flat round dense icon="sell" color="green" @click="abrirPromocaoProduto(props.row)">
+                  <q-tooltip>
+                    Adicionar Promoção
+                  </q-tooltip>
+                </q-btn>
+                <q-btn flat round dense icon="shelves" color="blue-9" @click="abrirEstoqueProduto(props.row)">
+                  <q-tooltip>
+                    Atualizar Estoque
+                  </q-tooltip>
+                </q-btn>
+                <q-btn flat round dense icon="edit" color="amber-9" @click="abrirEditarProduto(props.row)">
+                  <q-tooltip>
+                    Editar Produto
+                  </q-tooltip>
+                </q-btn>
+                <q-btn flat round dense icon="delete" color="negative" @click="abrirDeletarProduto(props.row)">
+                  <q-tooltip>
+                    Deletar Produto
+                  </q-tooltip>
+                </q-btn>
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </div>
 
-      <q-table dense :rows="produtosFiltrados" :columns="columns" row-key="id" no-data-label="Sem Produtos"
-        separator="cell" :rows-per-page-options="[0]" virtual-scroll class="q-mt-md tabela-full-width"
-        style="height: 450px">
-        <template v-slot:body="props">
-          <q-tr :props="props">
-            <q-td key="nome" :props="props">
-              {{ props.row.nome ?? '#' }}
-            </q-td>
-            <q-td key="descricao" :props="props">
-              {{ props.row.descricao ?? "#" }}
-            </q-td>
-            <q-td key="preco" :props="props">
-              {{ props.row.preco }}
-            </q-td>
-            <q-td key="categoria" :props="props">
-              {{ props.row.categoria.toUpperCase() }}
-            </q-td>
-            <q-td key="estoque" :props="props">
-              {{ props.row.estoque }}
-            </q-td>
-            <q-td key="actions" :props="props">
-              <q-btn flat round dense icon="edit" color="primary" @click="abrirEditarProduto(props.row)" />
-              <q-btn flat round dense icon="delete" color="negative" @click="removerProduto(props.row)" />
-            </q-td>
-          </q-tr>
-        </template>
-      </q-table>
     </div>
-
-    <q-btn color="primary" icon="add" label="Adicionar Produto" class="q-mt-md" @click="novoProduto" />
-
     <ManipularProdutos v-model:dialogGravar="dialogGravar" v-model:dialogEditar="dialogEditar"
-      :produto="produtoSelecionado" @atualizarLista="listarProdutosTela" />
+      v-model:dialog-promocao="dialogPromocao" v-model:dialogEstoque="dialogEstoque"
+      v-model:dialog-excluir="dialogExcluir" :produto="produtoSelecionado" @atualizarLista="listarProdutosTela" />
 
     <!-- ===== Dialog Editar Usuário ===== -->
     <q-dialog v-model="dialogEditarUsuario" persistent>
@@ -112,8 +148,8 @@
         </q-card-section>
         <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
         <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-          <q-btn icon="close" outline label="Fechar" color="primary" v-close-popup />
-          <q-btn icon="save" label="Salvar" color="primary" @click="editarUsuario" />
+          <q-btn icon="close" outline label="Fechar" color="primary" v-close-popup style="border-radius: 8px;" />
+          <q-btn icon="save" label="Salvar" color="primary" @click="editarUsuario" style="border-radius: 8px;" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -121,15 +157,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, } from 'vue'
 import { useQuasar } from 'quasar'
-import ManipularProdutos from 'src/components/manipularProdutos/ManipularProdutos.vue'
-import { listarProdutos, deletarProduto } from 'src/services/produtoService'
+import ManipularProdutos from 'src/components/ManipularProdutos.vue'
+import { listarProdutos } from 'src/services/produtoService'
 import type { Produto } from '../types/types'
 import type { QTableProps } from 'quasar'
+import { useRouter } from "vue-router";
+import { formatPrice } from 'src/config/formatPrice'
 
 // Importaçãoes =====
 const $q = useQuasar()
+const router = useRouter();
 
 // Variaveis  =====
 const dialogEditarUsuario = ref(false)
@@ -142,6 +181,9 @@ const senhaVisivel = ref(true)
 
 const dialogGravar = ref(false)
 const dialogEditar = ref(false)
+const dialogExcluir = ref(false)
+const dialogEstoque = ref(false)
+const dialogPromocao = ref(false)
 
 const produtoSelecionado = ref<Produto | null>(null)
 const produtos = ref<Produto[]>([])
@@ -150,6 +192,7 @@ const filtroCategoria = ref<string | null>(null)
 
 const ocultarSenha = ref(true)
 const senhaExemplo = ref('negomaq123')
+const admin = ref(false)
 
 const categorias = [
   { label: 'Todas', value: null },
@@ -160,11 +203,11 @@ const categorias = [
 ]
 
 const columns: QTableProps['columns'] = [
-  { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
-  { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'left' },
-  { name: 'preco', label: 'Preço', field: 'preco', align: 'right' },
-  { name: 'categoria', label: 'Categoria', field: 'categoria', align: 'left' },
-  { name: 'estoque', label: 'Estoque', field: 'estoque', align: 'right' },
+  { name: 'nome', label: 'Nome', field: 'nome', align: 'center' },
+  { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'center' },
+  { name: 'preco', label: 'Preço', field: 'preco', align: 'center' },
+  { name: 'categoria', label: 'Categoria', field: 'categoria', align: 'center' },
+  { name: 'estoque', label: 'Estoque', field: 'estoque', align: 'center' },
   { name: 'actions', label: 'Ações', field: 'actions', align: 'center' }
 ]
 
@@ -183,6 +226,21 @@ const abrirEditarProduto = (produto: Produto) => {
   dialogEditar.value = true
 }
 
+const abrirDeletarProduto = (produto: Produto) => {
+  produtoSelecionado.value = { ...produto }
+  dialogExcluir.value = true
+}
+
+const abrirEstoqueProduto = (produto: Produto) => {
+  produtoSelecionado.value = { ...produto }
+  dialogEstoque.value = true
+}
+
+const abrirPromocaoProduto = (produto: Produto) => {
+  produtoSelecionado.value = { ...produto }
+  dialogPromocao.value = true
+}
+
 const listarProdutosTela = async () => {
   try {
     $q.loading.show({ message: 'Carregando Produtos...' })
@@ -193,25 +251,6 @@ const listarProdutosTela = async () => {
     $q.notify({
       type: 'negative',
       message: 'Não foi possivel carregar os produto do estoque!',
-      timeout: 1500,
-      position: 'bottom'
-    })
-  } finally {
-    $q.loading.hide()
-  }
-}
-
-const removerProduto = async (produto: Produto) => {
-  try {
-    $q.loading.show({ message: 'Removendo Produto...' })
-    await deletarProduto(produto.id)
-    await listarProdutos()
-    $q.loading.hide()
-  } catch (err) {
-    console.log(err)
-    $q.notify({
-      type: 'negative',
-      message: 'Não foi possivel remover o produto do estoque!',
       timeout: 1500,
       position: 'bottom'
     })
@@ -244,6 +283,28 @@ const editarUsuario = () => {
   } finally {
     $q.loading.hide()
   }
+}
+
+const sairSistema = async () => {
+  try {
+    $q.loading.show({ message: 'Saindo do Sistema...' })
+    await router.push('/login')
+    $q.loading.hide()
+  } catch (err) {
+    console.log(err)
+    $q.notify({
+      type: 'negative',
+      message: 'Não foi possivel sair do sistema!',
+      timeout: 1500,
+      position: 'bottom'
+    })
+  } finally {
+    $q.loading.hide()
+  }
+}
+
+function formatCurrency(value: number) {
+  return formatPrice(value)
 }
 
 // Computed =====
