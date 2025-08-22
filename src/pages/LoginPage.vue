@@ -44,7 +44,6 @@ import { ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import api from 'src/services/api'
-import axios from 'axios'
 
 const $q = useQuasar()
 const router = useRouter()
@@ -59,52 +58,48 @@ const entrarSistema = async () => {
     $q.notify({
       type: 'warning',
       message: 'Campos não preenchidos',
-      position: 'center',
+      position: 'bottom',
       timeout: 2000
     })
     return
   }
-
   try {
     $q.loading.show({ message: 'Entrando...' })
-
     await api.post('auth/login', {
       email: email.value,
       senha: senha.value
     })
-
-    $q.notify({
-      type: 'positive',
-      message: 'Login efetuado com sucesso!',
-      position: 'center',
-      timeout: 1500
-    })
-
     await router.push('/home')
-
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error('ERRO DE LOGIN => ', error.response?.data || error.message)
-      $q.notify({
-        type: 'negative',
-        message: error.response?.data?.mensagem || 'Não foi possível fazer Login!',
-        position: 'center',
-        timeout: 2500
-      })
-    } else {
-      console.error(error)
-      $q.notify({
-        type: 'negative',
-        message: 'Erro inesperado!',
-        position: 'center',
-        timeout: 2500
-      })
-    }
+    $q.loading.hide()
+  } catch (error) {
+    console.log(error)
+    $q.notify({
+      type: 'negative',
+      message: 'Não foi possivel realizar login, Verifique os campos!',
+      position: 'bottom',
+      timeout: 2500
+    })
+  } finally {
+    $q.loading.hide()
   }
 }
 
 const irParaCadastro = async () => {
-  await router.push('/cadastro')
+  try {
+    $q.loading.show({ message: 'Carregando...' })
+    await router.push('/cadastro')
+    $q.loading.hide()
+  } catch (error) {
+    console.log(error)
+    $q.notify({
+      type: 'negative',
+      message: 'Não foi possivel ir para o cadastro!',
+      position: 'bottom',
+      timeout: 2500
+    })
+  } finally {
+    $q.loading.hide()
+  }
 }
 
 onMounted(() => {

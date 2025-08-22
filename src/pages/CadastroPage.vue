@@ -69,11 +69,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import api from "src/services/api";
-import axios from "axios";
 
 const $q = useQuasar();
 const router = useRouter();
@@ -105,84 +104,67 @@ function formatarTelefone(valor: string | number | null) {
   telefone.value = v;
 }
 
-
 const voltarLogin = async () => {
-  await router.push("/");
-};
+  try {
+    $q.loading.show({ message: 'Carregando...' })
+    await router.push('/login')
+    $q.loading.hide()
+  } catch (error) {
+    console.log(error)
+    $q.notify({
+      type: 'negative',
+      message: 'Não foi possivel ir para o login!',
+      position: 'center',
+      timeout: 2500
+    })
+  } finally {
+    $q.loading.hide()
+  }
+}
 
 const cadastrar = async () => {
   if (!nome.value || !email.value || !telefone.value || !senha.value || !confirmarSenha.value) {
     $q.notify({
       type: "warning",
-      message: "Preencha todos os campos",
+      message: "Campos não preenchidos!",
       position: "center",
-    });
-    return;
+    })
+    return
   }
   if (senha.value !== confirmarSenha.value) {
     $q.notify({
       type: "negative",
-      message: "As senhas não coincidem",
+      message: "As senhas não coincidem!",
       position: "center",
-    });
-    return;
+    })
+    return
   }
-
   try {
     $q.loading.show({ message: "Cadastrando..." });
-
     const payload = {
       nome: nome.value,
       email: email.value,
       telefone: telefone.value,
       senha: senha.value,
     };
-
-    const { data } = await api.post("auth/registrar", payload);
-
+    let data = {}
+    data = await api.post("auth/registrar", payload);
+    console.log(data)
     $q.loading.hide();
-
-    if (data.sucesso) {
-      $q.notify({
-        type: "positive",
-        message: "Teste verde",
-        position: "center",
-      });
-      await voltarLogin();
-    } else {
-      $q.notify({
-        type: "negative",
-        message: data.mensagem || "Erro no cadastro",
-        position: "center",
-      });
-    }
-  } catch (error: unknown) {
+  } catch (error) {
+    console.log(error)
+    $q.notify({
+      type: "negative",
+      message: "Não foi possível realizar o cadastro!",
+      position: "center",
+    })
+  } finally {
     $q.loading.hide();
-
-    if (axios.isAxiosError(error)) {
-      const mensagem = error.response?.data?.mensagem || "Erro desconhecido";
-      $q.notify({
-        type: "negative",
-        message: mensagem,
-        position: "center",
-      });
-    }
-    else if (error instanceof Error) {
-      $q.notify({
-        type: "negative",
-        message: error.message || "Erro desconhecido",
-        position: "center",
-      });
-    }
-    else {
-      $q.notify({
-        type: "negative",
-        message: "Erro ao conectar à API",
-        position: "center",
-      });
-    }
-
-    console.error("Erro ao cadastrar => ", error);
   }
-};
+}
+
+// Mounted
+onMounted(() => {
+  console.log('Tela carregada!')
+})
 </script>
