@@ -1,38 +1,31 @@
 <template>
   <q-page class="flex flex-center" padding>
-    <q-card style="width: 350px; height: 700px" class="flex flex-column items-center justify-center">
-      <div class="flex flex-center q-mt-md" style="width: 100%; justify-content: center;">
+    <q-card style="width: 330px; height: 600px" class="flex flex-column items-center justify-center">
+      <q-card-setion>
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa"
           style="width: 150px; height: 150px; display: block; margin: 0 auto;" />
-      </div>
-      <q-card-section class="flex flex-center">
-        <div style="font-size: 1.5rem; font-weight: bold">
+        <div style="font-size: 1.2rem; font-weight: bold; margin-top: 0;" class="flex justify-center">
           Cadastre-se
         </div>
-      </q-card-section>
-
+      </q-card-setion>
       <q-card-section style="width: 100%;">
-        <q-input class="full-width" label="Nome" v-model="nome">
+        <q-input class="full-width" label="Nome" v-model="nome" clearable>
           <template #prepend>
             <q-icon name="person" />
           </template>
         </q-input>
-
-        <q-input class="full-width" label="Email" v-model="email">
+        <q-input class="full-width" label="Email" v-model="email" clearable>
           <template #prepend>
             <q-icon name="alternate_email" />
           </template>
         </q-input>
-
-        <!-- Telefone com formatação correta -->
         <q-input class="full-width" label="Telefone" :model-value="telefone" @update:model-value="formatarTelefone"
-          maxlength="15">
+          clearable maxlength="15">
           <template #prepend>
             <q-icon name="phone" />
           </template>
         </q-input>
-
-        <q-input class="full-width" label="Senha" v-model="senha" :type="ocultarSenha ? 'password' : 'text'">
+        <q-input class="full-width" label="Senha" v-model="senha" :type="ocultarSenha ? 'password' : 'text'" clearable>
           <template #prepend>
             <q-icon name="lock" />
           </template>
@@ -41,8 +34,7 @@
               @click="ocultarSenha = !ocultarSenha" />
           </template>
         </q-input>
-
-        <q-input class="full-width" label="Confirmar Senha" v-model="confirmarSenha"
+        <q-input class="full-width" label="Confirmar Senha" v-model="confirmarSenha" clearable
           :type="ocultarConfirmarSenha ? 'password' : 'text'">
           <template #prepend>
             <q-icon name="lock" />
@@ -52,13 +44,10 @@
               @click="ocultarConfirmarSenha = !ocultarConfirmarSenha" />
           </template>
         </q-input>
-      </q-card-section>
-
-      <q-card-section style="width: 100%;">
-        <q-btn color="primary" label="CADASTRAR" class="full-width" style="border-radius: 10px" @click="cadastrar" />
-
+        <q-btn color="primary" label="CADASTRAR" class="full-width q-mt-lg" style="border-radius: 10px"
+          @click="cadastrar" />
         <div class="q-mt-md flex justify-center items-center" style="width: 100%; font-size: 14px;">
-          <span>Já tem conta?</span>
+          <span>Já tem um conta?</span>
           <span class="text-primary text-bold q-ml-xs cursor-pointer" @click="voltarLogin">
             Entrar
           </span>

@@ -2,18 +2,18 @@
   <q-page class="flex flex-center" padding>
 
     <!-- Card de Login -->
-    <q-card style="width: 350px; height: 500px">
+    <q-card style="width: 350px; height: 480px">
       <q-card-section class="flex flex-center">
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa" style="width: 150px; height: 150px" />
       </q-card-section>
 
       <q-card-section>
-        <q-input class="full-width" label="Email" v-model="email">
+        <q-input class="full-width" label="Email" v-model="email" clearable>
           <template #prepend>
             <q-icon name="alternate_email" />
           </template>
         </q-input>
-        <q-input class="full-width" label="Senha" v-model="senha" :type="ocultarSenha ? 'password' : 'text'">
+        <q-input class="full-width" label="Senha" v-model="senha" :type="ocultarSenha ? 'password' : 'text'" clearable>
           <template #prepend>
             <q-icon name="lock" />
           </template>
@@ -25,7 +25,7 @@
         <q-toggle label="Lembrar senha" color="primary" v-model="lembrarSenha" class="q-mt-sm" />
       </q-card-section>
 
-      <q-card-section class="flex flex-center column">
+      <q-card-section class="flex flex-center column" style="margin-bottom: 0;">
         <q-btn color="primary" label="ENTRAR" class="full-width" style="border-radius: 10px" @click="entrarSistema()" />
         <div class="q-mt-md flex items-center justify-center" style="width: 100%; font-size: 14px;">
           <p class="q-mb-none">Não tem uma Conta?</p>
