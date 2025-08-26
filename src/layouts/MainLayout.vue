@@ -9,11 +9,16 @@
         </q-toolbar-title>
 
         <div class="row items-center q-gutter-md gt-sm">
-          <router-link :to="{ name: 'home' }" class="no-underline text-white">Home</router-link>
-          <router-link :to="{ name: 'home-facas-page' }" class="no-underline text-white">Facas</router-link>
-          <router-link :to="{ name: 'home-estojo-page' }" class="no-underline text-white">Estojos</router-link>
-          <router-link :to="{ name: 'home-avental-page' }" class="no-underline text-white">Aventais</router-link>
-          <router-link :to="{ name: 'home-artigo-churrasco-page' }" class="no-underline text-white">Artigos de
+          <router-link :to="{ name: 'home' }"
+            class="no-underline text-white hover:scale-110 duration-300">Home</router-link>
+          <router-link :to="{ name: 'home-facas-page' }"
+            class="no-underline text-white hover:scale-110 duration-300">Facas</router-link>
+          <router-link :to="{ name: 'home-estojo-page' }"
+            class="no-underline text-white hover:scale-110 duration-300">Estojos</router-link>
+          <router-link :to="{ name: 'home-avental-page' }"
+            class="no-underline text-white hover:scale-110 duration-300">Aventais</router-link>
+          <router-link :to="{ name: 'home-artigo-churrasco-page' }"
+            class="no-underline text-white hover:scale-110 duration-300">Artigos de
             Churrasco</router-link>
 
           <q-separator vertical color="white"
@@ -21,11 +26,12 @@
         </div>
 
         <div class="row items-center q-gutter-sm gt-sm">
-          <q-btn round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }" class="text-white">
+          <q-btn round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }"
+            class="text-white  hover:scale-110 duration-300">
             <q-tooltip>Painel de Usuário</q-tooltip>
           </q-btn>
 
-          <q-btn round dense flat class="text-white" @click="menuCarrinho = true">
+          <q-btn round dense flat class="text-white  hover:scale-110 duration-300" @click="menuCarrinho = true">
             <q-icon name="shopping_cart" />
             <q-badge v-if="cartCount > 0" color="warning" floating class="text-black flex flex-center"
               style=" font-weight: 700; font-size: 13px; width: 24px; height: 24px; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.3); top: -6px; right: -6px; position: absolute;">
@@ -94,12 +100,12 @@
       <q-page-sticky v-if="!menuMobile && !menuCarrinho" position="bottom-right" :offset="[18, 18]"
         style="z-index: 9999;">
 
-        <q-btn fab color="amber-9" unelevated class="text-white flex items-center gap-2 q-mb-sm"
+        <q-btn fab color="amber-9" unelevated class="text-white flex items-center gap-2 q-mb-sm hover-scale"
           icon="notifications_active" @click="abrirNotificacao">
           <q-badge color="red" rounded floating label="!" class="soft-pulse-badge" />
         </q-btn>
 
-        <q-btn fab color="green" @click="enviarWhatsapp()">
+        <q-btn fab class="hover-scale" color="green" @click="enviarWhatsapp()">
           <i class="fab fa-whatsapp fa-2x text-white"></i>
         </q-btn>
       </q-page-sticky>
@@ -157,8 +163,8 @@
       <div class="q-pa-md" style="padding-top: 8px;">
         <div class="row text-bold" style="font-size: 16px;">Subtotal: {{ formatCurrency(0) }}</div>
         <div class="q-mt-mt" style="padding-top: 8px;">
-          <q-btn color="primary" class="full-width " label="Finalizar Compra" @click="finalizarCompra" unelevated
-            rounded :disable="carrinho.length === 0" />
+          <q-btn color="primary" class="full-width hover-scale" label="Finalizar Compra" @click="finalizarCompra"
+            unelevated rounded :disable="carrinho.length === 0" />
         </div>
       </div>
     </q-drawer>
@@ -166,7 +172,7 @@
     <!-- DIALOG DE NOTIFICAÇÕES -->
     <q-dialog v-model="dialogNotificacao" persistent>
       <q-card
-        style="width: 400px; max-height: 60vh; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"
+        style="width: 400px; max-height: 60vh; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"
         class="column no-wrap">
         <q-card-section class="bg-amber-9 text-white" style="padding: 16px;">
           <div class="row items-center" style="gap: 8px">
@@ -198,7 +204,8 @@
         </q-card-section>
         <q-separator style="height: 3px;" class="bg-amber-9 q-mx-md" />
         <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-          <q-btn icon="close" outline label="Fechar" color="amber-9" v-close-popup style="border-radius: 8px;" />
+          <q-btn icon="close" class="hover-scale" outline label="Fechar" color="amber-9" v-close-popup
+            style="border-radius: 10px;" />
         </q-card-actions>
       </q-card>
     </q-dialog>

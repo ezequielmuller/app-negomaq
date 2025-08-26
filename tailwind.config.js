@@ -4,7 +4,6 @@ module.exports = {
     './src/**/*.{vue,js,ts,jsx,tsx}', // observa todos os arquivos do Quasar
   ],
   theme: {
-    extend: {},
   },
   plugins: [],
 }

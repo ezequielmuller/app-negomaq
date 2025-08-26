@@ -39,9 +39,9 @@
         </div>
         <div class="col-12 col-md-12 col-xs-12 col-sm-12 flex justify-center q-mt-sm q-mt-md-none">
           <q-btn color="primary" icon="edit" label="Editar Perfil" @click="abrirDialogEditarUsuario"
-            style="border-radius: 8px;" />
+            style="border-radius: 8px;" class="hover-scale" />
           <q-btn outline color="primary" icon="logout" label="Sair" @click="sairSistema()" style="border-radius: 8px;"
-            class="q-ml-sm" />
+            class="q-ml-sm hover-scale" />
         </div>
       </div>
     </q-card>
@@ -58,7 +58,7 @@
             emit-value map-options />
         </div>
         <div class="row justify-end col-md-4 col-sm-4 col-xs-12">
-          <q-btn color="primary" icon="add" label="Adicionar Produto" @click="novoProduto"
+          <q-btn color="primary" icon="add" label="Adicionar Produto" @click="novoProduto" class="hover-scale"
             style="border-radius: 8px;" />
         </div>
       </div>
