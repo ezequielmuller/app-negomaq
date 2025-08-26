@@ -3,14 +3,14 @@
     <div class="column items-center">
 
       <!-- Título -->
-      <div class="text-h6 text-bold text-center q-mb-lg">
+      <div class="text-h6 text-bold text-center" style="font-size: 24px;">
         Consulte nosso Catálogo de Produtos e Garanta já os melhores!
       </div>
 
       <!-- Carrossel -->
       <div class="carousel-container">
-        <q-carousel v-model="slide" animated infinite autoplay height="220px" class="rounded-borders shadow-2"
-          style="max-width: 800px; width: 100%;">
+        <q-carousel v-model="slide" animated navigation infinite arrows autoplay height="220px"
+          class="rounded-borders shadow-2" style="max-width: 1200px; width: 100%;">
           <q-carousel-slide v-for="(img, index) in imagens" :key="index" :name="index" :img-src="img" />
         </q-carousel>
       </div>
@@ -34,7 +34,7 @@ const imagens = [
 .carousel-container {
   height: 850px;
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   display: flex;
   justify-content: center;
   /* Centraliza na horizontal */
