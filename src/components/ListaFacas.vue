@@ -1,6 +1,6 @@
-<template>
-  <div class="text-h6 text-center text-bold q-mt-md">
-    Facas
+<template padding>
+  <div class="text-h6 text-bold text-center" style="font-size: 24px;">
+    Confira nossas opções de Facas
   </div>
 
   <div class="flex justify-center q-mt-md q-mb-md">
