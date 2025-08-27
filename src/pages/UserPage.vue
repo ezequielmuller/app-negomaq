@@ -1,12 +1,12 @@
 <template>
   <q-page padding>
     <div class="row justify-center">
-      <div class="text-h5 text-bold q-ml-sm">Painel do Usuário</div>
+      <div class="text-h5 text-bold q-ml-sm q-mt-sm">Painel do Usuário</div>
     </div>
 
     <q-separator class="q-mb-md" />
 
-    <q-card class="q-pa-md q-mb-md shadow-2 " style="border-radius: 8px; border: 1px dashed var(--q-primary);">
+    <q-card class="q-pa-md q-mb-md shadow-2 " style="border-radius: 8px; border: 0.7mm solid var(--q-primary);">
       <div class="row q-col-gutter-sm items-center">
         <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
           <q-avatar size="60px" color="primary" text-color="white" icon="person" />
@@ -39,8 +39,8 @@
         </div>
         <div class="col-12 col-md-12 col-xs-12 col-sm-12 flex justify-center q-mt-sm q-mt-md-none">
           <q-btn color="primary" icon="edit" label="Editar Perfil" @click="abrirDialogEditarUsuario"
-            style="border-radius: 8px;" class="hover-scale" />
-          <q-btn outline color="primary" icon="logout" label="Sair" @click="sairSistema()" style="border-radius: 8px;"
+            style="border-radius: 10px;" class="hover-scale" />
+          <q-btn outline color="primary" icon="logout" label="Sair" @click="sairSistema()" style="border-radius: 10px;"
             class="q-ml-sm hover-scale" />
         </div>
       </div>
@@ -59,7 +59,7 @@
         </div>
         <div class="row justify-end col-md-4 col-sm-4 col-xs-12">
           <q-btn color="primary" icon="add" label="Adicionar Produto" @click="novoProduto" class="hover-scale"
-            style="border-radius: 8px;" />
+            style="border-radius: 10px;" />
         </div>
       </div>
       <div class="col-12 q-mt-md">
@@ -148,8 +148,10 @@
         </q-card-section>
         <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
         <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-          <q-btn icon="close" outline label="Fechar" color="primary" v-close-popup style="border-radius: 8px;" />
-          <q-btn icon="save" label="Salvar" color="primary" @click="editarUsuario" style="border-radius: 8px;" />
+          <q-btn icon="close" outline label="Fechar" class="hover-scale" color="primary" v-close-popup
+            style="border-radius: 10px;" />
+          <q-btn icon="save" label="Salvar" color="primary" class="hover-scale" @click="editarUsuario"
+            style="border-radius: 10px;" />
         </q-card-actions>
       </q-card>
     </q-dialog>

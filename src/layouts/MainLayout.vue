@@ -8,7 +8,7 @@
           <span class="text-bold text-h6 text-white">NegoMaq</span>
         </q-toolbar-title>
 
-        <div class="row items-center q-gutter-md gt-sm">
+        <div class=" row items-center q-gutter-md gt-sm">
           <router-link :to="{ name: 'home' }"
             class="no-underline text-white hover:scale-110 duration-300">Home</router-link>
           <router-link :to="{ name: 'home-facas-page' }"
@@ -26,11 +26,6 @@
         </div>
 
         <div class="row items-center q-gutter-sm gt-sm">
-          <q-btn round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }"
-            class="text-white  hover:scale-110 duration-300">
-            <q-tooltip>Painel de Usuário</q-tooltip>
-          </q-btn>
-
           <q-btn round dense flat class="text-white  hover:scale-110 duration-300" @click="menuCarrinho = true">
             <q-icon name="shopping_cart" />
             <q-badge v-if="cartCount > 0" color="warning" floating class="text-black flex flex-center"
@@ -39,6 +34,17 @@
             </q-badge>
             <q-tooltip>Meu Carrinho</q-tooltip>
           </q-btn>
+
+          <q-btn v-if="!userLogado" round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }"
+            class="text-white  hover:scale-110 duration-300">
+            <q-tooltip>Painel de Usuário</q-tooltip>
+          </q-btn>
+          <q-btn v-else outline dense icon="login" :to="{ name: 'login' }" label="FAÇA LOGIN" class="hover-scale"
+            color="white"
+            style="border-radius: 10px; background-color: #FFB8B8; border: 2px solid var(--q-primary); color: var(--q-primary)">
+            <q-tooltip>Faça Login</q-tooltip>
+          </q-btn>
+
         </div>
 
         <q-btn dense flat round icon="menu" class="lt-md" @click="menuMobile = true" />
@@ -224,6 +230,8 @@ const cartCount = ref(0)
 
 const carrinho = ref<Produto[]>([])
 const quantidadeProduto = ref(1)
+
+const userLogado = ref(false)
 
 interface Produto {
   id: string
