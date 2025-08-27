@@ -9,11 +9,13 @@ export interface Produto {
 }
 
 export type ProdutoPayload = Omit<Produto, 'id'>;
+
 export type Usuario = {
   id: string;
   nome: string;
   email: string;
   is_admin: boolean;
+  telefone: string;
 };
 
 export type LoginResponse = {

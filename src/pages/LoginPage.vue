@@ -45,14 +45,19 @@ import { ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import api from 'src/services/api'
+import type { Usuario } from 'src/types/types'
+import { useAuth } from 'src/composables/useAuth'
 
 const $q = useQuasar()
 const router = useRouter()
+const { saveUser } = useAuth()
 
 const lembrarSenha = ref(false)
 const email = ref('')
 const senha = ref('')
 const ocultarSenha = ref(true)
+
+const user = ref<Usuario | null>(null)
 
 const entrarSistema = async () => {
   if (!email.value || !senha.value) {
@@ -61,27 +66,30 @@ const entrarSistema = async () => {
       message: 'Campos não preenchidos',
       position: 'bottom',
       timeout: 2000
-    })
-    return
+    });
+    return;
   }
   try {
-    $q.loading.show({ message: 'Entrando...' })
-    await api.post('auth/login', {
+    $q.loading.show({ message: 'Entrando...' });
+
+    const result = await api.post('auth/login', {
       email: email.value,
       senha: senha.value
-    })
-    await router.push('/home')
-    $q.loading.hide()
+    });
+    const usuario: Usuario = result.data.usuario;
+    user.value = usuario;
+    saveUser(usuario);
+    await router.push('/home');
   } catch (error) {
-    console.log(error)
+    console.error('Erro no login:', error);
     $q.notify({
       type: 'negative',
-      message: 'Não foi possivel realizar login, Verifique os campos!',
+      message: 'Não foi possível realizar login, verifique os campos!',
       position: 'bottom',
       timeout: 2500
-    })
+    });
   } finally {
-    $q.loading.hide()
+    $q.loading.hide();
   }
 }
 
