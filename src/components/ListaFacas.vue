@@ -15,20 +15,23 @@
       :label-value="`R$ ${precoFinal}`" />
   </div>
 
-  <q-separator class="q-my-md" color="primary" style="height: 3px;" />
+  <q-separator style="height: 3px;" />
 
   <!-- Lista de produtos -->
   <div v-if="produtosFiltrados.length" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
-    <q-card v-for="produto in produtosFiltrados" :key="produto.id" class="q-mt-md"
+    <q-card v-for="produto in produtosFiltrados" :key="produto.id" class="q-mt-md hover-scale"
       style="width: 350px; max-width: 95vw; min-width: 220px; display: flex; flex-direction: column;">
 
       <q-card-section class="flex justify-center items-center h-[200px] pb-0">
         <img :src="produto.img || '/icons/estojo.webp'" :alt="produto.nome"
-          class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md" />
+          class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md"
+          style="border: 1mm solid var(--q-primary);" />
       </q-card-section>
 
+      <q-separator class="q-mx-md" />
+
       <q-card-section class="flex flex-col flex-1">
-        <div class="text-bold text-[18px]">
+        <div class="text-bold text-[21px]">
           {{ produto.nome }}
         </div>
         <div class="text-[14px] q-mt-sm">
@@ -36,15 +39,16 @@
         </div>
 
         <div class="row items-center justify-between q-mt-auto q-pt-sm gap-2">
-          <div class="text-bold text-primary text-[18px]">
+          <div class="text-bold text-primary text-[21px]">
             R$ {{ formatarPreco(produto.preco) }}
           </div>
-          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="rounded-[10px]" @click="props.adicionarAoCarrinho({
-            nome: produto.nome,
-            descricao: produto.descricao,
-            preco: `R$ ${formatarPreco(produto.preco)}`,
-            img: produto.img || '/icons/faca.webp'
-          })" />
+          <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="hover-scale"
+            style="border-radius: 10px;" @click="props.adicionarAoCarrinho({
+              nome: produto.nome,
+              descricao: produto.descricao,
+              preco: `R$ ${formatarPreco(produto.preco)}`,
+              img: produto.img || '/icons/faca.webp'
+            })" />
 
         </div>
       </q-card-section>
