@@ -20,7 +20,7 @@
   <!-- Lista de produtos -->
   <div v-if="produtosFiltrados.length" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
     <q-card v-for="produto in produtosFiltrados" :key="produto.id" class="q-mt-md hover-scale"
-      style="width: 350px; max-width: 95vw; min-width: 220px; display: flex; flex-direction: column;">
+      style="width: 350px; max-width: 95vw; min-width: 220px; display: flex; flex-direction: column; border-radius: 20px;">
 
       <q-card-section class="flex justify-center items-center h-[200px] pb-0">
         <img :src="produto.img || '/icons/estojo.webp'" :alt="produto.nome"
@@ -43,7 +43,7 @@
             R$ {{ formatarPreco(produto.preco) }}
           </div>
           <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="hover-scale"
-            style="border-radius: 10px;" @click="props.adicionarAoCarrinho({
+            style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
               nome: produto.nome,
               descricao: produto.descricao,
               preco: `R$ ${formatarPreco(produto.preco)}`,

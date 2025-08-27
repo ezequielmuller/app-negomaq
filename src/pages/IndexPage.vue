@@ -1,6 +1,5 @@
 <template>
   <q-page padding>
-
     <div class="text-h6 text-bold text-center" style="font-size: 24px;">
       Consulte nosso Catálogo de Produtos e Garanta já os melhores!
     </div>
@@ -8,11 +7,12 @@
     <div class="column items-center">
       <div class="carousel-container">
         <q-carousel v-model="slide" animated navigation infinite arrows autoplay height="270px"
-          class="rounded-borders shadow-2" style="max-width: 1200px; width: 100%;">
+          class="rounded-borders shadow-2" style="max-width: 1200px; width: 100%; border-radius: 20px;">
           <q-carousel-slide v-for="(img, index) in imagens" :key="index" :name="index" :img-src="img" />
         </q-carousel>
       </div>
     </div>
+
     <q-separator style="height: 3px;" />
 
   </q-page>

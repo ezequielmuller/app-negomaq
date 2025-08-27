@@ -9,8 +9,10 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container>
+    <q-page-container style="height: 500px;">
       <router-view />
+    </q-page-container>
+    <q-footer>
       <div class="text-grey bg-black q-mt-md">
         <div class="row q-col-gutter-md justify-center items-center text-center">
 
@@ -33,10 +35,9 @@
           </div>
         </div>
       </div>
-    </q-page-container>
-
-
+    </q-footer>
   </q-layout>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>

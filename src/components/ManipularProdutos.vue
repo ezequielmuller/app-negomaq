@@ -1,6 +1,6 @@
 <template>
   <q-dialog v-model="dialogGravar" persistent>
-    <q-card style="width: 400px; max-height: 50vh" class="column no-wrap">
+    <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-primary text-white">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="add" size="md" />
@@ -38,15 +38,15 @@
 
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
         <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" class="hover-scale"
-          style="border-radius: 10px;" />
+          style="border-radius: 20px;" />
         <q-btn label="Gravar" color="primary" @click="gravarProduto" icon="save" class="hover-scale"
-          style="border-radius: 10px;" />
+          style="border-radius: 20px;" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 
   <q-dialog v-model="dialogEditar" persistent>
-    <q-card style="width: 400px; max-height: 70vh;" class="column no-wrap">
+    <q-card style="width: 400px; max-height: 70vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-amber-9 text-white" style="position: sticky; top: 0; z-index: 1;">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="edit_square" size="md" />
@@ -87,16 +87,16 @@
       <q-separator style="height: 3px;" class="bg-amber-9 q-mr-md q-ml-md" />
 
       <q-card-actions align="right" class="q-mr-sm q-mb-xs bg-white" style="position: sticky; bottom: 0; z-index: 1;">
-        <q-btn outline label="Fechar" color="amber-9" v-close-popup icon="close" style="border-radius: 10px;"
+        <q-btn outline label="Fechar" color="amber-9" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
-        <q-btn label="Salvar" color="amber-9" @click="editarProduto" icon="save" style="border-radius: 10px;"
+        <q-btn label="Salvar" color="amber-9" @click="editarProduto" icon="save" style="border-radius: 20px;"
           class="hover-scale" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 
   <q-dialog v-model="dialogExcluir" persistent>
-    <q-card style="width: 400px; max-height: 50vh" class="column no-wrap">
+    <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-primary text-white">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="warning" size="md" />
@@ -114,16 +114,16 @@
       <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
 
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-        <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" style="border-radius: 10px;"
+        <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
-        <q-btn label="Excluir" color="primary" @click="excluirProduto" icon="delete" style="border-radius: 10px;"
+        <q-btn label="Excluir" color="primary" @click="excluirProduto" icon="delete" style="border-radius: 20px;"
           class="hover-scale" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 
   <q-dialog v-model="dialogEstoque" persistent>
-    <q-card style="width: 400px; max-height: 50vh" class="column no-wrap">
+    <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-blue-9 text-white">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="shelves" size="md" />
@@ -144,16 +144,16 @@
       <q-separator style="height: 3px;" class="bg-blue-9 q-mr-md q-ml-md" />
 
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-        <q-btn outline label="Fechar" color="blue-9" v-close-popup icon="close" style="border-radius: 10px;"
+        <q-btn outline label="Fechar" color="blue-9" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
-        <q-btn label="Salvar" color="blue-9" @click="atualizarEstoqueProduto" icon="save" style="border-radius: 10px;"
+        <q-btn label="Salvar" color="blue-9" @click="atualizarEstoqueProduto" icon="save" style="border-radius: 20px;"
           class="hover-scale" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 
   <q-dialog v-model="dialogPromocao" persistent>
-    <q-card style="width: 400px; max-height: 50vh" class="column no-wrap">
+    <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-green text-white">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="sell" size="md" />
@@ -168,9 +168,9 @@
       <q-separator style="height: 3px;" class="bg-green q-mr-md q-ml-md" />
 
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-        <q-btn outline label="Fechar" color="green" v-close-popup icon="close" style="border-radius: 10px;"
+        <q-btn outline label="Fechar" color="green" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
-        <q-btn label="Salvar" color="green" v-close-popup icon="save" style="border-radius: 10px;"
+        <q-btn label="Salvar" color="green" v-close-popup icon="save" style="border-radius: 20px;"
           class="hover-scale" />
       </q-card-actions>
     </q-card>

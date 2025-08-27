@@ -6,7 +6,7 @@
 
     <q-separator class="q-mb-md" />
 
-    <q-card class="q-pa-md q-mb-md shadow-2 " style="border-radius: 8px; border: 0.7mm solid var(--q-primary);">
+    <q-card class="q-pa-md q-mb-md shadow-2 " style="border-radius: 20px; border: 0.7mm solid var(--q-primary);">
       <div class="row q-col-gutter-sm items-center">
         <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
           <q-avatar size="60px" color="primary" text-color="white" icon="person" />
@@ -39,8 +39,8 @@
         </div>
         <div class="col-12 col-md-12 col-xs-12 col-sm-12 flex justify-center q-mt-sm q-mt-md-none">
           <q-btn color="primary" icon="edit" label="Editar Perfil" @click="abrirDialogEditarUsuario"
-            style="border-radius: 10px;" class="hover-scale" />
-          <q-btn outline color="primary" icon="logout" label="Sair" @click="sairSistema()" style="border-radius: 10px;"
+            style="border-radius: 20px;" class="hover-scale" />
+          <q-btn outline color="primary" icon="logout" label="Sair" @click="sairSistema()" style="border-radius: 20px;"
             class="q-ml-sm hover-scale" />
         </div>
       </div>
@@ -59,12 +59,12 @@
         </div>
         <div class="row justify-end col-md-4 col-sm-4 col-xs-12">
           <q-btn color="primary" icon="add" label="Adicionar Produto" @click="novoProduto" class="hover-scale"
-            style="border-radius: 10px;" />
+            style="border-radius: 20px;" />
         </div>
       </div>
       <div class="col-12 q-mt-md">
         <q-table dense :rows="produtosFiltrados" :columns="columns" row-key="id" no-data-label="Sem Produtos"
-          separator="cell" virtual-scroll style="height: 450px;" flat bordered>
+          separator="cell" virtual-scroll style="height: 450px; border-radius: 20px;" flat bordered>
           <template v-slot:header="props">
             <q-tr :props="props" class="bg-grey-4 text-bold">
               <q-th v-for="col in props.cols" :key="col.name" :props="props">
@@ -117,13 +117,14 @@
       </div>
 
     </div>
+
     <ManipularProdutos v-model:dialogGravar="dialogGravar" v-model:dialogEditar="dialogEditar"
       v-model:dialog-promocao="dialogPromocao" v-model:dialogEstoque="dialogEstoque"
       v-model:dialog-excluir="dialogExcluir" :produto="produtoSelecionado" @atualizarLista="listarProdutosTela" />
 
     <!-- ===== Dialog Editar Usuário ===== -->
     <q-dialog v-model="dialogEditarUsuario" persistent>
-      <q-card style="width: 400px; max-height: 50vh" class="column no-wrap">
+      <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
         <q-card-section class="bg-primary text-white">
           <div class="row items-center" style="gap: 8px">
             <q-icon name="edit" size="md" />
@@ -149,9 +150,9 @@
         <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
         <q-card-actions align="right" class="q-mr-sm q-mb-xs">
           <q-btn icon="close" outline label="Fechar" class="hover-scale" color="primary" v-close-popup
-            style="border-radius: 10px;" />
+            style="border-radius: 20px;" />
           <q-btn icon="save" label="Salvar" color="primary" class="hover-scale" @click="editarUsuario"
-            style="border-radius: 10px;" />
+            style="border-radius: 20px;" />
         </q-card-actions>
       </q-card>
     </q-dialog>

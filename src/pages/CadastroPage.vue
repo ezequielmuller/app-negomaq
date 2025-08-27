@@ -1,6 +1,7 @@
 <template>
   <q-page class="flex flex-center" padding>
-    <q-card style="width: 330px; height: 600px" class="flex flex-column items-center justify-center">
+    <q-card style="width: 330px; height: 600px; border-radius: 20px;"
+      class="flex flex-column items-center justify-center">
       <q-card-setion>
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa"
           style="width: 150px; height: 150px; display: block; margin: 0 auto;" />
@@ -44,11 +45,11 @@
               @click="ocultarConfirmarSenha = !ocultarConfirmarSenha" />
           </template>
         </q-input>
-        <q-btn color="primary" label="CADASTRAR" class="full-width q-mt-lg" style="border-radius: 10px"
+        <q-btn color="primary" label="CADASTRAR" class="full-width q-mt-lg hover-scale" style="border-radius: 20px"
           @click="cadastrar" />
         <div class="q-mt-md flex justify-center items-center" style="width: 100%; font-size: 14px;">
           <span>Já tem um conta?</span>
-          <span class="text-primary text-bold q-ml-xs cursor-pointer" @click="voltarLogin">
+          <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="voltarLogin">
             Entrar
           </span>
         </div>

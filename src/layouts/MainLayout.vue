@@ -39,9 +39,9 @@
             class="text-white  hover:scale-110 duration-300">
             <q-tooltip>Painel de Usuário</q-tooltip>
           </q-btn>
-          <q-btn v-else outline dense icon="login" :to="{ name: 'login' }" label="FAÇA LOGIN" class="hover-scale"
-            color="white"
-            style="border-radius: 10px; background-color: #FFB8B8; border: 2px solid var(--q-primary); color: var(--q-primary)">
+          <q-btn v-else outline dense icon="login" :to="{ name: 'login' }" label="FAÇA LOGIN"
+            class="hover-scale q-pr-sm" color="white"
+            style="border-radius: 20px; background-color: #FFB8B8; border: 2px solid var(--q-primary); color: var(--q-primary)">
             <q-tooltip>Faça Login</q-tooltip>
           </q-btn>
 
@@ -120,6 +120,28 @@
       <router-view v-slot="{ Component }" :key="$route.fullPath">
         <component :is="Component" :adicionar-ao-carrinho="adicionarAoCarrinho" />
       </router-view>
+      <div class="text-grey bg-black q-mt-md">
+        <div class="row q-col-gutter-md justify-center items-center text-center">
+
+          <div class="col-12 flex justify-center items-center q-pt-sm" style="text-align: center; font-size: 0.7rem;">
+            <a href="https://api.whatsapp.com/send/?phone=5554996641291&text&type=phone_number&app_absent=0"
+              target="_blank" class="q-mx-sm">
+              <i class="fab fa-whatsapp fa-2x" style="color: #25D366;"></i>
+            </a>
+            <a href="https://www.instagram.com/negomaq/" target="_blank" class="q-mx-sm">
+              <i class="fab fa-instagram fa-2x" style="color: #C13584;"></i>
+            </a>
+          </div>
+
+          <div class="col-12 flex justify-center items-center q-pt-xs"
+            style="text-align: center; font-size: 0.7rem; padding-bottom: 0.6rem;">
+            <q-icon name="copyright" />
+            <span class="q-ml-xs">
+              2025 Todos os direitos reservados - Couros NegoMaq
+            </span>
+          </div>
+        </div>
+      </div>
     </q-page-container>
 
     <!-- MENU CARRINHO -->
@@ -134,7 +156,7 @@
         <q-list separator>
 
           <q-item v-for="(item, index) in carrinho" :key="index" class="cart-item q-pa-sm"
-            style="border-radius: 12px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.2s;">
+            style="border-radius: 12px; margin-bottom: 8px; transition: all 0.2s; border-radius: 20px; border: 0.6mm solid #e9e9e9;">
 
             <q-item-section avatar>
               <img :src="item.img || ''" :alt="item.nome"
@@ -144,7 +166,7 @@
             <q-item-section class="q-ml-sm scroll">
               <div class="text-bold" style="font-size: 16px;">{{ item.nome }}</div>
               <div class="text-grey">{{ item.descricao }}</div>
-              <div class="text-bold q-mt-xs" style="font-size: 16px;">{{ item.preco }}</div>
+              <div class="text-bold q-mt-xs text-primary" style="font-size: 16px;">{{ item.preco }}</div>
               <div class="row justify-between q-mt-sm">
                 <q-btn flat color="negative" icon="add" round size="sm" @click="quantidadeProduto++"
                   style="width: 20px;" />
@@ -170,7 +192,7 @@
         <div class="row text-bold" style="font-size: 16px;">Subtotal: {{ formatCurrency(0) }}</div>
         <div class="q-mt-mt" style="padding-top: 8px;">
           <q-btn color="primary" class="full-width hover-scale" label="Finalizar Compra" @click="finalizarCompra"
-            unelevated rounded :disable="carrinho.length === 0" />
+            unelevated :disable="carrinho.length === 0" style="border-radius: 20px;" />
         </div>
       </div>
     </q-drawer>
@@ -178,7 +200,7 @@
     <!-- DIALOG DE NOTIFICAÇÕES -->
     <q-dialog v-model="dialogNotificacao" persistent>
       <q-card
-        style="width: 400px; max-height: 60vh; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"
+        style="width: 400px; max-height: 60vh; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"
         class="column no-wrap">
         <q-card-section class="bg-amber-9 text-white" style="padding: 16px;">
           <div class="row items-center" style="gap: 8px">
@@ -199,7 +221,7 @@
                 <div class="col flex flex-center flex-column" style="gap: 8px;">
                   <img src="/public/icons/leilao-fundo.png" alt="Imagem do grupo de leilao"
                     style="width: 110px; height: 100px; object-fit: cover; border-radius: 8px;" />
-                  <q-btn color="green" class="full-width" @click="abrirGrupoLeilao" style="border-radius: 8px;">
+                  <q-btn color="green" class="full-width" @click="abrirGrupoLeilao" style="border-radius: 20px;">
                     <i class="fab fa-whatsapp fa-lg text-white q-mr-sm"></i>
                     Entrar
                   </q-btn>
@@ -211,7 +233,7 @@
         <q-separator style="height: 3px;" class="bg-amber-9 q-mx-md" />
         <q-card-actions align="right" class="q-mr-sm q-mb-xs">
           <q-btn icon="close" class="hover-scale" outline label="Fechar" color="amber-9" v-close-popup
-            style="border-radius: 10px;" />
+            style="border-radius: 20px;" />
         </q-card-actions>
       </q-card>
     </q-dialog>
