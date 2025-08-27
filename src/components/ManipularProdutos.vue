@@ -277,7 +277,9 @@ const formatarPreco = (valor: string | number): number => {
 }
 
 const gravarProduto = async () => {
-  if (!produtoId.value || !form.value.nome || !form.value.descricao || !form.value.preco || !form.value.categoria) {
+  console.log('Gravar Produto', form.value)
+
+  if (!form.value.nome || !form.value.descricao || !form.value.preco || !form.value.categoria) {
     $q.notify({
       type: 'warning',
       message: 'Campos não preenchidos!',
