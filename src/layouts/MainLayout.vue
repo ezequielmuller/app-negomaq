@@ -35,7 +35,7 @@
             <q-tooltip>Meu Carrinho</q-tooltip>
           </q-btn>
 
-          <q-btn v-if="!userLogado" round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }"
+          <q-btn v-if="user" round dense flat icon="manage_accounts" :to="{ name: 'home-user-page' }"
             class="text-white  hover:scale-110 duration-300">
             <q-tooltip>Painel de Usuário</q-tooltip>
           </q-btn>
@@ -242,8 +242,12 @@
 </template>
 
 <script setup lang="ts">
+import { useAuth } from 'src/composables/useAuth'
 import { formatPrice } from 'src/config/formatPrice'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+
+const { getUser } = useAuth()
+const user = getUser()
 
 const menuMobile = ref(false)
 const menuCarrinho = ref(false)
@@ -252,8 +256,6 @@ const cartCount = ref(0)
 
 const carrinho = ref<Produto[]>([])
 const quantidadeProduto = ref(1)
-
-const userLogado = ref(false)
 
 interface Produto {
   id: string
@@ -309,6 +311,8 @@ function formatCurrency(value: number) {
   return formatPrice(value)
 }
 
+onMounted(() => {
+})
 </script>
 
 <style scoped>

@@ -13,17 +13,17 @@
         </div>
         <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
           <div class="column q-ml-md">
-            <div class="text-h6">Ezequiel H. G. Muller</div>
+            <div class="text-h6">{{ user?.nome == '' ? 'Sem nome' : user?.nome }}</div>
           </div>
         </div>
         <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
           <div class="column q-ml-md">
-            <div class="text-subtitle2 text-grey">zikimuller017@gmail.com</div>
+            <div class="text-subtitle2 text-grey">{{ user?.email == '' ? 'Sem email' : user?.email }}</div>
           </div>
         </div>
         <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
           <div class="column q-ml-md">
-            <div class="text-subtitle2 text-grey">(54) 9 9922-8928</div>
+            <div class="text-subtitle2 text-grey">{{ user?.telefone == '' ? 'Sem telefone' : user?.telefone }}</div>
           </div>
         </div>
         <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
@@ -168,10 +168,13 @@ import type { Produto } from '../types/types'
 import type { QTableProps } from 'quasar'
 import { useRouter } from "vue-router";
 import { formatPrice } from 'src/config/formatPrice'
+import { useAuth } from 'src/composables/useAuth'
 
 // Importaçãoes =====
 const $q = useQuasar()
 const router = useRouter();
+const { getUser, removeUser } = useAuth()
+const user = getUser()
 
 // Variaveis  =====
 const dialogEditarUsuario = ref(false)
@@ -291,7 +294,9 @@ const editarUsuario = () => {
 const sairSistema = async () => {
   try {
     $q.loading.show({ message: 'Saindo do Sistema...' })
-    await router.push('/login')
+    await router.push('/home')
+    removeUser()
+    window.location.reload();
     $q.loading.hide()
   } catch (err) {
     console.log(err)
