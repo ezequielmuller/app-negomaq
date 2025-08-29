@@ -44,8 +44,13 @@
             style="border-radius: 20px; background-color: #FFB8B8; border: 2px solid var(--q-primary); color: var(--q-primary)">
             <q-tooltip>Faça Login</q-tooltip>
           </q-btn>
-
         </div>
+
+        <q-btn v-if="!user" outline dense icon="login" :to="{ name: 'login' }" label="FAÇA LOGIN"
+          class="hover-scale q-pr-sm q-mr-sm" color="white"
+          style="border-radius: 20px; background-color: #FFB8B8; border: 2px solid var(--q-primary); color: var(--q-primary)">
+          <q-tooltip>Faça Login</q-tooltip>
+        </q-btn>
 
         <q-btn dense flat round icon="menu" class="lt-md" @click="menuMobile = true" />
 
@@ -82,11 +87,6 @@
 
         <q-separator />
 
-        <q-item clickable :to="{ name: 'home-user-page' }">
-          <q-item-section avatar><q-icon name="manage_accounts" /></q-item-section>
-          <q-item-section>Painel de Usuário</q-item-section>
-        </q-item>
-
         <q-item clickable @click="menuCarrinho = true">
           <q-item-section avatar><q-icon name="shopping_cart" /></q-item-section>
           <q-item-section>Meu Carrinho</q-item-section>
@@ -94,7 +94,18 @@
             <q-badge color="warning" class="text-black">{{ cartCount }}</q-badge>
           </q-item-section>
         </q-item>
+
+        <template v-if="user">
+          <q-item clickable :to="{ name: 'home-user-page' }">
+            <q-item-section avatar><q-icon name="manage_accounts" /></q-item-section>
+            <q-item-section>Painel de Usuário</q-item-section>
+          </q-item>
+        </template>
+        <template v-else>
+
+        </template>
       </q-list>
+
 
       <div class="q-pa-md text-center bg-primary text-white text-bold">
         NegoMaq - V.1.0.0
