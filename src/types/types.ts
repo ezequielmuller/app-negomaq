@@ -18,6 +18,15 @@ export type Usuario = {
   telefone: string;
 };
 
+export type UsuarioEditar = {
+  id: string;
+  nome: string;
+  sobrenome: string;
+  email: string;
+  telefone: string;
+  senha: string;
+};
+
 export type LoginResponse = {
   mensagem: string;
   is_admin: boolean;

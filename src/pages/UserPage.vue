@@ -34,7 +34,6 @@
 
     <div v-if="admin == false">
       <div class="text-h6 row q-mb-xs">Lista de Produtos</div>
-
       <div class="row q-col-gutter-sm">
         <div class="col-md-4 col-sm-4 col-xs-12">
           <q-input v-model="filtroNome" label="Pesquisar por nome" dense outlined debounce="300" />
@@ -122,7 +121,8 @@
             <div class="col-6"><q-input dense flat outlined v-model="nome" label="Nome" /></div>
             <div class="col-6"><q-input dense flat outlined v-model="sobrenome" label="Sobrenome" /></div>
             <div class="col-12"><q-input dense flat outlined v-model="email" label="Email" /></div>
-            <div class="col-12"><q-input dense flat outlined v-model="telefone" label="Telefone" /></div>
+            <div class="col-12"><q-input dense flat outlined :model-value="telefone"
+                @update:model-value="formatarTelefone" label="Telefone" /></div>
             <div class="col-12">
               <q-input dense outlined v-model="senha" :type="senhaVisivel ? 'password' : 'text'" label="Senha">
                 <template v-slot:append>
@@ -149,7 +149,7 @@
 import { ref, computed, onMounted, } from 'vue'
 import { useQuasar } from 'quasar'
 import ManipularProdutos from 'src/components/ManipularProdutos.vue'
-import { listarProdutos } from 'src/services/produtoService'
+import { EditarUsuario, listarProdutos } from 'src/services/produtoService'
 import type { Produto } from '../types/types'
 import type { QTableProps } from 'quasar'
 import { useRouter } from "vue-router";
@@ -206,6 +206,11 @@ const columns: QTableProps['columns'] = [
 // Metodos =====
 const abrirDialogEditarUsuario = () => {
   dialogEditarUsuario.value = true
+  nome.value = user.nome ?? ''
+  sobrenome.value = user.sobrenome ?? ''
+  email.value = user.email ?? ''
+  telefone.value = user.telefone ?? ''
+  senha.value = ''
 }
 
 const novoProduto = () => {
@@ -251,10 +256,11 @@ const listarProdutosTela = async () => {
   }
 }
 
-const editarUsuario = () => {
+const editarUsuario = async () => {
   try {
     $q.loading.show({ message: 'Editando Perfil...' })
     const data = {
+      id: user.id,
       nome: nome.value,
       sobrenome: sobrenome.value,
       email: email.value,
@@ -262,7 +268,8 @@ const editarUsuario = () => {
       senha: senha.value
     }
     console.log(data)
-    // await EditarUsuario(data)
+    const result = await EditarUsuario(data)
+    console.log(result)
     $q.loading.hide()
   } catch (err) {
     console.log(err)
@@ -295,6 +302,25 @@ const sairSistema = async () => {
   } finally {
     $q.loading.hide()
   }
+}
+
+function formatarTelefone(valor: string | number | null) {
+  if (valor === null) {
+    telefone.value = '';
+    return;
+  }
+  let v = String(valor).replace(/\D/g, "");
+  if (v.length > 11) v = v.slice(0, 11);
+
+  if (v.length > 0) {
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+    if (v.length > 9) {
+      v = v.replace(/(\d{5})(\d{4})$/, "$1-$2");
+    } else if (v.length > 8) {
+      v = v.replace(/(\d{4})(\d{4})$/, "$1-$2");
+    }
+  }
+  telefone.value = v;
 }
 
 function formatCurrency(value: number) {
