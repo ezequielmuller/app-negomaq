@@ -137,7 +137,7 @@
             style="text-align: center; font-size: 0.7rem; padding-bottom: 0.6rem;">
             <q-icon name="copyright" />
             <span class="q-ml-xs">
-              2025 Todos os direitos reservados - Couros NegoMaq
+              2025 Todos os direitos reservados - NegoMaq Couros
             </span>
           </div>
         </div>

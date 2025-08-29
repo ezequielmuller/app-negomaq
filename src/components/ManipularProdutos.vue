@@ -298,7 +298,6 @@ const gravarProduto = async () => {
       estoque: Number(form.value.estoque)
     }
     await criarProduto(data)
-    $q.notify({ type: 'positive', message: 'Produto criado!' })
     emit('atualizarLista')
     dialogGravar.value = false
     $q.notify({

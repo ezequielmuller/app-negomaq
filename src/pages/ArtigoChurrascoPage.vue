@@ -1,62 +1,59 @@
 <template>
   <q-page padding>
     <div class="text-h6 text-bold text-center q-mt-sm" style="font-size: 24px;">
-      Confira nossas opções de Artigos para Churrasco
+      Confira nossas opções de Artigos de Churrascos
     </div>
     <div class="flex justify-center q-mt-md q-mb-md">
-      <q-input flat v-model="pesquisa" label="Pesquise por Produtos!" class="input-pesquisa">
+      <q-input flat v-model="pesquisa" label="Pesquise por Produtos!" class="input-pesquisa" clearable dense
+        style="max-width: 700px; width: 90vw;">
         <template #prepend>
-          <q-icon name="search" />
+          <q-icon name="search" @click="listarProdutos" class="cursor-pointer" />
         </template>
       </q-input>
     </div>
+    <div class="mx-auto q-mt-sm q-py-sm q-px-md rounded-xl shadow-md bg-grey-1 flex flex-col" style="max-width: 600px;">
+      <div class="text-center text-bold" style="font-size: 16px;">Preço</div>
 
-    <div class="max-w-[400px] mx-auto q-mt-xl">
-      <div class="text-center text-bold text-[16px] q-mb-sm">Filtro de Preço</div>
-      <q-slider v-model="precoInicial" color="primary" :min="50" :max="400" :step="50" markers label
-        :label-value="`R$ ${precoInicial}`" class="q-mb-md" />
-      <q-slider v-model="precoFinal" color="primary" :min="precoInicial" :max="400" :step="50" markers label
-        :label-value="`R$ ${precoFinal}`" />
+      <q-range v-model="precoRange" :min="50" :max="400" :step="10" label color="primary" markers drag-range
+        class="q-mt-md" :left-label-value="`R$ ${formatarPreco(precoRange.min)}`"
+        :right-label-value="`R$ ${formatarPreco(precoRange.max)}`" />
+
+      <div class="flex justify-between text-bold text-primary">
+        <span>R$ {{ formatarPreco(precoRange.min) }}</span>
+        <span>R$ {{ formatarPreco(precoRange.max) }}</span>
+      </div>
     </div>
 
-    <q-separator style="height: 3px;" />
+    <q-separator style="height: 3px;" class="q-my-md" />
 
-    <!-- Lista de produtos -->
-    <div v-if="produtosFiltrados.length" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
-      <q-card v-for="produto in produtosFiltrados" :key="produto.id" class="q-mt-md hover-scale"
-        style="width: 350px; max-width: 95vw; min-width: 220px; display: flex; flex-direction: column; border-radius: 20px;">
+    <div v-if="produtosFiltrados.length" class="row q-col-gutter-md flex justify-center">
+      <div v-for="produto in produtosFiltrados" :key="produto.id" class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <q-card class="hover-scale" style="border-radius: 20px; display: flex; flex-direction: column; height: 100%;">
+          <q-card-section class="flex justify-center items-center" style="height: 200px;">
+            <img :src="produto.img || '/icons/estojo.webp'" :alt="produto.nome"
+              class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md"
+              style="border: 1mm solid var(--q-primary);" />
+          </q-card-section>
+          <q-separator class="q-mx-md" />
+          <q-card-section class="flex flex-col flex-1">
+            <div class="text-bold" style="font-size: 21px;">{{ produto.nome }}</div>
+            <div class="q-mt-sm" style="font-size: 14px;">{{ produto.descricao }}</div>
 
-        <q-card-section class="flex justify-center items-center h-[200px] pb-0">
-          <img :src="produto.img || '/icons/estojo.webp'" :alt="produto.nome"
-            class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md"
-            style="border: 1mm solid var(--q-primary);" />
-        </q-card-section>
-
-        <q-separator class="q-mx-md" />
-
-        <q-card-section class="flex flex-col flex-1">
-          <div class="text-bold text-[21px]">
-            {{ produto.nome }}
-          </div>
-          <div class="text-[14px] q-mt-sm">
-            {{ produto.descricao }}
-          </div>
-
-          <div class="row items-center justify-between q-mt-auto q-pt-sm gap-2">
-            <div class="text-bold text-primary text-[21px]">
-              R$ {{ formatarPreco(produto.preco) }}
+            <div class="row items-center justify-between q-mt-auto q-pt-sm">
+              <div class="text-bold text-primary" style="font-size: 21px;">
+                R$ {{ formatarPreco(produto.preco) }}
+              </div>
+              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="hover-scale"
+                style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
+                  nome: produto.nome,
+                  descricao: produto.descricao,
+                  preco: `R$ ${formatarPreco(produto.preco)}`,
+                  img: produto.img || '/icons/faca.webp'
+                })" />
             </div>
-            <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="hover-scale"
-              style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
-                nome: produto.nome,
-                descricao: produto.descricao,
-                preco: `R$ ${formatarPreco(produto.preco)}`,
-                img: produto.img || '/icons/faca.webp'
-              })" />
-
-          </div>
-        </q-card-section>
-      </q-card>
+          </q-card-section>
+        </q-card>
+      </div>
     </div>
     <div v-else class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
       <q-icon name="error" size="xl" color="grey" />
@@ -64,7 +61,6 @@
     </div>
   </q-page>
 </template>
-
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import api from 'src/services/api'
@@ -83,8 +79,7 @@ const props = defineProps<{
 }>()
 
 const pesquisa = ref('')
-const precoInicial = ref(50)
-const precoFinal = ref(400)
+const precoRange = ref({ min: 50, max: 400 })
 const produtos = ref<Produto[]>([])
 
 const listarProdutos = async () => {
@@ -105,21 +100,25 @@ const listarProdutos = async () => {
     $q.loading.hide()
   }
 }
+
 const produtosFiltrados = computed(() =>
   produtos.value.filter(
     (p) =>
       p.categoria === 'churrascos' &&
-      p.nome.toLowerCase().includes(pesquisa.value.toLowerCase())
+      p.nome.toLowerCase().includes(pesquisa.value.toLowerCase()) &&
+      Number(p.preco) >= precoRange.value.min &&
+      Number(p.preco) <= precoRange.value.max
   )
 )
+
 function formatarPreco(preco: string | number) {
   return Number(preco).toFixed(2).replace('.', ',')
 }
+
 onMounted(async () => {
   await listarProdutos()
 })
 </script>
-
 
 <style scoped>
 .input-pesquisa {
