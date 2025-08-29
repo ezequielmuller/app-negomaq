@@ -6,38 +6,23 @@
 
     <q-separator class="q-mb-md" />
 
-    <q-card class="q-pa-md q-mb-md shadow-2 " style="border-radius: 20px; border: 0.7mm solid var(--q-primary);">
-      <div class="row q-col-gutter-sm items-center">
-        <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
-          <q-avatar size="60px" color="primary" text-color="white" icon="person" />
-        </div>
-        <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
-          <div class="column q-ml-md">
-            <div class="text-h6">{{ user?.nome == '' ? 'Sem nome' : user?.nome }}</div>
-          </div>
-        </div>
-        <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
-          <div class="column q-ml-md">
-            <div class="text-subtitle2 text-grey">{{ user?.email == '' ? 'Sem email' : user?.email }}</div>
-          </div>
-        </div>
-        <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
-          <div class="column q-ml-md">
-            <div class="text-subtitle2 text-grey">{{ user?.telefone == '' ? 'Sem telefone' : user?.telefone }}</div>
-          </div>
-        </div>
-        <div class="col-12 col-md-12 col-sm-12 col-xs-12 row justify-center">
-          <div class="column q-ml-md q-pa-sm">
-            <q-input dense outlined readonly size="xs" class="full-width" label="Senha" v-model="senhaExemplo"
-              :type="ocultarSenha ? 'password' : 'text'">
-              <template #append>
-                <q-icon :name="ocultarSenha ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-                  @click="ocultarSenha = !ocultarSenha" />
-              </template>
-            </q-input>
-          </div>
-        </div>
-        <div class="col-12 col-md-12 col-xs-12 col-sm-12 flex justify-center q-mt-sm q-mt-md-none">
+    <q-card class="q-pa-md q-mb-md shadow-2" style="border-radius: 20px; border: 0.7mm solid var(--q-primary);">
+      <div class="column items-center q-gutter-md">
+        <q-avatar size="60px" color="primary" text-color="white" icon="person" />
+
+        <div class="text-h6">{{ user?.nome == '' ? 'Sem nome' : user?.nome }}</div>
+        <div class="text-subtitle2 text-grey">{{ user?.email == '' ? 'Sem email' : user?.email }}</div>
+        <div class="text-subtitle2 text-grey">{{ user?.telefone == '' ? 'Sem telefone' : user?.telefone }}</div>
+
+        <!-- <q-input dense outlined readonly size="xs" class="full-width" label="Senha" v-model="senhaExemplo"
+          :type="ocultarSenha ? 'password' : 'text'">
+          <template #append>
+            <q-icon :name="ocultarSenha ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+              @click="ocultarSenha = !ocultarSenha" />
+          </template>
+</q-input> -->
+
+        <div class="row justify-center q-mt-sm">
           <q-btn color="primary" icon="edit" label="Editar Perfil" @click="abrirDialogEditarUsuario"
             style="border-radius: 20px;" class="hover-scale" />
           <q-btn outline color="primary" icon="logout" label="Sair" @click="sairSistema()" style="border-radius: 20px;"
@@ -45,6 +30,7 @@
         </div>
       </div>
     </q-card>
+
 
     <div v-if="admin == false">
       <div class="text-h6 row q-mb-xs">Lista de Produtos</div>
@@ -196,8 +182,8 @@ const produtos = ref<Produto[]>([])
 const filtroNome = ref('')
 const filtroCategoria = ref<string | null>(null)
 
-const ocultarSenha = ref(true)
-const senhaExemplo = ref('negomaq123')
+// const ocultarSenha = ref(true)
+// const senhaExemplo = ref('negomaq123')
 const admin = ref(false)
 
 const categorias = [
