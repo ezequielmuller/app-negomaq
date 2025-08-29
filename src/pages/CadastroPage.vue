@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center" padding>
-    <q-card style="width: 330px; height: 600px; border-radius: 20px;"
+    <q-card style="width: 330px; height: 610px; border-radius: 20px;"
       class="flex flex-column items-center justify-center">
       <q-card-setion>
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa"
@@ -51,6 +51,12 @@
           <span>Já tem um conta?</span>
           <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="voltarLogin">
             Entrar
+          </span>
+        </div>
+        <div class="q-mt-sm flex items-center justify-center"
+          style="width: 100%; font-size: 14px; text-decoration: underline;">
+          <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="router.push('/home')">
+            Continuar Desconectado!
           </span>
         </div>
       </q-card-section>
