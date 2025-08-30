@@ -26,8 +26,9 @@
 
     <q-separator style="height: 3px;" class="q-my-md" />
 
-    <div v-if="produtosFiltrados.length" class="row q-col-gutter-md flex justify-center">
-      <div v-for="produto in produtosFiltrados" :key="produto.id" class="col-12 col-sm-6 col-md-4 col-lg-3">
+    <div v-if="produtosFiltrados.length" class="row justify-center q-col-gutter-md">
+      <div v-for="produto in produtosFiltrados" :key="produto.id" class="col-xs-12 col-sm-4 col-md-4 q-mb-md"
+        style="max-width: 320px;">
         <q-card class="hover-scale" style="border-radius: 20px; display: flex; flex-direction: column; height: 100%;">
           <q-card-section class="flex justify-center items-center" style="height: 200px;">
             <img :src="produto.img || '/icons/estojo.webp'" :alt="produto.nome"
