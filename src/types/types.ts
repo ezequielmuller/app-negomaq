@@ -13,16 +13,9 @@ export type ProdutoPayload = Omit<Produto, 'id'>;
 export type Usuario = {
   id: string;
   nome: string;
-  email: string;
-  is_admin: boolean;
-  telefone: string;
-};
-
-export type UsuarioEditar = {
-  id: string;
-  nome: string;
   sobrenome: string;
   email: string;
+  is_admin: boolean;
   telefone: string;
   senha: string;
 };

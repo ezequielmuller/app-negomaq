@@ -7,12 +7,15 @@
     <q-separator class="q-mb-md" />
 
     <q-card class="q-pa-md q-mb-md shadow-2" style="border-radius: 20px; border: 0.7mm solid var(--q-primary);">
-      <div class="column items-center q-gutter-md">
+      <div class="column items-center q-gutter-xs">
         <q-avatar size="60px" color="primary" text-color="white" icon="person" />
 
-        <div class="text-h6">{{ user?.nome == '' ? 'Sem nome' : user?.nome }}</div>
-        <div class="text-subtitle2 text-grey">{{ user?.email == '' ? 'Sem email' : user?.email }}</div>
-        <div class="text-subtitle2 text-grey">{{ user?.telefone == '' ? 'Sem telefone' : user?.telefone }}</div>
+        <div class="text-h6">{{ user?.nome == '' || user?.nome == null ? 'Sem nome cadastrado' : user?.nome }}</div>
+        <div class="text-subtitle2 text-grey">{{ user?.email == '' || user?.email == null ? 'Sem email cadastrado' :
+          user?.email }}</div>
+        <div class="text-subtitle2 text-grey">
+          {{ user?.telefone == '' || user?.telefone == null ? 'Sem telefone cadastrado' : user?.telefone }}
+        </div>
 
         <!-- <q-input dense outlined readonly size="xs" class="full-width" label="Senha" v-model="senhaExemplo"
           :type="ocultarSenha ? 'password' : 'text'">
@@ -265,7 +268,8 @@ const editarUsuario = async () => {
       sobrenome: sobrenome.value,
       email: email.value,
       telefone: telefone.value,
-      senha: senha.value
+      senha: senha.value,
+      is_admin: user.is_admin
     }
     console.log(data)
     const result = await EditarUsuario(data)

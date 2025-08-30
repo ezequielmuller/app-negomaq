@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center" padding>
-    <q-card style="width: 330px; height: 610px; border-radius: 20px;"
+    <q-card style="width: 330px; height: 680px; border-radius: 20px;"
       class="flex flex-column items-center justify-center">
       <q-card-setion>
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa"
@@ -11,6 +11,11 @@
       </q-card-setion>
       <q-card-section style="width: 100%;">
         <q-input class="full-width" label="Nome" v-model="nome" clearable>
+          <template #prepend>
+            <q-icon name="person" />
+          </template>
+        </q-input>
+        <q-input class="full-width" label="Sobrenome" v-model="sobrenome" clearable>
           <template #prepend>
             <q-icon name="person" />
           </template>
@@ -65,21 +70,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useQuasar } from "quasar";
-import { useRouter } from "vue-router";
-import api from "src/services/api";
+import { onMounted, ref } from "vue"
+import { useQuasar } from "quasar"
+import { useRouter } from "vue-router"
+import api from "src/services/api"
 
-const $q = useQuasar();
-const router = useRouter();
+const $q = useQuasar()
+const router = useRouter()
 
-const nome = ref("");
-const email = ref("");
-const telefone = ref("");
-const senha = ref("");
-const confirmarSenha = ref("");
-const ocultarSenha = ref(true);
-const ocultarConfirmarSenha = ref(true);
+const nome = ref("")
+const sobrenome = ref("")
+const email = ref("")
+const telefone = ref("")
+const senha = ref("")
+const confirmarSenha = ref("")
+const ocultarSenha = ref(true)
+const ocultarConfirmarSenha = ref(true)
 
 function formatarTelefone(valor: string | number | null) {
   if (valor === null) {
@@ -139,6 +145,7 @@ const cadastrar = async () => {
     $q.loading.show({ message: "Cadastrando..." });
     const payload = {
       nome: nome.value,
+      sobrenome: sobrenome.value,
       email: email.value,
       telefone: telefone.value,
       senha: senha.value,

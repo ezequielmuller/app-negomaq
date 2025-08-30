@@ -1,5 +1,5 @@
 import api from './api';
-import type { ProdutoPayload, UsuarioEditar } from '../types/types';
+import type { ProdutoPayload, Usuario } from '../types/types';
 
 const VITE_ADMIN_TOKEN = import.meta.env.VITE_ADMIN_TOKEN;
 
@@ -60,7 +60,7 @@ export const atualizarProduto = async (id: string, dados: ProdutoPayload) => {
   }
 };
 
-export const EditarUsuario = async (dados: UsuarioEditar) => {
+export const EditarUsuario = async (dados: Usuario) => {
   try {
     await api.put(`/admin/editar`, dados, {
       headers: {
