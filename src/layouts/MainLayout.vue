@@ -46,12 +46,6 @@
           </q-btn>
         </div>
 
-        <q-btn v-if="!user" outline dense icon="login" :to="{ name: 'login' }" label="FAÇA LOGIN"
-          class="hover-scale q-pr-sm q-mr-sm" color="white"
-          style="border-radius: 20px; background-color: #FFB8B8; border: 2px solid var(--q-primary); color: var(--q-primary)">
-          <q-tooltip>Faça Login</q-tooltip>
-        </q-btn>
-
         <q-btn dense flat round icon="menu" class="lt-md" @click="menuMobile = true" />
 
       </q-toolbar>
@@ -102,7 +96,10 @@
           </q-item>
         </template>
         <template v-else>
-
+          <q-item clickable :to="{ name: 'login' }" class="text-primary text-bold">
+            <q-item-section avatar><q-icon name="login" /></q-item-section>
+            <q-item-section>Faça Login</q-item-section>
+          </q-item>
         </template>
       </q-list>
 
@@ -254,11 +251,14 @@
 
 <script setup lang="ts">
 import { useAuth } from 'src/composables/useAuth'
+//import { usePlatform } from 'src/composables/usePlatform'
 import { formatPrice } from 'src/config/formatPrice'
 import { onMounted, ref } from 'vue'
 
 const { getUser } = useAuth()
 const user = getUser()
+
+//const mobile = usePlatform()
 
 const menuMobile = ref(false)
 const menuCarrinho = ref(false)
