@@ -26,14 +26,13 @@
 
     <q-separator style="height: 3px;" class="q-my-md" />
 
-    <div v-if="produtosFiltrados.length" class="row justify-center q-col-gutter-md">
-      <div v-for="produto in produtosFiltrados" :key="produto.id" class="col-xs-12 col-sm-4 col-md-4 q-mb-md"
+    <div v-if="produtosFiltrados.length > 0" class="row justify-center q-col-gutter-md">
+      <div v-for="produto in produtosFiltrados" :key="produto.id" class="col-12 col-sm-6 col-md-4 q-mb-md"
         style="max-width: 320px;">
-        <q-card class="hover-scale" style="border-radius: 20px; display: flex; flex-direction: column; height: 100%;">
+        <q-card class="produto-card" style="border-radius: 20px; display: flex; flex-direction: column; height: 100%;">
           <q-card-section class="flex justify-center items-center" style="height: 200px;">
             <img :src="produto.img || '/icons/estojo.webp'" :alt="produto.nome"
-              class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md"
-              style="border: 1mm solid var(--q-primary);" />
+              class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md" />
           </q-card-section>
           <q-separator class="q-mx-md" />
           <q-card-section class="flex flex-col flex-1">
@@ -44,13 +43,12 @@
               <div class="text-bold text-primary" style="font-size: 21px;">
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
-              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="hover-scale"
-                style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
-                  nome: produto.nome,
-                  descricao: produto.descricao,
-                  preco: `R$ ${formatarPreco(produto.preco)}`,
-                  img: produto.img || '/icons/faca.webp'
-                })" />
+              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
+                nome: produto.nome,
+                descricao: produto.descricao,
+                preco: `R$ ${formatarPreco(produto.preco)}`,
+                img: produto.img || '/icons/faca.webp'
+              })" />
             </div>
           </q-card-section>
         </q-card>
@@ -131,5 +129,40 @@ onMounted(async () => {
   .input-pesquisa {
     width: 300px;
   }
+}
+
+.carousel-container {
+  height: 300px;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.rounded-borders {
+  border-radius: 16px;
+}
+
+.categorias-container {
+  max-width: 1200px;
+  margin: 0 auto 24px auto;
+  width: 100%;
+}
+
+.categoria-card,
+.produto-card {
+  border: 1mm solid gainsboro;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.categoria-card:hover,
+.produto-card:hover {
+  border-color: var(--q-primary);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
+  z-index: 2;
+  transform: translateY(-4px) scale(1.05);
+  animation-duration: 3ms;
 }
 </style>

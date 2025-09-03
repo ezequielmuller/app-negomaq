@@ -65,7 +65,7 @@
         </q-item>
 
         <q-item clickable :to="{ name: 'home-estojo-page' }">
-          <q-item-section avatar><q-icon name="work" /></q-item-section>
+          <q-item-section avatar><q-icon name="takeout_dining" /></q-item-section>
           <q-item-section>Estojos</q-item-section>
         </q-item>
 

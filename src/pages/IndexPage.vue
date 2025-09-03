@@ -1,9 +1,5 @@
 <template>
   <q-page padding>
-    <div class="text-h6 text-bold text-center" style="font-size: 24px;">
-      Consulte nosso Catálogo de Produtos e Garanta já os melhores!
-    </div>
-
     <div class="column items-center">
       <div class="carousel-container">
         <q-carousel v-model="slide" animated navigation infinite arrows autoplay height="270px"
@@ -15,10 +11,27 @@
 
     <q-separator style="height: 3px;" class="q-my-sm" />
 
-    <div v-if="produtos.length > 0" class="row justify-center q-col-gutter-md q-mt-sm">
-      <div v-for="produto in produtos" :key="produto.id" class="col-12 col-sm-4 col-md-4 q-mb-md"
+    <div class="text-h6 text-bold text-center" style="font-size: 24px;">
+      Consulte nosso <span class="text-primary">Catálogo de Produtos</span> e garanta já os melhores!
+    </div>
+    <div class="col-12 text-bold q-mt-sm row justify-center"
+      style="font-size: 22px; margin-bottom: 0px; margin-top: 24px">
+      Categorias</div>
+    <div class="row justify-center q-col-gutter-md categorias-container" style="margin-top: 0;">
+      <div class="col-xs-12 col-sm-6 col-md-3" v-for="cat in categorias" :key="cat.nome" style="margin-top: 0;">
+        <q-card class="categoria-card flex column items-center cursor-pointer"
+          style="border-radius: 20px; margin-top: 0;">
+          <div class=" icone"><q-icon :color="cat.cor" :name="cat.icone" size="80px" /></div>
+          <div class="text-grey text-bold text-h6">{{ cat.nome }}</div>
+        </q-card>
+      </div>
+    </div>
+    <div class="col-12 text-bold q-mb-lg q-mt-sm row justify-center" style="font-size: 22px; margin-bottom: 14px;">
+      Novidades!</div>
+    <div v-if="produtos.length > 0" class="row justify-center q-col-gutter-md">
+      <div v-for="produto in produtos" :key="produto.id" class="col-12 col-sm-6 col-md-4 q-mb-md"
         style="max-width: 320px;">
-        <q-card class="hover-scale" style="border-radius: 20px; display: flex; flex-direction: column; height: 100%;">
+        <q-card class="produto-card" style="border-radius: 20px; display: flex; flex-direction: column; height: 100%;">
           <q-card-section class="flex justify-center items-center" style="height: 200px;">
             <img :src="produto.img || '/icons/estojo.webp'" :alt="produto.nome"
               class="w-auto max-w-full h-full object-contain rounded-[10px] shadow-md" />
@@ -32,13 +45,12 @@
               <div class="text-bold text-primary" style="font-size: 21px;">
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
-              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" class="hover-scale"
-                style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
-                  nome: produto.nome,
-                  descricao: produto.descricao,
-                  preco: `R$ ${formatarPreco(produto.preco)}`,
-                  img: produto.img || '/icons/faca.webp'
-                })" />
+              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
+                nome: produto.nome,
+                descricao: produto.descricao,
+                preco: `R$ ${formatarPreco(produto.preco)}`,
+                img: produto.img || '/icons/faca.webp'
+              })" />
             </div>
           </q-card-section>
         </q-card>
@@ -76,15 +88,21 @@ const imagens = [
   "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
 ]
 
+const categorias = [
+  { nome: 'Facas', icone: 'restaurant', cor: 'grey' },
+  { nome: 'Estojos', icone: 'takeout_dining', cor: 'grey' },
+  { nome: 'Aventais', icone: 'checkroom', cor: 'grey' },
+  { nome: 'Artigos de Churrasco', icone: 'outdoor_grill', cor: 'grey' }
+]
+
 const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
     const result = await ListarProdutosHome()
-    console.log(result.data)
     produtos.value = result
     $q.loading.hide()
   } catch (error) {
-    console.log("Erro==> ", error)
+    console.log(error)
     $q.notify({
       type: 'negative',
       position: 'bottom',
@@ -110,12 +128,40 @@ onMounted(async () => {
   max-width: 1200px;
   display: flex;
   justify-content: center;
-  /* Centraliza na horizontal */
   margin-top: 16px;
-  /* Espaço abaixo do header */
 }
 
 .rounded-borders {
   border-radius: 16px;
+}
+
+/* Centraliza as categorias e limita largura */
+.categorias-container {
+  max-width: 1200px;
+  margin: 0 auto 24px auto;
+  width: 100%;
+}
+
+.categoria-card,
+.produto-card {
+  border: 1mm solid gainsboro;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+}
+
+/* Hover geral dos cards */
+.categoria-card:hover,
+.produto-card:hover {
+  border-color: var(--q-primary);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
+  z-index: 2;
+  transform: translateY(-4px) scale(1.05);
+}
+
+/* Ícone e texto dentro da categoria ficam vermelhos no hover */
+.categoria-card:hover .icone,
+.categoria-card:hover .text-h6 {
+  color: var(--q-primary) !important;
 }
 </style>
