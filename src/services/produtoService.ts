@@ -71,3 +71,12 @@ export const EditarUsuario = async (dados: Usuario) => {
     console.log(err);
   }
 };
+
+export const ListarProdutosHome = async () => {
+  try {
+    const { data } = await api.get('/produtos/home');
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
