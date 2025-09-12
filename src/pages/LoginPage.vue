@@ -13,7 +13,8 @@
             <q-icon name="alternate_email" />
           </template>
         </q-input>
-        <q-input class="full-width" label="Senha" v-model="senha" :type="ocultarSenha ? 'password' : 'text'" clearable>
+        <q-input class="full-width" label="Senha" v-model="senha" :type="ocultarSenha ? 'password' : 'text'" clearable
+          @keyup.enter="entrarSistema">
           <template #prepend>
             <q-icon name="lock" />
           </template>

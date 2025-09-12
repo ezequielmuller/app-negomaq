@@ -41,7 +41,7 @@
           </template>
         </q-input>
         <q-input class="full-width" label="Confirmar Senha" v-model="confirmarSenha" clearable
-          :type="ocultarConfirmarSenha ? 'password' : 'text'">
+          :type="ocultarConfirmarSenha ? 'password' : 'text'" @keyup.enter="cadastrar">
           <template #prepend>
             <q-icon name="lock" />
           </template>
