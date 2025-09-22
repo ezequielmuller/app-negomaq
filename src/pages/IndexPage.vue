@@ -20,7 +20,7 @@
     <div class="row justify-center q-col-gutter-md categorias-container" style="margin-top: 0;">
       <div class="col-xs-12 col-sm-6 col-md-3" v-for="cat in categorias" :key="cat.nome" style="margin-top: 0;">
         <q-card class="categoria-card flex column items-center cursor-pointer"
-          style="border-radius: 20px; margin-top: 0;">
+          style="border-radius: 20px; margin-top: 0;" @click="$router.push(cat.rota)">
           <div class=" icone"><q-icon :color="cat.cor" :name="cat.icone" size="80px" /></div>
           <div class="text-grey text-bold text-h6">{{ cat.nome }}</div>
         </q-card>
@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
-import { ListarProdutosHome } from 'src/services/produtoService'
+import { ListarProdutosHome } from 'src/services/apiServices'
 import type { Produto } from 'src/types/types'
 import { ref, onMounted } from 'vue'
 
@@ -81,18 +81,19 @@ const props = defineProps<{
 }>()
 
 const produtos = ref<Produto[]>([])
+
 const slide = ref(0)
 const imagens = [
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+  "/src/assets/promocao-faca1.jpeg",
+  "/src/assets/promocao-faca2.png",
+  "/src/assets/promocao-faca3.jpg",
 ]
 
 const categorias = [
-  { nome: 'Facas', icone: 'restaurant', cor: 'grey' },
-  { nome: 'Estojos', icone: 'takeout_dining', cor: 'grey' },
-  { nome: 'Aventais', icone: 'checkroom', cor: 'grey' },
-  { nome: 'Artigos de Churrasco', icone: 'outdoor_grill', cor: 'grey' }
+  { nome: 'Facas', icone: 'restaurant', cor: 'grey', rota: 'home-facas-page' },
+  { nome: 'Estojos', icone: 'takeout_dining', cor: 'grey', rota: 'home-estojo-page' },
+  { nome: 'Aventais', icone: 'checkroom', cor: 'grey', rota: 'home-avental-page' },
+  { nome: 'Artigos de Churrasco', icone: 'outdoor_grill', cor: 'grey', rota: 'home-artigo-churrasco-page' }
 ]
 
 const listarProdutos = async () => {

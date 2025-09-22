@@ -180,7 +180,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
-import { criarProduto, atualizarProduto, deletarProduto, atualizarEstoque } from 'src/services/produtoService'
+import { criarProduto, atualizarProduto, deletarProduto, atualizarEstoque } from 'src/services/apiServices'
 import type { Produto } from 'src/types/types'
 
 // Variveis

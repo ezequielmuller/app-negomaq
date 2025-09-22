@@ -259,14 +259,8 @@ const { getUser } = useAuth()
 const user = getUser()
 
 //const mobile = usePlatform()
-
 const menuMobile = ref(false)
-const menuCarrinho = ref(false)
 const dialogNotificacao = ref(false)
-const cartCount = ref(0)
-
-const carrinho = ref<Produto[]>([])
-const quantidadeProduto = ref(1)
 
 interface Produto {
   id: string
@@ -278,23 +272,11 @@ interface Produto {
   img?: string
 }
 
-const enviarWhatsapp = () => {
-  const nome = 'Lucas'
-  const numero = '55548449-5095'
-  const celularFormatado = numero.replace(/\D/g, '')
-  const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado
-  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
-  const mensagemCodificada = encodeURIComponent(mensagem)
-  window.open(`https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`, '_blank')
-}
-
-const abrirGrupoLeilao = () => {
-  window.open('https://chat.whatsapp.com/FB2vjot6F5y1eYsM6nHwRM', '_blank')
-}
-
-const abrirNotificacao = () => {
-  dialogNotificacao.value = true
-}
+// carrinho
+const carrinho = ref<Produto[]>([])
+const menuCarrinho = ref(false)
+const cartCount = ref(0)
+const quantidadeProduto = ref(1)
 
 const adicionarAoCarrinho = (produto: Produto) => {
   carrinho.value.push(produto)
@@ -303,6 +285,22 @@ const adicionarAoCarrinho = (produto: Produto) => {
 
 const removerDoCarrinho = (index: number) => {
   carrinho.value.splice(index, 1)
+}
+
+// const subtotalCarrinho = computed(() => {
+//   const qtdItens = carrinho.value.reduce((total, item) => total + item.estoque, 0)
+//   console.log('Quantidade de itens no carrinho=====> ', qtdItens)
+//   return qtdItens
+// })
+
+const enviarWhatsapp = () => {
+  const nome = 'Lucas'
+  const numero = '55548449-5095'
+  const celularFormatado = numero.replace(/\D/g, '')
+  const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado
+  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
+  const mensagemCodificada = encodeURIComponent(mensagem)
+  window.open(`https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`, '_blank')
 }
 
 const finalizarCompra = () => {
@@ -318,6 +316,15 @@ const finalizarCompra = () => {
   menuCarrinho.value = false
 }
 
+const abrirGrupoLeilao = () => {
+  window.open('https://chat.whatsapp.com/FB2vjot6F5y1eYsM6nHwRM', '_blank')
+}
+
+const abrirNotificacao = () => {
+  dialogNotificacao.value = true
+}
+
+// formatar pra moeda (string)
 function formatCurrency(value: number) {
   return formatPrice(value)
 }

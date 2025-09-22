@@ -19,12 +19,3 @@ export type Usuario = {
   telefone: string;
   senha: string;
 };
-
-export type LoginResponse = {
-  mensagem: string;
-  is_admin: boolean;
-};
-
-export type ErrorResponse = {
-  erro: string;
-};

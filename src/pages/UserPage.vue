@@ -152,7 +152,7 @@
 import { ref, computed, onMounted, } from 'vue'
 import { useQuasar } from 'quasar'
 import ManipularProdutos from 'src/components/ManipularProdutos.vue'
-import { EditarUsuario, listarProdutos } from 'src/services/produtoService'
+import { EditarUsuario, listarProdutos } from 'src/services/apiServices'
 import type { Produto } from '../types/types'
 import type { QTableProps } from 'quasar'
 import { useRouter } from "vue-router";
