@@ -1,40 +1,52 @@
-# NegoMaq App (app-negomaq)
+# 🔪 NegoMaq App (app-negomaq)
 
-Sistema de venda de faca
+Sistema de vendas de facas desenvolvido com **Quasar Framework**, **Vue 3**, **TypeScript** e **Composition API**.
 
-## Install the dependencies
+## Tecnologias
+
+- [Quasar Framework](https://quasar.dev/)
+- [Vue 3](https://vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- Composition API
+
+## Instalação
+
+Clone o repositório e instale as dependências:
+
 ```bash
 yarn
-# or
+# ou
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+## Desenvolvimento
+
+Execute o app em modo de desenvolvimento:
+
 ```bash
 quasar dev
 ```
 
+## Comandos
 
-### Lint the files
+### Lint
+
 ```bash
 yarn lint
-# or
+# ou
 npm run lint
 ```
 
+### Format
 
-### Format the files
 ```bash
 yarn format
-# or
+# ou
 npm run format
 ```
 
+### Build (produção)
 
-### Build the app for production
 ```bash
 quasar build
 ```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
