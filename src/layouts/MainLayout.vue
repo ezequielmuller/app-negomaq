@@ -319,12 +319,13 @@ const finalizarCompra = () => {
     alert('Seu carrinho está vazio!')
     return
   }
-  const mensagem = encodeURIComponent(
-    `Olá, quero comprar:\n${carrinho.value.map(p => `- ${p.nome} (${p.preco})`).join('\n')}`
-  )
-  window.open(`https://wa.me/555484495095?text=${mensagem}`, '_blank')
-  carrinho.value = []
-  menuCarrinho.value = false
+  // const mensagem = encodeURIComponent(
+  //   `Olá, quero comprar:\n${carrinho.value.map(p => `- ${p.nome} (${p.preco})`).join('\n')}`
+  // )
+  // window.open(`https://wa.me/555484495095?text=${mensagem}`, '_blank')
+  // menuCarrinho.value = false
+
+  carrinho.value
 }
 
 // metodos soltos
