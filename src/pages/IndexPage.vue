@@ -29,7 +29,7 @@
     <div class="col-12 text-bold q-mb-lg q-mt-sm row justify-center" style="font-size: 22px; margin-bottom: 14px;">
       Novidades!</div>
     <div v-if="produtos.length > 0" class="row justify-center q-col-gutter-md">
-      <div v-for="produto in produtos" :key="produto.id" class="col-12 col-sm-6 col-md-4 q-mb-md"
+      <div v-for="produto in produtos.slice(0, 3)" :key="produto.id" class="col-12 col-sm-6 col-md-4 q-mb-md"
         style="max-width: 320px;">
         <q-card class="produto-card" style="border-radius: 20px; display: flex; flex-direction: column; height: 100%;">
           <q-card-section class="flex justify-center items-center" style="height: 200px;">
@@ -46,10 +46,12 @@
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
               <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
+                id: produto.id,
                 nome: produto.nome,
                 descricao: produto.descricao,
                 preco: `R$ ${formatarPreco(produto.preco)}`,
-                img: produto.img || '/icons/faca.webp'
+                img: produto.img || '/icons/faca.webp',
+                qtd: 1
               })" />
             </div>
           </q-card-section>
@@ -73,10 +75,12 @@ const $q = useQuasar()
 
 const props = defineProps<{
   adicionarAoCarrinho: (produto: {
+    id: string
     nome: string
     descricao: string
     preco: string
     img: string
+    qtd: number
   }) => void
 }>()
 

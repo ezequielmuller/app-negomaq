@@ -6,6 +6,7 @@ export interface Produto {
   categoria: string;
   estoque: number;
   img?: string;
+  qtd?: string;
 }
 
 export type ProdutoPayload = Omit<Produto, 'id'>;

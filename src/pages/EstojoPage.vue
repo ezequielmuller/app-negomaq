@@ -20,7 +20,7 @@
 
       <div class="flex justify-between text-bold text-primary">
         <span>R$ {{ formatarPreco(precoRange.min) }}</span>
-        <span>R$ {{ formatarPreco(precoRange.max) }}</span>
+        <span>R$ {{ '+ ' + formatarPreco(precoRange.max) }}</span>
       </div>
     </div>
 
@@ -44,10 +44,12 @@
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
               <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
+                id: produto.id,
                 nome: produto.nome,
                 descricao: produto.descricao,
                 preco: `R$ ${formatarPreco(produto.preco)}`,
-                img: produto.img || '/icons/faca.webp'
+                img: produto.img || '/icons/faca.webp',
+                qtd: 1
               })" />
             </div>
           </q-card-section>
@@ -70,10 +72,12 @@ const $q = useQuasar()
 
 const props = defineProps<{
   adicionarAoCarrinho: (produto: {
+    id: string
     nome: string
     descricao: string
     preco: string
     img: string
+    qtd: number
   }) => void
 }>()
 

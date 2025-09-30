@@ -14,13 +14,13 @@
     <div class="mx-auto q-mt-sm q-py-sm q-px-md rounded-xl shadow-md bg-grey-1 flex flex-col" style="max-width: 600px;">
       <div class="text-center text-bold" style="font-size: 16px;">Preço</div>
 
-      <q-range v-model="precoRange" :min="50" :max="400" :step="10" label color="primary" markers drag-range
+      <q-range v-model="precoRange" :min="0" :max="1000" :step="50" label color="primary" markers drag-range
         class="q-mt-md" :left-label-value="`R$ ${formatarPreco(precoRange.min)}`"
         :right-label-value="`R$ ${formatarPreco(precoRange.max)}`" />
 
       <div class="flex justify-between text-bold text-primary">
         <span>R$ {{ formatarPreco(precoRange.min) }}</span>
-        <span>R$ {{ formatarPreco(precoRange.max) }}</span>
+        <span>R$ {{ '+ ' + formatarPreco(precoRange.max) }}</span>
       </div>
     </div>
 
@@ -44,10 +44,12 @@
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
               <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
+                id: produto.id,
                 nome: produto.nome,
                 descricao: produto.descricao,
                 preco: `R$ ${formatarPreco(produto.preco)}`,
-                img: produto.img || '/icons/faca.webp'
+                img: produto.img || '/icons/faca.webp',
+                qtd: 1
               })" />
             </div>
           </q-card-section>
@@ -70,15 +72,17 @@ const $q = useQuasar()
 
 const props = defineProps<{
   adicionarAoCarrinho: (produto: {
+    id: string
     nome: string
     descricao: string
     preco: string
     img: string
+    qtd: number
   }) => void
 }>()
 
 const pesquisa = ref('')
-const precoRange = ref({ min: 50, max: 400 })
+const precoRange = ref({ min: 0, max: 400 })
 const produtos = ref<Produto[]>([])
 
 const listarProdutos = async () => {

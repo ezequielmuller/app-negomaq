@@ -176,12 +176,11 @@
               <div class="text-grey">{{ item.descricao }}</div>
               <div class="text-bold q-mt-xs text-primary" style="font-size: 16px;">{{ item.preco }}</div>
               <div class="row justify-between q-mt-sm">
-                <q-btn flat color="negative" icon="add" round size="sm" @click="quantidadeProduto++"
-                  style="width: 20px;" />
-                <span class="q-mt-sm">{{ quantidadeProduto }}</span>
-                <q-btn flat color="negative" icon="remove" size="sm" round @click=" quantidadeProduto--" />
+                <q-btn flat color="negative" icon="add" round size="sm" @click="item.qtd++" style="width: 20px;" />
+                <span class="q-mt-sm">{{ item.qtd }}</span>
+                <q-btn flat color="negative" icon="remove" size="sm" round @click="diminuirQtd(item)" />
                 <q-separator vertical color="primary" />
-                <q-btn color="negative" icon="delete" round dense flat @click="removerDoCarrinho(index)" />
+                <q-btn color="negative" icon="delete" round dense flat @click="removerDoCarrinho(item)" />
               </div>
             </q-item-section>
           </q-item>
@@ -197,7 +196,9 @@
       <q-separator />
 
       <div class="q-pa-md" style="padding-top: 8px;">
-        <div class="row text-bold" style="font-size: 16px;">Subtotal: {{ formatCurrency(0) }}</div>
+        <div class="row text-bold" style="font-size: 16px;">Subtotal:
+          {{ formatCurrency(totalCarrinho) }}
+        </div>
         <div class="q-mt-mt" style="padding-top: 8px;">
           <q-btn color="primary" class="full-width hover-scale" label="Finalizar Compra" @click="finalizarCompra"
             unelevated :disable="carrinho.length === 0" style="border-radius: 20px;" />
@@ -250,6 +251,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useAuth } from 'src/composables/useAuth'
 //import { usePlatform } from 'src/composables/usePlatform'
 import { formatPrice } from 'src/config/formatPrice'
@@ -270,38 +272,47 @@ interface Produto {
   preco: number
   estoque: number
   img?: string
+  qtd: number
 }
 
 // carrinho
 const carrinho = ref<Produto[]>([])
 const menuCarrinho = ref(false)
 const cartCount = ref(0)
-const quantidadeProduto = ref(1)
 
 const adicionarAoCarrinho = (produto: Produto) => {
-  carrinho.value.push(produto)
+  const jaContem = carrinho.value.find(p => p.id === produto.id)
+  if (jaContem) {
+    jaContem.qtd = (jaContem.qtd || 1) + 1
+  } else {
+    carrinho.value.push({ ...produto, qtd: 1 })
+  }
+  cartCount.value = carrinho.value.reduce((total, p) => total + (p.qtd || 1), 0)
   menuCarrinho.value = true
+  console.log("CARRINHO==> ", carrinho)
 }
 
-const removerDoCarrinho = (index: number) => {
-  carrinho.value.splice(index, 1)
+const removerDoCarrinho = (item: Produto) => {
+  carrinho.value = carrinho.value.slice().filter(p => p.id !== item.id)
+  cartCount.value = carrinho.value.reduce((total, p) => total + (p.qtd || 1), 0)
 }
 
-// const subtotalCarrinho = computed(() => {
-//   const qtdItens = carrinho.value.reduce((total, item) => total + item.estoque, 0)
-//   console.log('Quantidade de itens no carrinho=====> ', qtdItens)
-//   return qtdItens
-// })
-
-const enviarWhatsapp = () => {
-  const nome = 'Lucas'
-  const numero = '55548449-5095'
-  const celularFormatado = numero.replace(/\D/g, '')
-  const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado
-  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
-  const mensagemCodificada = encodeURIComponent(mensagem)
-  window.open(`https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`, '_blank')
+const diminuirQtd = (item: Produto) => {
+  if (item.qtd > 1) {
+    item.qtd--
+  } else {
+    removerDoCarrinho(item)
+  }
 }
+
+const totalCarrinho = computed(() => {
+  const total = carrinho.value.reduce((sum, item) => {
+    const precoNumero = Number(item.preco.toString().replace('R$', '').replace(',', '.')) || 0
+    const quantidade = item.qtd || 1
+    return sum + (precoNumero * quantidade)
+  }, 0)
+  return total
+})
 
 const finalizarCompra = () => {
   if (carrinho.value.length === 0) {
@@ -314,6 +325,17 @@ const finalizarCompra = () => {
   window.open(`https://wa.me/555484495095?text=${mensagem}`, '_blank')
   carrinho.value = []
   menuCarrinho.value = false
+}
+
+// metodos soltos
+const enviarWhatsapp = () => {
+  const nome = 'Lucas'
+  const numero = '55548449-5095'
+  const celularFormatado = numero.replace(/\D/g, '')
+  const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado
+  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
+  const mensagemCodificada = encodeURIComponent(mensagem)
+  window.open(`https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`, '_blank')
 }
 
 const abrirGrupoLeilao = () => {
@@ -330,6 +352,7 @@ function formatCurrency(value: number) {
 }
 
 onMounted(() => {
+  console.log("layout mounted")
 })
 </script>
 
