@@ -256,7 +256,11 @@ import { useAuth } from 'src/composables/useAuth'
 //import { usePlatform } from 'src/composables/usePlatform'
 import { formatPrice } from 'src/config/formatPrice'
 import { onMounted, ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+const $q = useQuasar()
 const { getUser } = useAuth()
 const user = getUser()
 
@@ -314,20 +318,12 @@ const totalCarrinho = computed(() => {
   return total
 })
 
-const finalizarCompra = () => {
-  if (carrinho.value.length === 0) {
-    alert('Seu carrinho está vazio!')
-    return
-  }
-  // const mensagem = encodeURIComponent(
-  //   `Olá, quero comprar:\n${carrinho.value.map(p => `- ${p.nome} (${p.preco})`).join('\n')}`
-  // )
-  // window.open(`https://wa.me/555484495095?text=${mensagem}`, '_blank')
-  // menuCarrinho.value = false
+const finalizarCompra = async () => {
+  $q.loading.show({ message: 'Carregando...' })
+  await router.push({ name: 'home-finalizar-venda', params: { carrinho: JSON.stringify(carrinho.value) } })
+  $q.loading.hide()
 
-  carrinho.value
 }
-
 // metodos soltos
 const enviarWhatsapp = () => {
   const nome = 'Lucas'

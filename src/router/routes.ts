@@ -1,3 +1,5 @@
+import { json } from 'stream/consumers';
+
 const routes = [
   {
     path: '',
@@ -7,7 +9,7 @@ const routes = [
       // ==== PÁGINAS ==== //
       { path: 'home', name: 'home', component: () => import('pages/IndexPage.vue') },
       { path: 'home-user-page', name: 'home-user-page', component: () => import('pages/UserPage.vue'), },
-      { path: 'home-finalizar-venda', name: 'home-finalizar-venda', component: () => import('pages/FinalizarCompraPage.vue'), },
+      { path: 'home-finalizar-venda', name: 'home-finalizar-venda', component: () => import('pages/FinalizarCompraPage.vue'), params: { carrinho: json } },
       // ==== PRODUTOS ==== //
       { path: 'home-facas-page', name: 'home-facas-page', component: () => import('src/pages/Produtos/FacasPage.vue') },
       { path: 'home-estojo-page', name: 'home-estojo-page', component: () => import('src/pages/Produtos/EstojoPage.vue') },
