@@ -147,7 +147,6 @@
     </q-dialog>
   </q-page>
 </template>
-
 <script setup lang="ts">
 import { ref, computed, onMounted, } from 'vue'
 import { useQuasar } from 'quasar'

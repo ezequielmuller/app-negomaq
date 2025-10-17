@@ -1,13 +1,13 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated class="bg-primary text-white">
-
       <!-- MENU DESKTOP -->
-      <q-toolbar class="q-px-lg">
+      <q-toolbar class="q-pa-xs">
         <q-toolbar-title class="row items-center">
+          <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa" class="cursor-pointer"
+            style="width: 60px; height: 50px" @click="navegarPraHome" />
           <span class="text-bold text-h6 text-white">NegoMaq</span>
         </q-toolbar-title>
-
         <div class=" row items-center q-gutter-md gt-sm">
           <router-link :to="{ name: 'home' }"
             class="no-underline text-white hover:scale-110 duration-300">Home</router-link>
@@ -20,7 +20,6 @@
           <router-link :to="{ name: 'home-artigo-churrasco-page' }"
             class="no-underline text-white hover:scale-110 duration-300">Artigos de
             Churrasco</router-link>
-
           <q-separator vertical color="white"
             style="margin-left: 10px; margin-right: 10px; margin-top: 17px; margin-bottom: 1px;" />
         </div>
@@ -114,7 +113,7 @@
       <q-page-sticky v-if="!menuMobile && !menuCarrinho" position="bottom-right" :offset="[18, 18]"
         style="z-index: 9999;">
 
-        <q-btn fab color="amber-9" unelevated class="text-white flex items-center gap-2 q-mb-sm hover-scale"
+        <q-btn fab color="amber-9" unelevated class="notify-btn text-white flex items-center gap-2 q-mb-sm hover-scale"
           icon="notifications_active" @click="abrirNotificacao">
           <q-badge color="red" rounded floating label="!" class="soft-pulse-badge" />
         </q-btn>
@@ -258,6 +257,10 @@ interface Produto {
   qtd: number
 }
 
+const navegarPraHome = async () => {
+  await router.push('/home');
+}
+
 // carrinho
 const carrinho = ref<Produto[]>([])
 const menuCarrinho = ref(false)
@@ -325,17 +328,14 @@ const abrirGrupoLeilao = () => {
 const abrirNotificacao = () => {
   dialogNotificacao.value = true
 }
-
 // formatar pra moeda (string)
 function formatCurrency(value: number) {
   return formatPrice(value)
 }
-
 onMounted(() => {
   console.log("layout mounted")
 })
 </script>
-
 <style scoped>
 :deep(a.router-link-active),
 :deep(a.router-link-exact-active) {
@@ -347,10 +347,94 @@ onMounted(() => {
 }
 
 /* Badge pulsante */
-.soft-pulse-badge {
-  animation: soft-pulse 1s infinite ease-in-out;
+.notify-btn {
+  overflow: visible !important;
+  position: relative;
 }
 
+/* badge mais visível + anel pulsante */
+.soft-pulse-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-weight: 800;
+  font-size: 13px;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background-color: #ff3b30;
+  /* vermelho mais vivo */
+  color: #fff;
+  animation: soft-pulse 1.6s infinite cubic-bezier(.4, 0, .2, 1), soft-fade 1.6s infinite ease-in-out;
+}
+
+/* anel maior por trás da badge */
+.soft-pulse-badge::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 59, 48, 0.18);
+  z-index: 2;
+  pointer-events: none;
+  animation: ring-pulse 1.6s infinite ease-in-out;
+}
+
+/* keyframes */
+@keyframes soft-pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.18);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes ring-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.25);
+    opacity: 0.16;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.0;
+  }
+}
+
+@keyframes soft-fade {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.95;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 
 .cart-item {
   background-color: #ffffff;
