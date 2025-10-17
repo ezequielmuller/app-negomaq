@@ -13,19 +13,15 @@
     </div>
     <div class="mx-auto q-mt-sm q-py-sm q-px-md rounded-xl shadow-md bg-grey-1 flex flex-col" style="max-width: 600px;">
       <div class="text-center text-bold" style="font-size: 16px;">Preço</div>
-
       <q-range v-model="precoRange" :min="50" :max="400" :step="10" label color="primary" markers drag-range
         class="q-mt-md" :left-label-value="`R$ ${formatarPreco(precoRange.min)}`"
         :right-label-value="`R$ ${formatarPreco(precoRange.max)}`" />
-
       <div class="flex justify-between text-bold text-primary">
         <span>R$ {{ formatarPreco(precoRange.min) }}</span>
         <span>R$ {{ '+ ' + formatarPreco(precoRange.max) }}</span>
       </div>
     </div>
-
     <q-separator style="height: 3px;" class="q-my-md" />
-
     <div v-if="produtosFiltrados.length > 0" class="row justify-center q-col-gutter-md">
       <div v-for="produto in produtosFiltrados" :key="produto.id" class="col-12 col-sm-6 col-md-4 q-mb-md"
         style="max-width: 320px;">
@@ -43,14 +39,8 @@
               <div class="text-bold text-primary" style="font-size: 21px;">
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
-              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
-                id: produto.id,
-                nome: produto.nome,
-                descricao: produto.descricao,
-                preco: `R$ ${formatarPreco(produto.preco)}`,
-                img: produto.img || '/icons/faca.webp',
-                qtd: 1
-              })" />
+              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;"
+                @click="adicionarNoCarrinho(produto)" />
             </div>
           </q-card-section>
         </q-card>
@@ -67,30 +57,45 @@ import { ref, onMounted, computed } from 'vue'
 import api from 'src/services/api'
 import type { Produto } from 'src/types/types'
 import { useQuasar } from 'quasar'
+import { useCartStore } from 'src/stores/useCartStore'
 
 const $q = useQuasar()
+const store = useCartStore()
 
-const props = defineProps<{
-  adicionarAoCarrinho: (produto: {
-    id: string
-    nome: string
-    descricao: string
-    preco: string
-    img: string
-    qtd: number
-  }) => void
-}>()
-
+// Variaveis ---
 const pesquisa = ref('')
 const precoRange = ref({ min: 50, max: 400 })
 const produtos = ref<Produto[]>([])
 
+// Carrinho ---
+const adicionarNoCarrinho = (produto: Produto) => {
+  store.adicionarAoCarrinho({
+    ...produto,
+    qtd: 1
+  })
+  $q.notify({
+    type: 'positive',
+    message: `${produto.nome} adicionado ao carrinho!`,
+    position: 'bottom',
+    timeout: 1500
+  })
+}
+const produtosFiltrados = computed(() =>
+  produtos.value.filter(
+    (p) =>
+      p.categoria === 'estojos' &&
+      p.nome.toLowerCase().includes(pesquisa.value.toLowerCase()) &&
+      Number(p.preco) >= precoRange.value.min &&
+      Number(p.preco) <= precoRange.value.max
+  )
+)
+
+// Listar produtos da API
 const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
     const result = await api.get('/produtos')
     produtos.value = result.data
-    $q.loading.hide()
   } catch (error) {
     console.log("Erro==> ", error)
     $q.notify({
@@ -104,20 +109,10 @@ const listarProdutos = async () => {
   }
 }
 
-const produtosFiltrados = computed(() =>
-  produtos.value.filter(
-    (p) =>
-      p.categoria === 'estojos' &&
-      p.nome.toLowerCase().includes(pesquisa.value.toLowerCase()) &&
-      Number(p.preco) >= precoRange.value.min &&
-      Number(p.preco) <= precoRange.value.max
-  )
-)
-
+// Métodos uteis ---
 function formatarPreco(preco: string | number) {
   return Number(preco).toFixed(2).replace('.', ',')
 }
-
 onMounted(async () => {
   await listarProdutos()
 })
@@ -135,25 +130,6 @@ onMounted(async () => {
   }
 }
 
-.carousel-container {
-  height: 300px;
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.rounded-borders {
-  border-radius: 16px;
-}
-
-.categorias-container {
-  max-width: 1200px;
-  margin: 0 auto 24px auto;
-  width: 100%;
-}
-
 .categoria-card,
 .produto-card {
   border: 1mm solid gainsboro;
@@ -167,6 +143,5 @@ onMounted(async () => {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
   z-index: 2;
   transform: translateY(-4px) scale(1.05);
-  animation-duration: 3ms;
 }
 </style>

@@ -3,6 +3,7 @@
     <div class="text-h6 text-bold text-center q-mt-sm" style="font-size: 24px;">
       Confira nossas opções de Aventais
     </div>
+
     <div class="flex justify-center q-mt-md q-mb-md">
       <q-input flat v-model="pesquisa" label="Pesquise por Produtos!" class="input-pesquisa" clearable dense
         style="max-width: 700px; width: 90vw;">
@@ -11,6 +12,7 @@
         </template>
       </q-input>
     </div>
+
     <div class="mx-auto q-mt-sm q-py-sm q-px-md rounded-xl shadow-md bg-grey-1 flex flex-col" style="max-width: 600px;">
       <div class="text-center text-bold" style="font-size: 16px;">Preço</div>
 
@@ -43,54 +45,65 @@
               <div class="text-bold text-primary" style="font-size: 21px;">
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
-              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
-                id: produto.id,
-                nome: produto.nome,
-                descricao: produto.descricao,
-                preco: `R$ ${formatarPreco(produto.preco)}`,
-                img: produto.img || '/icons/faca.webp',
-                qtd: 1
-              })" />
+              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;"
+                @click="adicionarNoCarrinho(produto)" />
             </div>
           </q-card-section>
         </q-card>
       </div>
     </div>
+
     <div v-else class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
       <q-icon name="error" size="xl" color="grey" />
       <span class="font-bold q-mt-sm">Nenhum produto encontrado!</span>
     </div>
   </q-page>
 </template>
+
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import api from 'src/services/api'
 import type { Produto } from 'src/types/types'
 import { useQuasar } from 'quasar'
+import { useCartStore } from 'src/stores/useCartStore'
 
 const $q = useQuasar()
+const store = useCartStore()
 
-const props = defineProps<{
-  adicionarAoCarrinho: (produto: {
-    id: string
-    nome: string
-    descricao: string
-    preco: string
-    img: string
-    qtd: number
-  }) => void
-}>()
-
+// Variaveis ---
 const pesquisa = ref('')
 const precoRange = ref({ min: 50, max: 400 })
 const produtos = ref<Produto[]>([])
 
+// Carrinho ---
+const adicionarNoCarrinho = (produto: Produto) => {
+  store.adicionarAoCarrinho({
+    ...produto,
+    qtd: 1
+  })
+  $q.notify({
+    type: 'positive',
+    message: `${produto.nome} adicionado ao carrinho!`,
+    position: 'bottom',
+    timeout: 1500
+  })
+}
+const produtosFiltrados = computed(() =>
+  produtos.value.filter(
+    (p) =>
+      p.categoria === 'aventais' &&
+      p.nome.toLowerCase().includes(pesquisa.value.toLowerCase()) &&
+      Number(p.preco) >= precoRange.value.min &&
+      Number(p.preco) <= precoRange.value.max
+  )
+)
+
+// Listar produtos da API
 const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
     const result = await api.get('/produtos')
     produtos.value = result.data
-    $q.loading.hide()
   } catch (error) {
     console.log("Erro==> ", error)
     $q.notify({
@@ -104,25 +117,14 @@ const listarProdutos = async () => {
   }
 }
 
-const produtosFiltrados = computed(() =>
-  produtos.value.filter(
-    (p) =>
-      p.categoria === 'aventais' &&
-      p.nome.toLowerCase().includes(pesquisa.value.toLowerCase()) &&
-      Number(p.preco) >= precoRange.value.min &&
-      Number(p.preco) <= precoRange.value.max
-  )
-)
-
+// Métodos uteis ---
 function formatarPreco(preco: string | number) {
   return Number(preco).toFixed(2).replace('.', ',')
 }
-
 onMounted(async () => {
   await listarProdutos()
 })
 </script>
-
 <style scoped>
 .input-pesquisa {
   width: 700px;
@@ -133,25 +135,6 @@ onMounted(async () => {
   .input-pesquisa {
     width: 300px;
   }
-}
-
-.carousel-container {
-  height: 300px;
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.rounded-borders {
-  border-radius: 16px;
-}
-
-.categorias-container {
-  max-width: 1200px;
-  margin: 0 auto 24px auto;
-  width: 100%;
 }
 
 .categoria-card,
@@ -167,6 +150,5 @@ onMounted(async () => {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
   z-index: 2;
   transform: translateY(-4px) scale(1.05);
-  animation-duration: 3ms;
 }
 </style>

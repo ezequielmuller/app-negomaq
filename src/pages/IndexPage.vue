@@ -28,6 +28,7 @@
     </div>
     <div class="col-12 text-bold q-mb-lg q-mt-sm row justify-center" style="font-size: 22px; margin-bottom: 14px;">
       Novidades!</div>
+
     <div v-if="produtos.length > 0" class="row justify-center q-col-gutter-md">
       <div v-for="produto in produtos.slice(0, 3)" :key="produto.id" class="col-12 col-sm-6 col-md-4 q-mb-md"
         style="max-width: 320px;">
@@ -45,19 +46,14 @@
               <div class="text-bold text-primary" style="font-size: 21px;">
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
-              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
-                id: produto.id,
-                nome: produto.nome,
-                descricao: produto.descricao,
-                preco: `R$ ${formatarPreco(produto.preco)}`,
-                img: produto.img || '/icons/faca.webp',
-                qtd: 1
-              })" />
+              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;"
+                @click="adicionarNoCarrinho(produto)" />
             </div>
           </q-card-section>
         </q-card>
       </div>
     </div>
+
     <div v-else class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
       <q-icon name="error" size="xl" color="grey" />
       <span class="font-bold q-mt-sm">Nenhum produto encontrado!</span>
@@ -68,23 +64,29 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
 import { ListarProdutosHome } from 'src/services/apiServices'
-import type { Produto } from 'src/types/types'
+import { useCartStore } from 'src/stores/useCartStore'
 import { ref, onMounted } from 'vue'
+import type { Produto } from 'src/types/types'
 
 const $q = useQuasar()
-
-const props = defineProps<{
-  adicionarAoCarrinho: (produto: {
-    id: string
-    nome: string
-    descricao: string
-    preco: string
-    img: string
-    qtd: number
-  }) => void
-}>()
+const store = useCartStore()
 
 const produtos = ref<Produto[]>([])
+
+const adicionarNoCarrinho = (produto: Produto) => {
+  if (store.adicionarAoCarrinho) {
+    store.adicionarAoCarrinho(produto)
+    $q.notify({
+      type: 'positive',
+      message: `${produto.nome} adicionado ao carrinho!`,
+      position: 'bottom',
+      timeout: 1500
+    })
+  } else {
+    console.warn('Método adicionarAoCarrinho não encontrado na store.')
+  }
+}
+
 
 const slide = ref(0)
 const imagens = [
@@ -104,8 +106,7 @@ const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
     const result = await ListarProdutosHome()
-    produtos.value = result
-    $q.loading.hide()
+    produtos.value = Array.isArray(result) ? result : []
   } catch (error) {
     console.log(error)
     $q.notify({

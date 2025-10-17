@@ -43,14 +43,8 @@
               <div class="text-bold text-primary" style="font-size: 21px;">
                 R$ {{ formatarPreco(produto.preco) }}
               </div>
-              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;" @click="props.adicionarAoCarrinho({
-                id: produto.id,
-                nome: produto.nome,
-                descricao: produto.descricao,
-                preco: `R$ ${formatarPreco(produto.preco)}`,
-                img: produto.img || '/icons/faca.webp',
-                qtd: 1
-              })" />
+              <q-btn color="primary" icon="add_shopping_cart" label="Adicionar" style="border-radius: 20px;"
+                @click="adicionarNoCarrinho(produto)" />
             </div>
           </q-card-section>
         </q-card>
@@ -67,30 +61,36 @@ import { ref, onMounted, computed } from 'vue'
 import api from 'src/services/api'
 import type { Produto } from 'src/types/types'
 import { useQuasar } from 'quasar'
+import { useCartStore } from 'src/stores/useCartStore'
 
 const $q = useQuasar()
+const store = useCartStore()
 
-const props = defineProps<{
-  adicionarAoCarrinho: (produto: {
-    id: string
-    nome: string
-    descricao: string
-    preco: string
-    img: string
-    qtd: number
-  }) => void
-}>()
-
+// Variaveis ---
 const pesquisa = ref('')
 const precoRange = ref({ min: 50, max: 400 })
 const produtos = ref<Produto[]>([])
 
+// Carrinho ---
+const adicionarNoCarrinho = (produto: Produto) => {
+  store.adicionarAoCarrinho({
+    ...produto,
+    qtd: 1
+  })
+  $q.notify({
+    type: 'positive',
+    message: `${produto.nome} adicionado ao carrinho!`,
+    position: 'bottom',
+    timeout: 1500
+  })
+}
+
+// Lista produtos da API
 const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
     const result = await api.get('/produtos')
     produtos.value = result.data
-    console.log("Produtos==> ", produtos.value)
     $q.loading.hide()
   } catch (error) {
     console.log("Erro==> ", error)
@@ -104,7 +104,6 @@ const listarProdutos = async () => {
     $q.loading.hide()
   }
 }
-
 const produtosFiltrados = computed(() =>
   produtos.value.filter(
     (p) =>
@@ -115,6 +114,7 @@ const produtosFiltrados = computed(() =>
   )
 )
 
+// Métodos uteis ---
 function formatarPreco(preco: string | number) {
   return Number(preco).toFixed(2).replace('.', ',')
 }
@@ -149,17 +149,10 @@ onMounted(async () => {
   border-radius: 16px;
 }
 
-.categorias-container {
-  max-width: 1200px;
-  margin: 0 auto 24px auto;
-  width: 100%;
-}
-
 .categoria-card,
 .produto-card {
   border: 1mm solid gainsboro;
   transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .categoria-card:hover,

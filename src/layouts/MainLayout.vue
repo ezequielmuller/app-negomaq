@@ -130,7 +130,7 @@
 
       <q-scroll-area class="col q-pa-md">
         <q-list separator>
-          <q-item v-for="(item, index) in carrinho" :key="index" class="cart-item q-pa-sm"
+          <q-item v-for="(item, index) in cartStore.carrinho" :key="index" class="cart-item q-pa-sm"
             style="border-radius: 12px; margin-bottom: 8px; border: 0.6mm solid #e9e9e9;">
             <q-item-section avatar>
               <img :src="item.img || ''" :alt="item.nome"
@@ -139,9 +139,10 @@
             <q-item-section class="q-ml-sm scroll">
               <div class="text-bold" style="font-size: 16px;">{{ item.nome }}</div>
               <div class="text-grey">{{ item.descricao }}</div>
-              <div class="text-bold q-mt-xs text-primary" style="font-size: 16px;">{{ item.preco }}</div>
+              <div class="text-bold q-mt-xs text-primary" style="font-size: 16px;">{{ formatCurrency(item.preco) }}
+              </div>
               <div class="row justify-between q-mt-sm">
-                <q-btn flat color="negative" icon="add" round size="sm" @click="item.qtd++" />
+                <q-btn flat color="negative" icon="add" round size="sm" @click="item.qtd = (item.qtd ?? 1) + 1" />
                 <span class="q-mt-sm">{{ item.qtd }}</span>
                 <q-btn flat color="negative" icon="remove" size="sm" round @click="diminuirQtd(item)" />
                 <q-separator vertical color="primary" />
@@ -150,7 +151,7 @@
             </q-item-section>
           </q-item>
 
-          <div v-if="carrinho.length === 0"
+          <div v-if="cartStore.carrinho.length === 0"
             class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
             <q-icon name="production_quantity_limits" size="md" color="grey" />
             <span class="font-bold q-mt-sm">Seu carrinho está vazio!</span>
@@ -163,7 +164,7 @@
         <div class="row text-bold" style="font-size: 16px;">Subtotal: {{ formatCurrency(totalCarrinho) }}</div>
         <div class="q-mt-md">
           <q-btn color="primary" class="full-width hover-scale" label="Finalizar Compra" @click="finalizarCompra"
-            unelevated :disable="carrinho.length === 0" style="border-radius: 20px;" />
+            unelevated :disable="cartStore.carrinho.length === 0" style="border-radius: 20px;" />
         </div>
       </div>
     </q-drawer>
@@ -204,108 +205,77 @@
     </q-dialog>
   </q-layout>
 </template>
-
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useAuth } from 'src/composables/useAuth'
-//import { usePlatform } from 'src/composables/usePlatform'
-import { formatPrice } from 'src/config/formatPrice'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import { useAuth } from 'src/composables/useAuth'
+import { formatPrice } from 'src/config/formatPrice'
+import { useCartStore } from 'src/stores/useCartStore'
+import type { Produto } from 'src/types/types'
 
 const router = useRouter()
 const $q = useQuasar()
 const { getUser } = useAuth()
 const user = getUser()
 
-//const mobile = usePlatform()
 const menuMobile = ref(false)
+const menuCarrinho = ref(false)
 const dialogNotificacao = ref(false)
 
-interface Produto {
-  id: string
-  nome: string
-  descricao: string
-  categoria: string
-  preco: number
-  estoque: number
-  img?: string
-  qtd: number
-}
+// Store ---
+const cartStore = useCartStore()
+const cartCount = computed(() => {
+  return cartStore.carrinho.reduce((total, p) => total + (p.qtd || 1), 0)
+})
 
 const navegarPraHome = async () => {
-  await router.push('/home');
+  await router.push('/home')
 }
 
-// carrinho
-const carrinho = ref<Produto[]>([])
-const menuCarrinho = ref(false)
-const cartCount = ref(0)
-
+// Carrinho ---
 const adicionarAoCarrinho = (produto: Produto) => {
-  const jaContem = carrinho.value.find(p => p.id === produto.id)
-  if (jaContem) {
-    jaContem.qtd = (jaContem.qtd || 1) + 1
-  } else {
-    carrinho.value.push({ ...produto, qtd: 1 })
-  }
-  cartCount.value = carrinho.value.reduce((total, p) => total + (p.qtd || 1), 0)
+  cartStore.adicionarAoCarrinho(produto)
+  $q.notify({
+    type: 'positive',
+    message: `${produto.nome} adicionado ao carrinho!`,
+    position: 'bottom',
+    timeout: 1000
+  })
   menuCarrinho.value = true
-  console.log("CARRINHO==> ", carrinho)
 }
-
 const removerDoCarrinho = (item: Produto) => {
-  carrinho.value = carrinho.value.slice().filter(p => p.id !== item.id)
-  cartCount.value = carrinho.value.reduce((total, p) => total + (p.qtd || 1), 0)
+  cartStore.removerDoCarrinho(item.id)
 }
-
 const diminuirQtd = (item: Produto) => {
-  if (item.qtd > 1) {
-    item.qtd--
+  if ((item.qtd ?? 1) > 1) {
+    item.qtd!--
   } else {
     removerDoCarrinho(item)
   }
 }
-
 const totalCarrinho = computed(() => {
-  const total = carrinho.value.reduce((sum, item) => {
-    const precoNumero = Number(item.preco.toString().replace('R$', '').replace(',', '.')) || 0
-    const quantidade = item.qtd || 1
-    return sum + (precoNumero * quantidade)
-  }, 0)
-  return total
+  return cartStore.carrinho.reduce((sum, item) => sum + (item.preco * (item.qtd ?? 1)), 0)
 })
-
-defineProps<{
-  pedidoVenda: object
-}>()
-
 const finalizarCompra = async () => {
   $q.loading.show({ message: 'Carregando...' })
-  await router.push({ name: 'home-finalizar-venda', params: { carrinho: JSON.stringify(carrinho.value) } })
+  await router.push({ name: 'home-finalizar-venda' })
   $q.loading.hide()
-
-}
-// metodos soltos
-const enviarWhatsapp = () => {
-  const nome = 'Lucas'
-  const numero = '55548449-5095'
-  const celularFormatado = numero.replace(/\D/g, '')
-  const telefone = celularFormatado.startsWith('55') ? celularFormatado : '55' + celularFormatado
-  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
-  const mensagemCodificada = encodeURIComponent(mensagem)
-  window.open(`https://api.whatsapp.com/send?phone=${telefone}&text=${mensagemCodificada}`, '_blank')
 }
 
-const abrirGrupoLeilao = () => {
-  window.open('https://chat.whatsapp.com/FB2vjot6F5y1eYsM6nHwRM', '_blank')
-}
-
+// Botoes fixos
+const abrirGrupoLeilao = () => window.open('https://chat.whatsapp.com/FB2vjot6F5y1eYsM6nHwRM', '_blank')
 const abrirNotificacao = () => {
   dialogNotificacao.value = true
 }
-// formatar pra moeda (string)
+const enviarWhatsapp = () => {
+  const nome = 'Lucas'
+  const numero = '555484495095'
+  const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
+  const mensagemCodificada = encodeURIComponent(mensagem)
+  window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${mensagemCodificada}`, '_blank')
+}
+// Métodos uteis
 function formatCurrency(value: number) {
   return formatPrice(value)
 }
