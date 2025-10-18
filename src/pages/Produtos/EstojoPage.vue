@@ -3,22 +3,18 @@
     <div class="text-h6 text-bold text-center q-mt-sm" style="font-size: 24px;">
       Confira nossas opções de Estojos
     </div>
-    <div class="flex justify-center q-mt-md q-mb-md">
-      <q-input flat v-model="pesquisa" label="Pesquise por Produtos!" class="input-pesquisa" clearable dense
-        style="max-width: 700px; width: 90vw;">
-        <template #prepend>
-          <q-icon name="search" @click="listarProdutos" class="cursor-pointer" />
-        </template>
-      </q-input>
-    </div>
-    <div class="mx-auto q-mt-sm q-py-sm q-px-md rounded-xl shadow-md bg-grey-1 flex flex-col" style="max-width: 600px;">
-      <div class="text-center text-bold" style="font-size: 16px;">Preço</div>
-      <q-range v-model="precoRange" :min="50" :max="400" :step="10" label color="primary" markers drag-range
-        class="q-mt-md" :left-label-value="`R$ ${formatarPreco(precoRange.min)}`"
-        :right-label-value="`R$ ${formatarPreco(precoRange.max)}`" />
-      <div class="flex justify-between text-bold text-primary">
-        <span>R$ {{ formatarPreco(precoRange.min) }}</span>
-        <span>R$ {{ '+ ' + formatarPreco(precoRange.max) }}</span>
+    <div class="row q-col-gutter-sm justify-center q-mt-md">
+      <div class="col-xs-12 col-sm-6 col-md-3 q-pa-sm">
+        <q-input flat v-model="pesquisa" label="Pesquise por Produtos!" class="input-pesquisa" clearable dense
+          style="width: 100%;">
+          <template #prepend>
+            <q-icon name="search" @click="listarProdutos" class="cursor-pointer" />
+          </template>
+        </q-input>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-2 q-pa-sm">
+        <q-select v-model="ordenacao" :options="ordens" option-label="label" option-value="value" label="Ordenar por"
+          outlined dense clearable emit-value map-options />
       </div>
     </div>
     <q-separator style="height: 3px;" class="q-my-md" />
@@ -67,6 +63,13 @@ const pesquisa = ref('')
 const precoRange = ref({ min: 50, max: 400 })
 const produtos = ref<Produto[]>([])
 
+// Filtro - Ordem dos produtos ---
+const ordens = ref([
+  { label: 'Maior Preço', value: 'precoMaior' },
+  { label: 'Menor Preço', value: 'precoMenor' },
+])
+const ordenacao = ref('')
+
 // Carrinho ---
 const adicionarNoCarrinho = (produto: Produto) => {
   store.adicionarAoCarrinho({
@@ -80,17 +83,26 @@ const adicionarNoCarrinho = (produto: Produto) => {
     timeout: 1500
   })
 }
-const produtosFiltrados = computed(() =>
-  produtos.value.filter(
+const produtosFiltrados = computed(() => {
+  // Input de pesquisa
+  const filtrados = produtos.value.filter(
     (p) =>
       p.categoria === 'estojos' &&
       p.nome.toLowerCase().includes(pesquisa.value.toLowerCase()) &&
       Number(p.preco) >= precoRange.value.min &&
       Number(p.preco) <= precoRange.value.max
   )
-)
+  // Ordenação
+  if (ordenacao.value === 'precoMaior') {
+    filtrados.sort((a, b) => Number(b.preco) - Number(a.preco))
+  } else if (ordenacao.value === 'precoMenor') {
+    filtrados.sort((a, b) => Number(a.preco) - Number(b.preco))
+  }
+  return filtrados
+})
 
-// Listar produtos da API
+
+// Listar produtos da API ---
 const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
