@@ -2,9 +2,11 @@
   <q-page padding>
     <div class="column items-center">
       <div class="carousel-container">
-        <q-carousel v-model="slide" animated navigation infinite arrows autoplay height="270px"
-          class="rounded-borders shadow-2" style="max-width: 1200px; width: 100%; border-radius: 20px;">
-          <q-carousel-slide v-for="(img, index) in imagens" :key="index" :name="index" :img-src="img" />
+        <q-carousel v-model="slide" animated infinite arrows autoplay class="carousel-responsive shadow-2">
+          <q-carousel-slide v-for="(img, index) in imagens" :key="index" :name="index" class="carousel-slide">
+            <div class="slide-bg" :style="{ backgroundImage: `url(${img})` }"></div>
+            <img :src="img" alt="promoção" class="slide-img" />
+          </q-carousel-slide>
         </q-carousel>
       </div>
     </div>
@@ -129,12 +131,78 @@ onMounted(async () => {
 
 <style scoped>
 .carousel-container {
-  height: 300px;
   width: 100%;
-  max-width: 1200px;
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.carousel-responsive {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 21 / 9;
+  margin: 16px 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-slide {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.slide-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.7);
+  transform: scale(1.2);
+}
+
+.slide-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+  padding: 16px;
+}
+
+
+
+/* Ajustes responsivos */
+@media (max-width: 1024px) {
+  .carousel-responsive {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-responsive {
+    aspect-ratio: 3 / 2;
+  }
+
+  .slide-img {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel-container {
+    padding: 0 8px;
+  }
+
+  .carousel-responsive {
+    aspect-ratio: 4 / 3;
+    margin: 8px 0;
+  }
+
+  .slide-img {
+    padding: 8px;
+  }
 }
 
 .rounded-borders {
