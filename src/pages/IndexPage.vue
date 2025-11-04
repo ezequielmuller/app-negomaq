@@ -143,8 +143,10 @@ onMounted(async () => {
   aspect-ratio: 21 / 9;
   margin: 16px 0;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  /* garante que controles fiquem posicionados corretamente */
 }
 
 .carousel-slide {
@@ -160,6 +162,9 @@ onMounted(async () => {
   background-position: center;
   filter: blur(20px) brightness(0.7);
   transform: scale(1.2);
+  z-index: 1;
+  pointer-events: none;
+  /* evita que o background intercepts cliques nas setas */
 }
 
 .slide-img {
@@ -169,6 +174,26 @@ onMounted(async () => {
   object-fit: contain;
   z-index: 2;
   padding: 16px;
+}
+
+.slide-img {
+  border-radius: 12px;
+  /* bordas arredondadas na própria imagem */
+  background-color: transparent;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* garante que o wrapper com borda arredondada esconda excessos
+   enquanto o carrossel interno pode mostrar controles além da área */
+.carousel-container {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Força as setas do Quasar a aparecerem na frente e permitirem cliques */
+.carousel-responsive :deep(.q-carousel__arrow) {
+  z-index: 1000;
+  pointer-events: auto;
 }
 
 
