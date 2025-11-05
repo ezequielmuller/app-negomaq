@@ -154,6 +154,12 @@ const cadastrar = async () => {
     data = await api.post("auth/registrar", payload);
     console.log(data)
     $q.loading.hide();
+    $q.notify({
+      type: "positive",
+      message: "Cadastro realizado com sucesso!",
+      position: "bottom",
+    })
+    await router.push('/login')
   } catch (error) {
     console.log(error)
     $q.notify({
