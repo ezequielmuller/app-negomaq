@@ -16,6 +16,7 @@ export type Usuario = {
   nome: string;
   sobrenome: string;
   email: string;
+  cpf: string
   is_admin: boolean;
   telefone: string;
   senha: string;

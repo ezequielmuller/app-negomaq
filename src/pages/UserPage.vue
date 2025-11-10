@@ -89,6 +89,7 @@ const dialogEditarUsuario = ref(false)
 const nome = ref('')
 const sobrenome = ref('')
 const email = ref('')
+const cpf = ref('')
 const telefone = ref('')
 const senha = ref('')
 const senhaVisivel = ref(true)
@@ -112,6 +113,7 @@ const editarUsuario = async () => {
       nome: nome.value,
       sobrenome: sobrenome.value,
       email: email.value,
+      cpf: cpf.value,
       telefone: telefone.value,
       senha: senha.value,
       is_admin: user.is_admin

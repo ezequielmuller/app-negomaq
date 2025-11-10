@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center" padding>
-    <q-card style="width: 330px; height: 680px; border-radius: 20px;"
+    <q-card style="width: 330px; height: 100%; border-radius: 20px;"
       class="flex flex-column items-center justify-center">
       <q-card-setion>
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa"
@@ -23,6 +23,12 @@
         <q-input class="full-width" label="Email" v-model="email" clearable>
           <template #prepend>
             <q-icon name="alternate_email" />
+          </template>
+        </q-input>
+        <q-input class="full-width" label="CPF" v-model="cpf" clearable mask="###.###.###-##" reverse-fill-mask
+          maxlength="14">
+          <template #prepend>
+            <q-icon name="badge" />
           </template>
         </q-input>
         <q-input class="full-width" label="Telefone" :model-value="telefone" @update:model-value="formatarTelefone"
@@ -54,11 +60,12 @@
           @click="cadastrar" />
         <div class="q-mt-md flex justify-center items-center" style="width: 100%; font-size: 14px;">
           <span>Já tem um conta?</span>
-          <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="voltarLogin">
+          <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="voltarLogin"
+            style="text-decoration: underline;">
             Entrar
           </span>
         </div>
-        <div class="q-mt-sm flex items-center justify-center"
+        <div class=" q-mt-sm flex items-center justify-center"
           style="width: 100%; font-size: 14px; text-decoration: underline;">
           <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="router.push('/home')">
             Continuar Desconectado!
@@ -68,18 +75,18 @@
     </q-card>
   </q-page>
 </template>
-
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useQuasar } from "quasar"
 import { useRouter } from "vue-router"
 import api from "src/services/api"
-
+// Variaveis
 const $q = useQuasar()
 const router = useRouter()
 
 const nome = ref("")
 const sobrenome = ref("")
+const cpf = ref("")
 const email = ref("")
 const telefone = ref("")
 const senha = ref("")
@@ -87,25 +94,7 @@ const confirmarSenha = ref("")
 const ocultarSenha = ref(true)
 const ocultarConfirmarSenha = ref(true)
 
-function formatarTelefone(valor: string | number | null) {
-  if (valor === null) {
-    telefone.value = '';
-    return;
-  }
-  let v = String(valor).replace(/\D/g, "");
-  if (v.length > 11) v = v.slice(0, 11);
-
-  if (v.length > 0) {
-    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-    if (v.length > 9) {
-      v = v.replace(/(\d{5})(\d{4})$/, "$1-$2");
-    } else if (v.length > 8) {
-      v = v.replace(/(\d{4})(\d{4})$/, "$1-$2");
-    }
-  }
-  telefone.value = v;
-}
-
+// Methods ---
 const voltarLogin = async () => {
   try {
     $q.loading.show({ message: 'Carregando...' })
@@ -116,29 +105,34 @@ const voltarLogin = async () => {
     $q.notify({
       type: 'negative',
       message: 'Não foi possivel ir para o login!',
-      position: 'center',
+      position: 'bottom',
       timeout: 2500
     })
   } finally {
     $q.loading.hide()
   }
 }
-
 const cadastrar = async () => {
-  if (!nome.value || !email.value || !telefone.value || !senha.value || !confirmarSenha.value) {
+  if (!nome.value || !email.value || !telefone.value || !senha.value || !confirmarSenha.value || !cpf.value) {
     $q.notify({
       type: "warning",
       message: "Campos não preenchidos!",
-      position: "center",
+      position: "bottom",
+      timeout: 2500
     })
     return
   }
   if (senha.value !== confirmarSenha.value) {
     $q.notify({
-      type: "negative",
+      type: "warning",
       message: "As senhas não coincidem!",
-      position: "center",
+      position: "bottom",
+      timeout: 2500
     })
+    return
+  }
+  const emailValidado = validarEmail(email.value)
+  if (emailValidado === false) {
     return
   }
   try {
@@ -158,6 +152,7 @@ const cadastrar = async () => {
       type: "positive",
       message: "Cadastro realizado com sucesso!",
       position: "bottom",
+      timeout: 2500
     })
     await router.push('/login')
   } catch (error) {
@@ -165,15 +160,49 @@ const cadastrar = async () => {
     $q.notify({
       type: "negative",
       message: "Não foi possível realizar o cadastro!",
-      position: "center",
+      position: "bottom",
+      timeout: 2500
     })
   } finally {
     $q.loading.hide();
   }
 }
+// Metodos uteis
+const validarEmail = (val: string) => {
+  const email = (val || '').trim()
+  const arroba = email.indexOf('@')
+  const ponto = email.indexOf('.', arroba)
+  if (!email || arroba < 1 || ponto <= arroba + 1) {
+    $q.notify({
+      type: 'warning',
+      message: 'Verifique o e-mail: precisa conter "@" e um "." após o @!',
+      position: 'bottom',
+      timeout: 2500
+    })
+    return false
+  }
+  return true
+}
+function formatarTelefone(valor: string | number | null) {
+  if (valor === null) {
+    telefone.value = '';
+    return;
+  }
+  let v = String(valor).replace(/\D/g, "");
+  if (v.length > 11) v = v.slice(0, 11);
 
+  if (v.length > 0) {
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+    if (v.length > 9) {
+      v = v.replace(/(\d{5})(\d{4})$/, "$1-$2");
+    } else if (v.length > 8) {
+      v = v.replace(/(\d{4})(\d{4})$/, "$1-$2");
+    }
+  }
+  telefone.value = v;
+}
 // Mounted
 onMounted(() => {
-  console.log('Tela carregada!')
+  //console.log('Tela carregada!')
 })
 </script>

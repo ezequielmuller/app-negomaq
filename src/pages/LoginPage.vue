@@ -31,11 +31,12 @@
           @click="entrarSistema()" />
         <div class="q-mt-sm flex items-center justify-center" style="width: 100%; font-size: 14px;">
           <p class="q-mb-none">Não tem uma Conta?</p>
-          <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="irParaCadastro">
+          <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="irParaCadastro"
+            style="text-decoration: underline;">
             Cadastre-se!
           </span>
         </div>
-        <div class="q-mt-sm flex items-center justify-center"
+        <div class=" q-mt-sm flex items-center justify-center"
           style="width: 100%; font-size: 14px; text-decoration: underline;">
           <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="router.push('/home')">
             Continuar Desconectado!
@@ -43,10 +44,8 @@
         </div>
       </q-card-section>
     </q-card>
-
   </q-page>
 </template>
-
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
@@ -54,7 +53,7 @@ import { useRouter } from 'vue-router'
 import api from 'src/services/api'
 import type { Usuario } from 'src/types/types'
 import { useAuth } from 'src/composables/useAuth'
-
+// Variaveis ---
 const $q = useQuasar()
 const router = useRouter()
 const { saveUser } = useAuth()
@@ -63,9 +62,9 @@ const lembrarSenha = ref(false)
 const email = ref('')
 const senha = ref('')
 const ocultarSenha = ref(true)
-
 const user = ref<Usuario | null>(null)
 
+// Methods ---
 const entrarSistema = async () => {
   if (!email.value || !senha.value) {
     $q.notify({
@@ -76,9 +75,12 @@ const entrarSistema = async () => {
     });
     return;
   }
+  const emailValidado = validarEmail(email.value)
+  if (emailValidado === false) {
+    return
+  }
   try {
     $q.loading.show({ message: 'Entrando...' });
-
     const result = await api.post('auth/login', {
       email: email.value,
       senha: senha.value
@@ -117,7 +119,22 @@ const irParaCadastro = async () => {
     $q.loading.hide()
   }
 }
-
+// Metodos uteis ---
+const validarEmail = (val: string) => {
+  const email = (val || '').trim()
+  const arroba = email.indexOf('@')
+  const ponto = email.indexOf('.', arroba)
+  if (!email || arroba < 1 || ponto <= arroba + 1) {
+    $q.notify({
+      type: 'warning',
+      message: 'Verifique o e-mail: precisa conter "@" e um "." após o @!',
+      position: 'bottom',
+      timeout: 2500
+    })
+    return false
+  }
+  return true
+}
 onMounted(() => {
   const salvarLogin = localStorage.getItem('lembrarEmail')
   const salvarSenha = localStorage.getItem('lembrarSenha')
