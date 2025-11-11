@@ -101,8 +101,8 @@
       </router-view>
     </q-page-container>
 
-    <!-- RODAPÉ (não fixo) -->
-    <div class="bg-black text-grey q-mt-lg" height-hint="60">
+    <!-- RODAPÉ -->
+    <footer class="footer bg-black text-grey">
       <div class="row q-col-gutter-md justify-center items-center text-center">
         <div class="col-12 flex justify-center items-center q-pt-sm" style="font-size: 0.7rem;">
           <a href="https://api.whatsapp.com/send/?phone=5554996641291&text&type=phone_number&app_absent=0"
@@ -118,7 +118,7 @@
           <span class="q-ml-xs">2025 Todos os direitos reservados - NegoMaq Couros</span>
         </div>
       </div>
-    </div>
+    </footer>
 
     <!-- DRAWER DO CARRINHO -->
     <q-drawer v-model="menuCarrinho" side="right" overlay bordered class="bg-white cart-drawer column no-wrap"
@@ -127,7 +127,6 @@
         <q-btn flat dense round icon="close" @click="menuCarrinho = false" />
         <q-toolbar-title style="font-size: 18px;">Meu Carrinho</q-toolbar-title>
       </q-toolbar>
-
       <q-scroll-area class="col q-pa-md">
         <q-list separator>
           <q-item v-for="(item, index) in cartStore.carrinho" :key="index" class="cart-item q-pa-sm"
@@ -150,7 +149,6 @@
               </div>
             </q-item-section>
           </q-item>
-
           <div v-if="cartStore.carrinho.length === 0"
             class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
             <q-icon name="production_quantity_limits" size="md" color="grey" />
@@ -158,7 +156,6 @@
           </div>
         </q-list>
       </q-scroll-area>
-
       <q-separator />
       <div class="q-pa-md">
         <div class="row text-bold" style="font-size: 16px;">Subtotal: {{ formatCurrency(totalCarrinho) }}</div>
@@ -284,6 +281,26 @@ onMounted(() => {
 })
 </script>
 <style scoped>
+.footer {
+  margin-top: auto;
+  padding-top: 20px;
+  padding-bottom: 5px;
+  font-size: 0.75rem;
+}
+
+/* Faz o layout ocupar toda a altura e empurra o footer pro fim quando há pouco conteúdo */
+.q-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px);
+  /* 64px ≈ altura do header */
+}
+
+.q-page-container>*:not(.footer) {
+  flex: 1;
+}
+
+
 :deep(a.router-link-active),
 :deep(a.router-link-exact-active) {
   color: white !important;
