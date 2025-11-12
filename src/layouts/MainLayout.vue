@@ -67,7 +67,7 @@
           <q-item-section avatar><q-icon name="shopping_cart" /></q-item-section>
           <q-item-section>Meu Carrinho</q-item-section>
           <q-item-section side v-if="cartCount > 0"><q-badge color="warning" class="text-black">{{ cartCount
-              }}</q-badge></q-item-section>
+          }}</q-badge></q-item-section>
         </q-item>
 
         <template v-if="user">
@@ -185,7 +185,7 @@
                 <div class="col flex flex-center flex-column">
                   <img src="/public/icons/leilao-fundo.png" alt="Leilão"
                     style="width: 110px; height: 100px; border-radius: 8px;" />
-                  <q-btn color="green" class="full-width q-mt-sm" @click="abrirGrupoLeilao"
+                  <q-btn color="green" class="full-width q-mt-sm hover-scale" @click="abrirGrupoLeilao"
                     style="border-radius: 20px;">
                     <i class="fab fa-whatsapp fa-lg text-white q-mr-sm"></i> Entrar
                   </q-btn>
@@ -196,7 +196,8 @@
         </q-card-section>
         <q-separator class="bg-amber-9 q-mx-md" />
         <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-          <q-btn icon="close" outline label="Fechar" color="amber-9" v-close-popup style="border-radius: 20px;" />
+          <q-btn icon="close" outline label="Fechar" color="amber-9" class="hover-scale" v-close-popup
+            style="border-radius: 20px;" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -277,7 +278,7 @@ function formatCurrency(value: number) {
   return formatPrice(value)
 }
 onMounted(() => {
-  console.log("layout mounted")
+  //console.log("layout mounted")
 })
 </script>
 <style scoped>

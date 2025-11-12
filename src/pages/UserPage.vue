@@ -3,15 +3,16 @@
     <div class="row justify-center">
       <div class="text-h5 text-bold q-ml-sm q-mt-sm">Painel do Usuário</div>
     </div>
-
     <q-separator class="q-mb-md" />
-
     <q-card class="q-pa-md q-mb-md shadow-2" style="border-radius: 20px; border: 0.7mm solid var(--q-primary);">
       <div class="column items-center q-gutter-xs">
         <q-avatar size="60px" color="primary" text-color="white" icon="person" />
-        <div class="text-h6">{{ user?.nome == '' || user?.nome == null ? 'Sem nome cadastrado' : user?.nome }}</div>
-        <div class="text-subtitle2 text-grey">{{ user?.email == '' || user?.email == null ? 'Sem email cadastrado' :
-          user?.email }}</div>
+        <div class="text-h6">
+          {{ user?.nome == '' || user?.nome == null ? 'Sem nome cadastrado' : user?.nome }}
+        </div>
+        <div class="text-subtitle2 text-grey">
+          {{ user?.email == '' || user?.email == null ? 'Sem email cadastrado' : user?.email }}
+        </div>
         <div class="text-subtitle2 text-grey">
           {{ user?.telefone == '' || user?.telefone == null ? 'Sem telefone cadastrado' : user?.telefone }}
         </div>
@@ -25,9 +26,9 @@
     </q-card>
     <q-tabs v-model="tab" inline-label outside-arrows mobile-arrows class="bg-grey-4 text-primary shadow-2"
       style="border-radius: 16px;">
-      <q-tab name="produtos" icon="inventory_2" label="Produtos" v-if="user.is_admin === true" />
-      <q-tab name="pedidos" icon="sell" label="Pedidos" v-if="user.is_admin === true" />
-      <q-tab name="vendas" icon="payments" label="Vendas" v-if="user.is_admin === true" />
+      <q-tab name="produtos" icon="inventory_2" label="Produtos" v-if="user.is_admin === false" />
+      <q-tab name="pedidos" icon="sell" label="Pedidos" v-if="user.is_admin === false" />
+      <q-tab name="vendas" icon="payments" label="Vendas" v-if="user.is_admin === false" />
       <q-tab name="minhasCompras" icon="shopping_cart" label="Minhas Compras" />
     </q-tabs>
     <q-tab-panels v-model="tab" animated>

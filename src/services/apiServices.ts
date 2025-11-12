@@ -16,8 +16,12 @@ export const criarProduto = async (produto: ProdutoPayload) => {
 };
 
 export const listarProdutos = async () => {
-  const { data } = await api.get('/produtos');
-  return data;
+  try {
+    const { data } = await api.get('/produtos');
+    return data;
+  } catch (err) {
+    console.error('Erro ao lista produtos: ', err)
+  }
 };
 
 export const deletarProduto = async (id: string) => {
@@ -80,3 +84,17 @@ export const ListarProdutosHome = async () => {
     console.log(err);
   }
 };
+
+// FINALIZAR COMPRA
+export const CotacaoFrete = async (data: object) => {
+  try {
+    await api.post(`/frete/cotacao`, data, {
+      headers: {
+        Authorization: VITE_ADMIN_TOKEN,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
