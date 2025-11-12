@@ -43,7 +43,7 @@
                       <span class="text-bold">{{ item.qtd }}</span>
                       <q-btn flat dense round color="primary" icon="add" @click="item.qtd = (item.qtd ?? 1) + 1" />
                       <q-space />
-                      <q-btn flat dense round color="negative" icon="delete" @click="removerDoCarrinho(item)" />
+                      <q-btn flat dense round color="negative" icon="delete" @click="removerProdCarrinho(item)" />
                     </div>
                   </q-item-section>
                 </q-item>
@@ -115,12 +115,12 @@ watch(() => pedidoVenda.value.length, (novoTamanho) => {
   { immediate: true }
 )
 // Methods---
-const removerDoCarrinho = (item: Produto) => {
+const removerProdCarrinho = (item: Produto) => {
   storeCart.removerDoCarrinho(item.id)
 }
 const diminuirQtd = (item: Produto) => {
   if ((item.qtd ?? 1) > 1) item.qtd!--
-  else removerDoCarrinho(item)
+  else removerProdCarrinho(item)
 }
 // metodos uteis ---
 function formatCurrency(value: number) {

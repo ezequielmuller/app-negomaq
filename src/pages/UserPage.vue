@@ -79,9 +79,11 @@ import { useQuasar } from 'quasar'
 import { EditarUsuario } from 'src/services/apiServices'
 import { useRouter } from "vue-router";
 import { useAuth } from 'src/composables/useAuth'
+import { useCartStore } from 'src/stores/useCartStore'
 import ListaProdutosAdmin from 'src/components/UserPage/ListaProdutosAdmin.vue'
 
 // Variaveis ---
+const cart = useCartStore()
 const $q = useQuasar()
 const router = useRouter();
 const { getUser, removeUser } = useAuth()
@@ -140,6 +142,7 @@ const sairSistema = async () => {
     $q.loading.show({ message: 'Saindo do Sistema...' })
     await router.push('/home')
     removeUser()
+    cart.limparCarrinho()
     window.location.reload();
     $q.loading.hide()
   } catch (err) {

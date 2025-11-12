@@ -19,15 +19,13 @@ export const useCartStore = defineStore('cart', {
     removerDoCarrinho(id: string) {
       const item = this.carrinho.find(p => p.id === id)
       if (item) {
-        if (item.qtd > 1) {
-          item.qtd--
-        } else {
-          this.carrinho = this.carrinho.filter(p => p.id !== id)
-        }
+        if (item.qtd > 1) item.qtd--
+        else this.carrinho = this.carrinho.filter(p => p.id !== id)
       }
     },
     limparCarrinho() {
       this.carrinho = []
     },
   },
+  persist: true,
 })

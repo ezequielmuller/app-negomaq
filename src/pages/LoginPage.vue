@@ -53,7 +53,9 @@ import { useRouter } from 'vue-router'
 import api from 'src/services/api'
 import type { Usuario } from 'src/types/types'
 import { useAuth } from 'src/composables/useAuth'
+import { useCartStore } from 'src/stores/useCartStore'
 // Variaveis ---
+const cart = useCartStore()
 const $q = useQuasar()
 const router = useRouter()
 const { saveUser } = useAuth()
@@ -89,6 +91,8 @@ const entrarSistema = async () => {
     user.value = usuario;
     saveUser(usuario);
     await router.push('/home');
+    cart.limparCarrinho()
+
   } catch (error) {
     console.error('Erro no login:', error);
     $q.notify({
