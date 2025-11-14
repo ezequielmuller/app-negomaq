@@ -55,22 +55,20 @@ import type { Produto } from 'src/types/types'
 import { useQuasar } from 'quasar'
 import { useCartStore } from 'src/stores/useCartStore'
 
+//Utils ---
 const $q = useQuasar()
 const store = useCartStore()
-
-// Variaveis ---
+// Refs ---
 const pesquisa = ref('')
 const precoRange = ref({ min: 50, max: 400 })
 const produtos = ref<Produto[]>([])
-
-// Filtro - Ordem dos produtos ---
 const ordens = ref([
   { label: 'Maior Preço', value: 'precoMaior' },
   { label: 'Menor Preço', value: 'precoMenor' },
 ])
 const ordenacao = ref('')
 
-// Carrinho ---
+// Methods ---
 const adicionarNoCarrinho = (produto: Produto) => {
   store.adicionarAoCarrinho({
     ...produto,
@@ -83,6 +81,7 @@ const adicionarNoCarrinho = (produto: Produto) => {
     timeout: 1500
   })
 }
+
 const produtosFiltrados = computed(() => {
   // Input de pesquisa
   const filtrados = produtos.value.filter(
@@ -101,8 +100,6 @@ const produtosFiltrados = computed(() => {
   return filtrados
 })
 
-
-// Listar produtos da API ---
 const listarProdutos = async () => {
   try {
     $q.loading.show({ message: 'Buscando Produtos...' })
@@ -125,11 +122,11 @@ const listarProdutos = async () => {
 function formatarPreco(preco: string | number) {
   return Number(preco).toFixed(2).replace('.', ',')
 }
+
 onMounted(async () => {
   await listarProdutos()
 })
 </script>
-
 <style scoped>
 .input-pesquisa {
   width: 700px;

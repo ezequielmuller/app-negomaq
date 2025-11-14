@@ -7,7 +7,6 @@
           <div class="text-h6">Adicionar Produto</div>
         </div>
       </q-card-section>
-
       <q-card-section>
         <div class="row q-col-gutter-sm">
           <div class="col-12">
@@ -33,9 +32,7 @@
           </div>
         </div>
       </q-card-section>
-
       <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
-
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
         <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" class="hover-scale"
           style="border-radius: 20px;" />
@@ -53,7 +50,6 @@
           <div class="text-h6">Alterar Produto</div>
         </div>
       </q-card-section>
-
       <q-card-section class="scroll" style="flex: 1; overflow-y: auto;">
         <div class="row q-col-gutter-sm">
           <div class="col-12">
@@ -83,9 +79,7 @@
           </div>
         </div>
       </q-card-section>
-
       <q-separator style="height: 3px;" class="bg-amber-9 q-mr-md q-ml-md" />
-
       <q-card-actions align="right" class="q-mr-sm q-mb-xs bg-white" style="position: sticky; bottom: 0; z-index: 1;">
         <q-btn outline label="Fechar" color="amber-9" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
@@ -103,16 +97,13 @@
           <div class="text-h6 text-bold"> - ATENÇÃO </div>
         </div>
       </q-card-section>
-
       <q-card-section>
         <div style="font-size: 16px;" class="text-center">
           Você deseja excluir o produto "
           <strong>{{ produto?.nome }}</strong>"?
         </div>
       </q-card-section>
-
       <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
-
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
         <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
@@ -130,7 +121,6 @@
           <div class="text-h6 text-bold">Atualizar Estoque</div>
         </div>
       </q-card-section>
-
       <q-card-section>
         <div style="font-size: 16px;" class="row justify-center text-center q-mb-md">
           Escreva a &nbsp;<strong>QUANTIDADE ATUAL</strong>&nbsp; presente no estoque
@@ -140,9 +130,7 @@
           <q-input v-model="form.estoque" dense outlined type="number" label="Quantidade Atual" />
         </div>
       </q-card-section>
-
       <q-separator style="height: 3px;" class="bg-blue-9 q-mr-md q-ml-md" />
-
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
         <q-btn outline label="Fechar" color="blue-9" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
@@ -160,13 +148,8 @@
           <div class="text-h6 text-bold">Promoção</div>
         </div>
       </q-card-section>
-
-      <q-card-section>
-
-      </q-card-section>
-
+      <q-card-section></q-card-section>
       <q-separator style="height: 3px;" class="bg-green q-mr-md q-ml-md" />
-
       <q-card-actions align="right" class="q-mr-sm q-mb-xs">
         <q-btn outline label="Fechar" color="green" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
@@ -176,16 +159,15 @@
     </q-card>
   </q-dialog>
 </template>
-
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { criarProduto, atualizarProduto, deletarProduto, atualizarEstoque } from 'src/services/produtoServices'
 import type { Produto } from 'src/types/types'
 
-// Variveis
+// Utils ---
+const $q = useQuasar()
 type ArquivosImagem = File[] | null
-
 const props = defineProps<{
   dialogGravar: boolean
   dialogEditar: boolean
@@ -194,9 +176,15 @@ const props = defineProps<{
   dialogPromocao: boolean
   produto?: Produto | null
 }>()
-
-const emit = defineEmits(['update:dialogGravar', 'update:dialogEditar', 'update:dialogExcluir', 'update:dialogEstoque', 'update:dialogPromocao', 'atualizarLista'])
-
+const emit = defineEmits([
+  'update:dialogGravar',
+  'update:dialogEditar',
+  'update:dialogExcluir',
+  'update:dialogEstoque',
+  'update:dialogPromocao',
+  'atualizarLista'
+])
+// Refs ---
 const dialogGravar = ref(props.dialogGravar)
 const dialogEditar = ref(props.dialogEditar)
 const dialogExcluir = ref(props.dialogExcluir)
@@ -204,9 +192,6 @@ const dialogEstoque = ref(props.dialogEstoque)
 const dialogPromocao = ref(props.dialogPromocao)
 const produtoId = ref<string | null>(null)
 const imgUrl = ref<string | null>(null)
-
-const $q = useQuasar()
-
 const form = ref<{
   nome: string
   descricao: string
@@ -222,7 +207,6 @@ const form = ref<{
   estoque: 0,
   imgArquivos: null
 })
-
 const categorias = [
   { label: 'Facas', value: 'facas' },
   { label: 'Estojos', value: 'estojos' },
@@ -230,7 +214,7 @@ const categorias = [
   { label: 'Churrascos', value: 'churrascos' }
 ]
 
-// Watch das Informações do produto
+// Watch ---
 watch(() => props.produto, (novo) => {
   if (novo) {
     form.value = {
@@ -250,7 +234,6 @@ watch(() => props.produto, (novo) => {
   }
 }, { immediate: true })
 
-// Watch dos Dialogs
 watch(() => props.dialogGravar, val => { dialogGravar.value = val })
 watch(dialogGravar, val => { emit('update:dialogGravar', val) })
 
@@ -266,7 +249,7 @@ watch(dialogEstoque, val => { emit('update:dialogEstoque', val) })
 watch(() => props.dialogPromocao, val => { dialogPromocao.value = val })
 watch(dialogPromocao, val => { emit('update:dialogPromocao', val) })
 
-// Métodos
+// Methods ---
 const formatarPreco = (valor: string | number): number => {
   if (typeof valor === 'string') {
     // remove pontos de milhar e troca vírgula por ponto
@@ -283,37 +266,31 @@ const gravarProduto = async () => {
       message: "Campos não preenchidos!",
       position: "bottom",
       timeout: 1500
-    });
+    })
   }
-
   try {
-    $q.loading.show({ message: "Cadastrando Produto..." });
-
+    $q.loading.show({ message: "Cadastrando Produto..." })
     const data = {
       nome: form.value.nome,
       descricao: form.value.descricao,
       preco: formatarPreco(form.value.preco),
       categoria: form.value.categoria,
       estoque: Number(form.value.estoque)
-    };
-
-    const result = await criarProduto(data);
-    if (!result) return;
-
-    emit("atualizarLista");
-    dialogGravar.value = false;
-
+    }
+    const result = await criarProduto(data)
+    if (!result) return
+    emit("atualizarLista")
+    dialogGravar.value = false
     $q.notify({
       type: "positive",
       message: "Produto Gravado com Sucesso!",
       position: "bottom",
       timeout: 1500
-    });
-
+    })
   } finally {
-    $q.loading.hide();
+    $q.loading.hide()
   }
-};
+}
 
 const editarProduto = async () => {
   if (!produtoId.value ||
@@ -327,37 +304,31 @@ const editarProduto = async () => {
       message: "Campos não preenchidos!",
       position: "bottom",
       timeout: 1500
-    });
+    })
   }
-
   try {
-    $q.loading.show({ message: "Alterando Produto..." });
-
+    $q.loading.show({ message: "Alterando Produto..." })
     const data = {
       nome: form.value.nome,
       descricao: form.value.descricao,
       preco: formatarPreco(form.value.preco),
       categoria: form.value.categoria,
       estoque: Number(form.value.estoque)
-    };
-
-    const result = await atualizarProduto(produtoId.value, data);
-    if (!result) return;
-
-    emit("atualizarLista");
-    dialogEditar.value = false;
-
+    }
+    const result = await atualizarProduto(produtoId.value, data)
+    if (!result) return
+    emit("atualizarLista")
+    dialogEditar.value = false
     $q.notify({
       type: "positive",
       message: "Produto Editado com Sucesso!",
       position: "bottom",
       timeout: 1500
-    });
-
+    })
   } finally {
-    $q.loading.hide();
+    $q.loading.hide()
   }
-};
+}
 
 const excluirProduto = async () => {
   if (!produtoId.value) {
@@ -366,29 +337,24 @@ const excluirProduto = async () => {
       message: "Produto não encontrado!",
       position: "bottom",
       timeout: 1500
-    });
+    })
   }
-
   try {
-    $q.loading.show({ message: "Deletando Produto..." });
-
-    const result = await deletarProduto(produtoId.value);
-    if (!result) return;
-
-    emit("atualizarLista");
-    dialogExcluir.value = false;
-
+    $q.loading.show({ message: "Deletando Produto..." })
+    const result = await deletarProduto(produtoId.value)
+    if (!result) return
+    emit("atualizarLista")
+    dialogExcluir.value = false
     $q.notify({
       type: "positive",
       message: "Produto deletado!",
       position: "bottom",
       timeout: 1500
-    });
-
+    })
   } finally {
-    $q.loading.hide();
+    $q.loading.hide()
   }
-};
+}
 
 const atualizarEstoqueProduto = async () => {
   if (!produtoId.value) {
@@ -397,29 +363,25 @@ const atualizarEstoqueProduto = async () => {
       message: "Produto não encontrado!",
       position: "bottom",
       timeout: 1500
-    });
+    })
   }
   try {
-    $q.loading.show({ message: "Atualizando Estoque..." });
-
-    const qtd = Number(form.value.estoque);
-
-    const result = await atualizarEstoque(produtoId.value, qtd);
-    if (!result) return;
-
-    emit("atualizarLista");
-    dialogEstoque.value = false;
-
+    $q.loading.show({ message: "Atualizando Estoque..." })
+    const qtd = Number(form.value.estoque)
+    const result = await atualizarEstoque(produtoId.value, qtd)
+    if (!result) return
+    emit("atualizarLista")
+    dialogEstoque.value = false
     $q.notify({
       type: "positive",
       message: "Estoque atualizado!",
       position: "bottom",
       timeout: 1500
-    });
+    })
   } finally {
     $q.loading.hide();
   }
-};
+}
 
 // Mounted
 onMounted(() => {

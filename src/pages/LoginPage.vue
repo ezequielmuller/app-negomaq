@@ -1,12 +1,9 @@
 <template>
   <q-page class="flex flex-center" padding>
-
-    <!-- Card de Login -->
     <q-card style="width: 350px; height: 500px; border-radius: 20px;">
       <q-card-section class="flex flex-center">
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa" style="width: 150px; height: 150px" />
       </q-card-section>
-
       <q-card-section>
         <q-input class="full-width" label="Email" v-model="email" clearable>
           <template #prepend>
@@ -25,7 +22,6 @@
         </q-input>
         <q-toggle label="Lembrar senha" color="primary" v-model="lembrarSenha" class="q-mt-sm" />
       </q-card-section>
-
       <q-card-section class="flex flex-center column" style="margin-bottom: 0;">
         <q-btn color="primary" label="ENTRAR" class="full-width hover-scale " style="border-radius: 20px"
           @click="entrarSistema()" />
@@ -53,16 +49,28 @@ import { useRouter } from 'vue-router'
 import { useAuth } from 'src/composables/useAuth'
 import { useCartStore } from 'src/stores/useCartStore'
 import { LogarUsuario } from 'src/services/usuarioServices'
-// Variaveis ---
+
+// Utils ---
 const cart = useCartStore()
 const $q = useQuasar()
 const router = useRouter()
 const { saveUser } = useAuth()
-
+// Refs ---
 const lembrarSenha = ref(false)
 const email = ref('')
 const senha = ref('')
 const ocultarSenha = ref(true)
+
+// Watch ---
+watch([lembrarSenha, email, senha], ([lembrar, emailVal, senhaVal]) => {
+  if (lembrar && emailVal) {
+    localStorage.setItem('lembrarEmail', emailVal)
+    localStorage.setItem('lembrarSenha', senhaVal)
+  } else if (!lembrar) {
+    localStorage.removeItem('lembrarEmail')
+    localStorage.removeItem('lembrarSenha')
+  }
+})
 
 // Methods ---
 const entrarSistema = async () => {
@@ -72,28 +80,28 @@ const entrarSistema = async () => {
       message: 'Campos não preenchidos!',
       position: 'bottom',
       timeout: 2000
-    });
-    return;
+    })
+    return
   }
   if (!validarEmail(email.value)) return;
   try {
-    $q.loading.show({ message: 'Entrando...' });
+    $q.loading.show({ message: 'Entrando...' })
     const data = {
       email: email.value,
       senha: senha.value
-    };
-    const result = await LogarUsuario(data);
-    if (!result) return;
-    const tokenUsuario = result.token;
-    const user = result.usuario;
-    const usuarioCompleto = { ...user, token: tokenUsuario };
-    saveUser(usuarioCompleto);
-    cart.limparCarrinho();
-    await router.push('/home');
+    }
+    const result = await LogarUsuario(data)
+    if (!result) return
+    const tokenUsuario = result.token
+    const user = result.usuario
+    const usuarioCompleto = { ...user, token: tokenUsuario }
+    saveUser(usuarioCompleto)
+    cart.limparCarrinho()
+    await router.push('/home')
   } finally {
-    $q.loading.hide();
+    $q.loading.hide()
   }
-};
+}
 
 const irParaCadastro = async () => {
   try {
@@ -112,6 +120,7 @@ const irParaCadastro = async () => {
     $q.loading.hide()
   }
 }
+
 // Metodos uteis ---
 const validarEmail = (val: string) => {
   const email = (val || '').trim()
@@ -128,6 +137,7 @@ const validarEmail = (val: string) => {
   }
   return true
 }
+
 onMounted(() => {
   const salvarLogin = localStorage.getItem('lembrarEmail')
   const salvarSenha = localStorage.getItem('lembrarSenha')
@@ -139,15 +149,4 @@ onMounted(() => {
     senha.value = salvarSenha
   }
 })
-
-watch([lembrarSenha, email, senha], ([lembrar, emailVal, senhaVal]) => {
-  if (lembrar && emailVal) {
-    localStorage.setItem('lembrarEmail', emailVal)
-    localStorage.setItem('lembrarSenha', senhaVal)
-  } else if (!lembrar) {
-    localStorage.removeItem('lembrarEmail')
-    localStorage.removeItem('lembrarSenha')
-  }
-})
-
 </script>

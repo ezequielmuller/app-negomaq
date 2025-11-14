@@ -68,7 +68,6 @@
   <ManipularProdutos v-model:dialogGravar="dialogGravar" v-model:dialogEditar="dialogEditar"
     v-model:dialog-promocao="dialogPromocao" v-model:dialogEstoque="dialogEstoque"
     v-model:dialog-excluir="dialogExcluir" :produto="produtoSelecionado" @atualizarLista="listarProdutosTela" />
-
 </template>
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
@@ -77,8 +76,10 @@ import { listarProdutos } from 'src/services/produtoServices'
 import type { Produto } from 'src/types/types'
 import { formatPrice } from 'src/config/formatPrice'
 import ManipularProdutos from 'src/components/ManipularProdutos.vue'
+
+// Utils ---
 const $q = useQuasar()
-// Variaveis ---
+// Refs ---
 const dialogGravar = ref(false)
 const dialogEditar = ref(false)
 const dialogExcluir = ref(false)
@@ -104,7 +105,16 @@ const columns: QTableProps['columns'] = [
   { name: 'actions', label: 'Ações', field: 'actions', align: 'center' }
 ]
 
-// Dialogs manipular produtos ---
+// Computed ---
+const produtosFiltrados = computed(() => {
+  return produtos.value.filter(p => {
+    const nomeMatch = p.nome.toLowerCase().includes(filtroNome.value.toLowerCase())
+    const categoriaMatch = !filtroCategoria.value || p.categoria === filtroCategoria.value
+    return nomeMatch && categoriaMatch
+  })
+})
+
+// Methods ---
 const novoProduto = () => {
   produtoSelecionado.value = null
   dialogGravar.value = true
@@ -126,7 +136,6 @@ const abrirPromocaoProduto = (produto: Produto) => {
   dialogPromocao.value = true
 }
 
-// Methods ---
 const listarProdutosTela = async () => {
   try {
     $q.loading.show({ message: 'Carregando Produtos...' })
@@ -149,14 +158,7 @@ const listarProdutosTela = async () => {
 function formatCurrency(value: number) {
   return formatPrice(value)
 }
-// Computed ---
-const produtosFiltrados = computed(() => {
-  return produtos.value.filter(p => {
-    const nomeMatch = p.nome.toLowerCase().includes(filtroNome.value.toLowerCase())
-    const categoriaMatch = !filtroCategoria.value || p.categoria === filtroCategoria.value
-    return nomeMatch && categoriaMatch
-  })
-})
+
 // Mounted ---
 onMounted(() => {
   void listarProdutosTela()

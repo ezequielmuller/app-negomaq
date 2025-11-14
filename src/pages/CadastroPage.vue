@@ -76,14 +76,15 @@
   </q-page>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { ref } from "vue"
 import { useQuasar } from "quasar"
 import { useRouter } from "vue-router"
 import { CadastrarUsuario } from "src/services/usuarioServices"
-// Variaveis
+
+// Utils ---
 const $q = useQuasar()
 const router = useRouter()
-
+// Refs ---
 const nome = ref("")
 const sobrenome = ref("")
 const cpf = ref("")
@@ -112,6 +113,7 @@ const voltarLogin = async () => {
     $q.loading.hide()
   }
 }
+
 const cadastrar = async () => {
   if (!nome.value || !email.value || !telefone.value || !senha.value || !confirmarSenha.value || !cpf.value) {
     $q.notify({
@@ -161,7 +163,7 @@ const cadastrar = async () => {
   }
 }
 
-// Metodos uteis
+// Metodos uteis ---
 const validarEmail = (val: string) => {
   const email = (val || '').trim()
   const arroba = email.indexOf('@')
@@ -177,6 +179,7 @@ const validarEmail = (val: string) => {
   }
   return true
 }
+
 function formatarTelefone(valor: string | number | null) {
   if (valor === null) {
     telefone.value = '';
@@ -195,8 +198,4 @@ function formatarTelefone(valor: string | number | null) {
   }
   telefone.value = v;
 }
-// Mounted
-onMounted(() => {
-  //console.log('Tela carregada!')
-})
 </script>

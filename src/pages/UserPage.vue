@@ -1,12 +1,9 @@
 <template>
   <q-page padding>
-    <!-- Título -->
     <div class="row justify-center">
       <div class="text-h5 text-bold q-ml-sm q-mt-sm">Painel do Usuário</div>
     </div>
     <q-separator class="q-mb-md" />
-
-    <!-- Card Perfil -->
     <q-card class="q-pa-md q-mb-md shadow-2" style="border-radius: 20px; border: 0.7mm solid var(--q-primary);">
       <div class="column items-center q-gutter-xs">
         <q-avatar size="80px" color="primary" text-color="white" icon="person" />
@@ -25,20 +22,16 @@
           <q-icon name="badge" size="16px" class="q-mr-xs" />
           {{ user?.cpf || 'Sem CPF cadastrado' }}
         </div>
-
         <div class="row justify-center q-mt-md q-gutter-sm flex-wrap">
           <q-btn color="amber-9" icon="home" label="Meus endereços" @click="abrirDialogEnderecos"
             style="border-radius: 20px;" class="hover-scale" :loading="carregandoEnderecos" />
-
           <q-btn color="primary" icon="edit" label="Editar Perfil" @click="abrirDialogEditarUsuario"
             style="border-radius: 20px;" class="hover-scale" />
-
           <q-btn outline color="primary" icon="logout" label="Sair" @click="confirmarSaida" style="border-radius: 20px;"
             class="hover-scale" />
         </div>
       </div>
     </q-card>
-
     <!-- Tabs -->
     <q-tabs v-model="tab" inline-label outside-arrows mobile-arrows class="bg-grey-4 text-primary shadow-2"
       style="border-radius: 16px;">
@@ -47,27 +40,22 @@
       <q-tab name="vendas" icon="payments" label="Vendas" v-if="!user?.is_admin" />
       <q-tab name="minhasCompras" icon="shopping_cart" label="Minhas Compras" />
     </q-tabs>
-
-    <!-- Paineis -->
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="produtos">
         <ListaProdutosAdmin />
       </q-tab-panel>
-
       <q-tab-panel name="pedidos">
         <div class="text-center q-pa-xl text-grey-6">
           <q-icon name="pending_actions" size="64px" />
           <div class="text-h6 q-mt-md">Pedidos em desenvolvimento</div>
         </div>
       </q-tab-panel>
-
       <q-tab-panel name="vendas">
         <div class="text-center q-pa-xl text-grey-6">
           <q-icon name="point_of_sale" size="64px" />
           <div class="text-h6 q-mt-md">Vendas em desenvolvimento</div>
         </div>
       </q-tab-panel>
-
       <q-tab-panel name="minhasCompras">
         <div class="text-center q-pa-xl text-grey-6">
           <q-icon name="shopping_bag" size="64px" />
@@ -75,76 +63,72 @@
         </div>
       </q-tab-panel>
     </q-tab-panels>
-
-    <!-- Dialog Editar Perfil -->
-    <q-dialog v-model="dialogEditarUsuario" persistent>
-      <q-card style="width: 500px; max-height: 70vh; border-radius: 20px;" class="column no-wrap">
-        <q-card-section class="bg-primary text-white">
-          <div class="row items-center" style="gap: 8px">
-            <q-icon name="edit" size="md" />
-            <div class="text-h6">Editar Perfil</div>
-          </div>
-        </q-card-section>
-        <q-card-section class="scroll" style="flex: 1; overflow-y: auto;">
-          <div class="row q-col-gutter-sm">
-            <div class="col-6">
-              <q-input dense outlined v-model="nome" label="Nome" />
-            </div>
-            <div class="col-6">
-              <q-input dense outlined v-model="sobrenome" label="Sobrenome" />
-            </div>
-            <div class="col-12">
-              <q-input dense outlined v-model="email" label="Email" type="email" />
-            </div>
-            <div class="col-12">
-              <q-input dense outlined :model-value="telefone" @update:model-value="formatarTelefone" label="Telefone"
-                mask="(##) #####-####" />
-            </div>
-            <div class="col-12">
-              <q-input dense outlined label="CPF" v-model="cpf" clearable mask="###.###.###-##" reverse-fill-mask
-                maxlength="14" />
-            </div>
-          </div>
-        </q-card-section>
-        <q-separator spaced />
-        <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-          <q-btn outline label="Cancelar" class="hover-scale" color="primary" @click="fecharDialogEditarUsuario"
-            style="border-radius: 20px;" icon="close" />
-          <q-btn label="Salvar" icon="save" class="hover-scale" color="primary" @click="editarUsuario"
-            :loading="salvandoPerfil" style="border-radius: 20px;" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-    <!-- Dialog Confirmar Saída -->
-    <q-dialog v-model="dialogConfirmarSaida" persistent>
-      <q-card style="width: 400px; border-radius: 20px;">
-        <q-card-section class="bg-primary text-white">
-          <div class="row items-center" style="gap: 8px">
-            <q-icon name="logout" size="md" />
-            <div class="text-h6">Confirmar Saída</div>
-          </div>
-        </q-card-section>
-        <q-card-section class="text-center q-pa-md">
-          <q-icon name="help_outline" size="lg" color="primary" />
-          <div class="text-subtitle1 q-mt-xs">Tem certeza que deseja sair?</div>
-        </q-card-section>
-        <q-separator spaced />
-        <q-card-actions align="right" class="q-mr-sm q-mb-xs">
-          <q-btn outline label="Cancelar" color="primary" class="hover-scale" v-close-popup icon="close"
-            style="border-radius: 20px;" />
-          <q-btn label="Sair" color="primary" icon="logout" class="hover-scale" @click="sairSistema"
-            style="border-radius: 20px;" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
     <!-- Componente Endereços -->
     <ManipularEnderecos v-model:dialog-lista-enderecos="dialogEnderecos" :enderecos="listaEnderecos"
       :usuario-id="user?.id" @atualizar-lista="buscarEnderecos" />
   </q-page>
+  <!-- Dialog Editar Perfil -->
+  <q-dialog v-model="dialogEditarUsuario" persistent>
+    <q-card style="width: 500px; max-height: 70vh; border-radius: 20px;" class="column no-wrap">
+      <q-card-section class="bg-primary text-white">
+        <div class="row items-center" style="gap: 8px">
+          <q-icon name="edit" size="md" />
+          <div class="text-h6">Editar Perfil</div>
+        </div>
+      </q-card-section>
+      <q-card-section class="scroll" style="flex: 1; overflow-y: auto;">
+        <div class="row q-col-gutter-sm">
+          <div class="col-6">
+            <q-input dense outlined v-model="nome" label="Nome" />
+          </div>
+          <div class="col-6">
+            <q-input dense outlined v-model="sobrenome" label="Sobrenome" />
+          </div>
+          <div class="col-12">
+            <q-input dense outlined v-model="email" label="Email" type="email" />
+          </div>
+          <div class="col-12">
+            <q-input dense outlined :model-value="telefone" @update:model-value="formatarTelefone" label="Telefone"
+              mask="(##) #####-####" />
+          </div>
+          <div class="col-12">
+            <q-input dense outlined label="CPF" v-model="cpf" clearable mask="###.###.###-##" reverse-fill-mask
+              maxlength="14" />
+          </div>
+        </div>
+      </q-card-section>
+      <q-separator spaced />
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
+        <q-btn outline label="Cancelar" class="hover-scale" color="primary" @click="fecharDialogEditarUsuario"
+          style="border-radius: 20px;" icon="close" />
+        <q-btn label="Salvar" icon="save" class="hover-scale" color="primary" @click="editarUsuario"
+          :loading="salvandoPerfil" style="border-radius: 20px;" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <!-- Dialog Confirmar Saída -->
+  <q-dialog v-model="dialogConfirmarSaida" persistent>
+    <q-card style="width: 400px; border-radius: 20px;">
+      <q-card-section class="bg-primary text-white">
+        <div class="row items-center" style="gap: 8px">
+          <q-icon name="logout" size="md" />
+          <div class="text-h6">Confirmar Saída</div>
+        </div>
+      </q-card-section>
+      <q-card-section class="text-center q-pa-md">
+        <q-icon name="help_outline" size="lg" color="primary" />
+        <div class="text-subtitle1 q-mt-xs">Tem certeza que deseja sair?</div>
+      </q-card-section>
+      <q-separator spaced />
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
+        <q-btn outline label="Cancelar" color="primary" class="hover-scale" v-close-popup icon="close"
+          style="border-radius: 20px;" />
+        <q-btn label="Sair" color="primary" icon="logout" class="hover-scale" @click="sairSistema"
+          style="border-radius: 20px;" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
-
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
@@ -156,7 +140,7 @@ import { ListarEnderecos } from 'src/services/enderecoServices'
 import ListaProdutosAdmin from 'src/components/UserPage/ListaProdutosAdmin.vue'
 import ManipularEnderecos from 'src/components/UserPage/ManipularEnderecos.vue'
 import type { Endereco, Usuario, UsuarioEdicao } from 'src/types/types'
-
+// Utils ---
 const $q = useQuasar()
 const router = useRouter()
 const { getUser, saveUser, removeUser } = useAuth()
@@ -190,7 +174,6 @@ const telefoneMostrar = computed(() => {
 })
 
 // Methdos ---
-// editar usuario ---
 const abrirDialogEditarUsuario = () => {
   nome.value = user.nome || ''
   sobrenome.value = user.sobrenome || ''
@@ -213,6 +196,7 @@ const abrirDialogEditarUsuario = () => {
 const fecharDialogEditarUsuario = () => {
   dialogEditarUsuario.value = false
 }
+
 const editarUsuario = async () => {
   if (!nome.value.trim() || !sobrenome.value.trim() || !email.value.trim() || !telefone.value || !cpf.value) {
     $q.notify({
@@ -229,7 +213,14 @@ const editarUsuario = async () => {
     const data: UsuarioEdicao = { novo_nome: nome.value.trim(), novo_sobrenome: sobrenome.value.trim(), novo_email: email.value.trim(), novo_telefone: telefone.value.trim(), novo_cpf: cpf.value, }
     await EditarPerfil(data, user.token)
     // atualizar localStorage
-    const usuarioAtualizado = { ...user, nome: data.novo_nome || user.nome, sobrenome: data.novo_sobrenome || user.sobrenome, email: data.novo_email || user.email, telefone: data.novo_telefone || user.telefone, cpf: data.novo_cpf || user.cpf }
+    const usuarioAtualizado = {
+      ...user,
+      nome: data.novo_nome || user.nome,
+      sobrenome: data.novo_sobrenome || user.sobrenome,
+      email: data.novo_email || user.email,
+      telefone: data.novo_telefone || user.telefone,
+      cpf: data.novo_cpf || user.cpf
+    }
     removeUser()
     saveUser(usuarioAtualizado)
     $q.notify({
@@ -244,21 +235,6 @@ const editarUsuario = async () => {
   }
 }
 
-// sair do sistema ---
-const confirmarSaida = () => {
-  dialogConfirmarSaida.value = true
-}
-
-const sairSistema = async () => {
-  $q.loading.show({ message: 'Saindo...' })
-  removeUser()
-  cart.limparCarrinho()
-  await router.push('/home')
-  $q.loading.hide()
-  window.location.reload()
-}
-
-// endereco ---
 const abrirDialogEnderecos = async () => {
   if (!user?.id) {
     $q.notify({ type: 'negative', message: 'Usuário não identificado!' })
@@ -280,7 +256,20 @@ const buscarEnderecos = async () => {
   }
 }
 
-// metodos uteis ---
+const confirmarSaida = () => {
+  dialogConfirmarSaida.value = true
+}
+
+const sairSistema = async () => {
+  $q.loading.show({ message: 'Saindo...' })
+  removeUser()
+  cart.limparCarrinho()
+  await router.push('/home')
+  $q.loading.hide()
+  window.location.reload()
+}
+
+// Metodos uteis ---
 function formatarTelefone(valor: string | number | null) {
   if (!valor) {
     telefone.value = ''

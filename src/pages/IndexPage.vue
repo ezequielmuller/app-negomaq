@@ -10,9 +10,7 @@
         </q-carousel>
       </div>
     </div>
-
     <q-separator style="height: 3px;" class="q-my-sm" />
-
     <div class="text-h6 text-bold text-center" style="font-size: 24px;">
       Consulte nosso <span class="text-primary">Catálogo de Produtos</span> e garanta já os melhores!
     </div>
@@ -29,8 +27,8 @@
       </div>
     </div>
     <div class="col-12 text-bold q-mb-lg q-mt-sm row justify-center" style="font-size: 22px; margin-bottom: 14px;">
-      Novidades!</div>
-
+      Novidades!
+    </div>
     <div v-if="produtos.length > 0" class="row justify-center q-col-gutter-md">
       <div v-for="produto in produtos.slice(0, 3)" :key="produto.id" class="col-12 col-sm-6 col-md-4 q-mb-md"
         style="max-width: 320px;">
@@ -55,14 +53,12 @@
         </q-card>
       </div>
     </div>
-
     <div v-else class="text-center text-grey q-mt-md flex flex-col justify-center items-center">
       <q-icon name="error" size="xl" color="grey" />
       <span class="font-bold q-mt-sm">Nenhum produto encontrado!</span>
     </div>
   </q-page>
 </template>
-
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
 import { ListarProdutosHome } from 'src/services/produtoServices'
@@ -70,11 +66,25 @@ import { useCartStore } from 'src/stores/useCartStore'
 import { ref, onMounted } from 'vue'
 import type { Produto } from 'src/types/types'
 
+//Utils ---
 const $q = useQuasar()
 const store = useCartStore()
-
+// Refs ---
 const produtos = ref<Produto[]>([])
+const slide = ref(0)
+const imagens = [
+  "/src/assets/promocao-faca1.jpeg",
+  "/src/assets/promocao-faca2.png",
+  "/src/assets/promocao-faca3.jpg",
+]
+const categorias = [
+  { nome: 'Facas', icone: 'restaurant', cor: 'grey', rota: 'home-facas-page' },
+  { nome: 'Estojos', icone: 'takeout_dining', cor: 'grey', rota: 'home-estojo-page' },
+  { nome: 'Aventais', icone: 'checkroom', cor: 'grey', rota: 'home-avental-page' },
+  { nome: 'Artigos de Churrasco', icone: 'outdoor_grill', cor: 'grey', rota: 'home-artigo-churrasco-page' }
+]
 
+// Methods ---
 const adicionarNoCarrinho = (produto: Produto) => {
   if (store.adicionarAoCarrinho) {
     store.adicionarAoCarrinho(produto)
@@ -88,21 +98,6 @@ const adicionarNoCarrinho = (produto: Produto) => {
     console.warn('Método adicionarAoCarrinho não encontrado na store.')
   }
 }
-
-
-const slide = ref(0)
-const imagens = [
-  "/src/assets/promocao-faca1.jpeg",
-  "/src/assets/promocao-faca2.png",
-  "/src/assets/promocao-faca3.jpg",
-]
-
-const categorias = [
-  { nome: 'Facas', icone: 'restaurant', cor: 'grey', rota: 'home-facas-page' },
-  { nome: 'Estojos', icone: 'takeout_dining', cor: 'grey', rota: 'home-estojo-page' },
-  { nome: 'Aventais', icone: 'checkroom', cor: 'grey', rota: 'home-avental-page' },
-  { nome: 'Artigos de Churrasco', icone: 'outdoor_grill', cor: 'grey', rota: 'home-artigo-churrasco-page' }
-]
 
 const listarProdutos = async () => {
   try {
@@ -121,14 +116,17 @@ const listarProdutos = async () => {
     $q.loading.hide()
   }
 }
+
+// Metodos uteis ---
 function formatarPreco(preco: string | number) {
   return Number(preco).toFixed(2).replace('.', ',')
 }
+
+
 onMounted(async () => {
   await listarProdutos()
 })
 </script>
-
 <style scoped>
 .carousel-container {
   width: 100%;
