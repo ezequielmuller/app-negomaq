@@ -43,8 +43,8 @@
     <q-tabs v-model="tab" inline-label outside-arrows mobile-arrows class="bg-grey-4 text-primary shadow-2"
       style="border-radius: 16px;">
       <q-tab name="produtos" icon="inventory_2" label="Produtos" v-if="user?.is_admin" />
-      <q-tab name="pedidos" icon="sell" label="Pedidos" v-if="!user?.is_admin" />
-      <q-tab name="vendas" icon="payments" label="Vendas" v-if="!user?.is_admin" />
+      <q-tab name="pedidos" icon="sell" label="Pedidos" v-if="user?.is_admin" />
+      <q-tab name="vendas" icon="payments" label="Vendas" v-if="user?.is_admin" />
       <q-tab name="minhasCompras" icon="shopping_cart" label="Minhas Compras" />
     </q-tabs>
 

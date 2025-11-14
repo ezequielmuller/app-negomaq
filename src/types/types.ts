@@ -1,13 +1,17 @@
 // Produtos ---
 export interface Produto {
-  id: string;
-  nome: string;
-  descricao: string;
-  preco: number;
-  categoria: string;
-  estoque: number;
-  img?: string;
-  qtd?: number;
+  id: string
+  nome: string
+  descricao: string
+  preco: number
+  categoria: string
+  estoque: number
+  peso: number
+  largura: number
+  altura: number
+  comprimento: number
+  img?: string
+  qtd?: number
 }
 export type ProdutoPayload = Omit<Produto, 'id'>;
 

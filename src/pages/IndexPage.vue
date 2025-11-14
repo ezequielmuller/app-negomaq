@@ -93,7 +93,7 @@ const slide = ref(0)
 const imagens = [
   "/src/assets/banner1.jpg",
   "/src/assets/banner2.jpeg",
-  "/src/assets/promocao-faca3.jpg",
+  "/src/assets/banner3.jpeg",
 ]
 
 const categorias = [
