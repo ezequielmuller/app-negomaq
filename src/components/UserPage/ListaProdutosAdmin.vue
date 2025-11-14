@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useQuasar, type QTableProps } from 'quasar'
-import { listarProdutos } from 'src/services/apiServices'
+import { listarProdutos } from 'src/services/produtoServices'
 import type { Produto } from 'src/types/types'
 import { formatPrice } from 'src/config/formatPrice'
 import ManipularProdutos from 'src/components/ManipularProdutos.vue'

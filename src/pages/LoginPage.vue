@@ -50,10 +50,9 @@
 import { ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-import api from 'src/services/api'
-import type { Usuario } from 'src/types/types'
 import { useAuth } from 'src/composables/useAuth'
 import { useCartStore } from 'src/stores/useCartStore'
+import { LogarUsuario } from 'src/services/usuarioServices'
 // Variaveis ---
 const cart = useCartStore()
 const $q = useQuasar()
@@ -64,47 +63,37 @@ const lembrarSenha = ref(false)
 const email = ref('')
 const senha = ref('')
 const ocultarSenha = ref(true)
-const user = ref<Usuario | null>(null)
 
 // Methods ---
 const entrarSistema = async () => {
   if (!email.value || !senha.value) {
     $q.notify({
       type: 'warning',
-      message: 'Campos não preenchidos',
+      message: 'Campos não preenchidos!',
       position: 'bottom',
       timeout: 2000
     });
     return;
   }
-  const emailValidado = validarEmail(email.value)
-  if (emailValidado === false) {
-    return
-  }
+  if (!validarEmail(email.value)) return;
   try {
     $q.loading.show({ message: 'Entrando...' });
-    const result = await api.post('auth/login', {
+    const data = {
       email: email.value,
       senha: senha.value
-    });
-    const usuario: Usuario = result.data.usuario;
-    user.value = usuario;
-    saveUser(usuario);
+    };
+    const result = await LogarUsuario(data);
+    if (!result) return;
+    const tokenUsuario = result.token;
+    const user = result.usuario;
+    const usuarioCompleto = { ...user, token: tokenUsuario };
+    saveUser(usuarioCompleto);
+    cart.limparCarrinho();
     await router.push('/home');
-    cart.limparCarrinho()
-
-  } catch (error) {
-    console.error('Erro no login:', error);
-    $q.notify({
-      type: 'negative',
-      message: 'Não foi possível realizar login, verifique os campos!',
-      position: 'bottom',
-      timeout: 2500
-    });
   } finally {
     $q.loading.hide();
   }
-}
+};
 
 const irParaCadastro = async () => {
   try {

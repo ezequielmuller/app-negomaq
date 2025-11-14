@@ -180,7 +180,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
-import { criarProduto, atualizarProduto, deletarProduto, atualizarEstoque } from 'src/services/apiServices'
+import { criarProduto, atualizarProduto, deletarProduto, atualizarEstoque } from 'src/services/produtoServices'
 import type { Produto } from 'src/types/types'
 
 // Variveis
@@ -277,60 +277,61 @@ const formatarPreco = (valor: string | number): number => {
 }
 
 const gravarProduto = async () => {
-  console.log('Gravar Produto', form.value)
-
   if (!form.value.nome || !form.value.descricao || !form.value.preco || !form.value.categoria) {
-    $q.notify({
-      type: 'warning',
-      message: 'Campos não preenchidos!',
-      timeout: 1500,
-      position: 'bottom'
-    })
-    return
+    return $q.notify({
+      type: "warning",
+      message: "Campos não preenchidos!",
+      position: "bottom",
+      timeout: 1500
+    });
   }
+
   try {
-    $q.loading.show({ message: 'Cadastrando Produto...' })
+    $q.loading.show({ message: "Cadastrando Produto..." });
+
     const data = {
       nome: form.value.nome,
       descricao: form.value.descricao,
       preco: formatarPreco(form.value.preco),
       categoria: form.value.categoria,
       estoque: Number(form.value.estoque)
-    }
-    await criarProduto(data)
-    emit('atualizarLista')
-    dialogGravar.value = false
+    };
+
+    const result = await criarProduto(data);
+    if (!result) return;
+
+    emit("atualizarLista");
+    dialogGravar.value = false;
+
     $q.notify({
-      type: 'positive',
-      message: 'Produto Gravado com Sucesso!',
-      timeout: 1500,
-      position: 'bottom'
-    })
-  } catch (err) {
-    console.log("Erro=> ", err)
-    $q.notify({
-      type: 'negative',
-      message: 'Não foi possivel gravar o produto!',
-      timeout: 1500,
-      position: 'bottom'
-    })
+      type: "positive",
+      message: "Produto Gravado com Sucesso!",
+      position: "bottom",
+      timeout: 1500
+    });
+
   } finally {
-    $q.loading.hide()
+    $q.loading.hide();
   }
-}
+};
 
 const editarProduto = async () => {
-  if (!produtoId.value || !form.value.nome || !form.value.descricao || !form.value.preco || !form.value.categoria) {
-    $q.notify({
-      type: 'warning',
-      message: 'Campos não preenchidos!',
-      timeout: 1500,
-      position: 'bottom'
-    })
-    return
+  if (!produtoId.value ||
+    !form.value.nome ||
+    !form.value.descricao ||
+    !form.value.preco ||
+    !form.value.categoria
+  ) {
+    return $q.notify({
+      type: "warning",
+      message: "Campos não preenchidos!",
+      position: "bottom",
+      timeout: 1500
+    });
   }
+
   try {
-    $q.loading.show({ message: 'Alterando Produto...' })
+    $q.loading.show({ message: "Alterando Produto..." });
 
     const data = {
       nome: form.value.nome,
@@ -338,98 +339,87 @@ const editarProduto = async () => {
       preco: formatarPreco(form.value.preco),
       categoria: form.value.categoria,
       estoque: Number(form.value.estoque)
-    }
-    await atualizarProduto(produtoId.value, data)
+    };
+
+    const result = await atualizarProduto(produtoId.value, data);
+    if (!result) return;
+
+    emit("atualizarLista");
+    dialogEditar.value = false;
+
     $q.notify({
-      type: 'positive',
-      message: 'Produto Editado com Sucesso!',
-      timeout: 1500,
-      position: 'bottom'
-    })
-    emit('atualizarLista')
-    dialogEditar.value = false
-  } catch (err) {
-    console.log("Erro=> ", err)
-    $q.notify({
-      type: 'negative',
-      message: 'Não foi possivel editar o produto!',
-      timeout: 1500,
-      position: 'bottom'
-    })
+      type: "positive",
+      message: "Produto Editado com Sucesso!",
+      position: "bottom",
+      timeout: 1500
+    });
+
   } finally {
-    $q.loading.hide()
+    $q.loading.hide();
   }
-}
+};
 
 const excluirProduto = async () => {
   if (!produtoId.value) {
-    $q.notify({
-      type: 'warning',
-      message: 'Produto não encontrado!',
-      timeout: 1500,
-      position: 'bottom'
-    })
-    return
+    return $q.notify({
+      type: "warning",
+      message: "Produto não encontrado!",
+      position: "bottom",
+      timeout: 1500
+    });
   }
+
   try {
-    $q.loading.show({ message: 'Deletando Produto...' })
-    await deletarProduto(produtoId.value)
-    emit('atualizarLista')
-    dialogExcluir.value = false
-    $q.loading.hide()
-  } catch (err) {
-    console.log(err)
+    $q.loading.show({ message: "Deletando Produto..." });
+
+    const result = await deletarProduto(produtoId.value);
+    if (!result) return;
+
+    emit("atualizarLista");
+    dialogExcluir.value = false;
+
     $q.notify({
-      type: 'negative',
-      message: 'Não foi possivel deletar o produto do estoque!',
-      timeout: 1500,
-      position: 'bottom'
-    })
+      type: "positive",
+      message: "Produto deletado!",
+      position: "bottom",
+      timeout: 1500
+    });
+
   } finally {
-    $q.loading.hide()
+    $q.loading.hide();
   }
-}
+};
 
 const atualizarEstoqueProduto = async () => {
   if (!produtoId.value) {
-    $q.notify({
-      type: 'warning',
-      message: 'Produto não encontrado!',
-      timeout: 1500,
-      position: 'bottom'
-    })
-    return
+    return $q.notify({
+      type: "warning",
+      message: "Produto não encontrado!",
+      position: "bottom",
+      timeout: 1500
+    });
   }
-  console.log(produtoId.value)
   try {
-    $q.loading.show({ message: 'Atualizando Estoque...' })
+    $q.loading.show({ message: "Atualizando Estoque..." });
 
-    const qtdEstoque = Number(form.value.estoque)
-    console.log('ESTOQUE ==== ', typeof qtdEstoque, " = ", qtdEstoque)
+    const qtd = Number(form.value.estoque);
 
-    await atualizarEstoque(produtoId.value, qtdEstoque)
-    emit('atualizarLista')
+    const result = await atualizarEstoque(produtoId.value, qtd);
+    if (!result) return;
 
-    dialogEstoque.value = false
-    $q.loading.hide()
+    emit("atualizarLista");
+    dialogEstoque.value = false;
+
     $q.notify({
-      type: 'positive',
-      message: 'Estoque Atualizado!',
-      timeout: 1500,
-      position: 'bottom'
-    })
-  } catch (err) {
-    console.log(err)
-    $q.notify({
-      type: 'negative',
-      message: 'Não foi possivel atualizar o estoque do produto!',
-      timeout: 1500,
-      position: 'bottom'
-    })
+      type: "positive",
+      message: "Estoque atualizado!",
+      position: "bottom",
+      timeout: 1500
+    });
   } finally {
-    $q.loading.hide()
+    $q.loading.hide();
   }
-}
+};
 
 // Mounted
 onMounted(() => {

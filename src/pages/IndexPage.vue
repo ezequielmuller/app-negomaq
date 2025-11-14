@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
-import { ListarProdutosHome } from 'src/services/apiServices'
+import { ListarProdutosHome } from 'src/services/produtoServices'
 import { useCartStore } from 'src/stores/useCartStore'
 import { ref, onMounted } from 'vue'
 import type { Produto } from 'src/types/types'

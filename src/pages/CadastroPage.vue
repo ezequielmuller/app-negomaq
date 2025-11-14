@@ -79,7 +79,7 @@
 import { onMounted, ref } from "vue"
 import { useQuasar } from "quasar"
 import { useRouter } from "vue-router"
-import api from "src/services/api"
+import { CadastrarUsuario } from "src/services/usuarioServices"
 // Variaveis
 const $q = useQuasar()
 const router = useRouter()
@@ -119,8 +119,17 @@ const cadastrar = async () => {
       message: "Campos não preenchidos!",
       position: "bottom",
       timeout: 2500
-    })
-    return
+    });
+    return;
+  }
+  if (senha.value.length < 6) {
+    $q.notify({
+      type: "warning",
+      message: "As senhas deve conter pelo menos 6 digitos!",
+      position: "bottom",
+      timeout: 2500
+    });
+    return;
   }
   if (senha.value !== confirmarSenha.value) {
     $q.notify({
@@ -128,45 +137,30 @@ const cadastrar = async () => {
       message: "As senhas não coincidem!",
       position: "bottom",
       timeout: 2500
-    })
-    return
+    });
+    return;
   }
-  const emailValidado = validarEmail(email.value)
-  if (emailValidado === false) {
-    return
-  }
+  if (!validarEmail(email.value)) return;
   try {
     $q.loading.show({ message: "Cadastrando..." });
-    const payload = {
+    const data = {
       nome: nome.value,
       sobrenome: sobrenome.value,
       email: email.value,
       telefone: telefone.value,
       senha: senha.value,
+      cpf: cpf.value
     };
-    let data = {}
-    data = await api.post("auth/registrar", payload);
-    console.log(data)
-    $q.loading.hide();
-    $q.notify({
-      type: "positive",
-      message: "Cadastro realizado com sucesso!",
-      position: "bottom",
-      timeout: 2500
-    })
-    await router.push('/login')
-  } catch (error) {
-    console.log(error)
-    $q.notify({
-      type: "negative",
-      message: "Não foi possível realizar o cadastro!",
-      position: "bottom",
-      timeout: 2500
-    })
+
+    const result = await CadastrarUsuario(data);
+
+    if (!result) return;
+    await router.push("/login");
   } finally {
     $q.loading.hide();
   }
 }
+
 // Metodos uteis
 const validarEmail = (val: string) => {
   const email = (val || '').trim()
