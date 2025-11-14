@@ -84,6 +84,7 @@ const entrarSistema = async () => {
     };
     const result = await LogarUsuario(data);
     if (!result) return;
+
     const tokenUsuario = result.token;
     const user = result.usuario;
     const usuarioCompleto = { ...user, token: tokenUsuario };

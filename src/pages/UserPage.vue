@@ -213,6 +213,7 @@ const abrirDialogEditarUsuario = () => {
 const fecharDialogEditarUsuario = () => {
   dialogEditarUsuario.value = false
 }
+
 const editarUsuario = async () => {
   if (!nome.value.trim() || !sobrenome.value.trim() || !email.value.trim() || !telefone.value || !cpf.value) {
     $q.notify({
@@ -220,25 +221,62 @@ const editarUsuario = async () => {
       message: 'Campos vazios, verifique!',
       position: 'bottom',
       timeout: 2500
-    });
-    return;
+    })
+    return
   }
+
   if (!validarEmail(email.value)) return;
+
   try {
     $q.loading.show({ message: 'Editando perfil...' })
-    const data: UsuarioEdicao = { novo_nome: nome.value.trim(), novo_sobrenome: sobrenome.value.trim(), novo_email: email.value.trim(), novo_telefone: telefone.value.trim(), novo_cpf: cpf.value, }
-    await EditarPerfil(data, user.token)
-    // atualizar localStorage
-    const usuarioAtualizado = { ...user, nome: data.novo_nome || user.nome, sobrenome: data.novo_sobrenome || user.sobrenome, email: data.novo_email || user.email, telefone: data.novo_telefone || user.telefone, cpf: data.novo_cpf || user.cpf }
+
+    const data: UsuarioEdicao = {
+      email: user.email,
+      novo_nome: nome.value.trim(),
+      novo_sobrenome: sobrenome.value.trim(),
+      novo_email: email.value.trim(),
+      novo_telefone: telefone.value,
+      novo_cpf: cpf.value,
+    }
+    console.log(user.token)
+    const result = await EditarPerfil(data, user.token)
+
+    const usuarioAtualizado = {
+      ...user,
+      nome: data.novo_nome || user.nome,
+      sobrenome: data.novo_sobrenome || user.sobrenome,
+      email: data.novo_email || user.email,
+      telefone: data.novo_telefone || user.telefone,
+      cpf: data.novo_cpf || user.cpf
+    }
+
     removeUser()
     saveUser(usuarioAtualizado)
+    fecharDialogEditarUsuario()
+    if (!result) return
+    $q.loading.show({
+      message: 'Atualizando...',
+      spinnerSize: 140,
+    })
+
+    // pequeno delay só para mostrar o loading
+    setTimeout(() => {
+      window.location.reload()
+    }, 800)
     $q.notify({
       type: 'positive',
       message: 'Perfil atualizado com sucesso!',
       position: 'bottom',
       timeout: 2000
     })
-    fecharDialogEditarUsuario()
+  } catch (err) {
+    console.error('Erro ao atualizar perfil:', err)
+    $q.notify({
+      type: 'negative',
+      message: 'Não foi possivel editar o perfil!',
+      position: 'bottom',
+      timeout: 2500
+    })
   } finally {
     $q.loading.hide()
   }
