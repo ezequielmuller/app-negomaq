@@ -26,9 +26,10 @@ export type Usuario = {
 };
 
 export type UsuarioEdicao = {
+  email: string
   novo_nome?: string;
   novo_sobrenome?: string;
-  novo_email?: string;
+  novo_email?: string
   novo_telefone?: string;
   novo_cpf?: string;
 };
