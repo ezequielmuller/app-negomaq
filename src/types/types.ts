@@ -1,3 +1,4 @@
+// Produtos ---
 export interface Produto {
   id: string;
   nome: string;
@@ -8,9 +9,9 @@ export interface Produto {
   img?: string;
   qtd?: number;
 }
-
 export type ProdutoPayload = Omit<Produto, 'id'>;
 
+// Usuários ---
 export type Usuario = {
   id: string;
   nome: string;
@@ -19,5 +20,28 @@ export type Usuario = {
   cpf: string
   is_admin: boolean;
   telefone: string;
-  senha: string;
+  senha?: string;
+  enderecos?: Endereco;
+  token: string;
 };
+
+export type UsuarioEdicao = {
+  novo_nome?: string;
+  novo_sobrenome?: string;
+  novo_email?: string;
+  novo_telefone?: string;
+  novo_cpf?: string;
+};
+
+// Endereços ---
+export type Endereco = {
+  bairro: string;
+  cep: string;
+  cidade: string;
+  complemento: string;
+  estado: string;
+  logradouro: string;
+  numero: string;
+}
+
+
