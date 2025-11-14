@@ -1,7 +1,5 @@
 // import { ref } from 'vue';
-
-import type { Usuario } from 'src/types/types';
-
+import type { Usuario } from "src/types/types";
 const USER_KEY = 'user';
 
 function saveUser(user: Usuario) {
