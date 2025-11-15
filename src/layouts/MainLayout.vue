@@ -67,7 +67,7 @@
           <q-item-section avatar><q-icon name="shopping_cart" /></q-item-section>
           <q-item-section>Meu Carrinho</q-item-section>
           <q-item-section side v-if="cartCount > 0"><q-badge color="warning" class="text-black">{{ cartCount
-          }}</q-badge></q-item-section>
+              }}</q-badge></q-item-section>
         </q-item>
 
         <template v-if="user">

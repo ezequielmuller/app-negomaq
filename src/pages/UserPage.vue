@@ -310,7 +310,7 @@ const abrirDialogEnderecos = async () => {
 
 const buscarEnderecos = async () => {
   try {
-    const res = await ListarEnderecos(user.id)
+    const res = await ListarEnderecos(user.id, user.token)
     listaEnderecos.value = Array.isArray(res) ? res : []
   } catch (err) {
     console.error(err)

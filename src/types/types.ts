@@ -13,40 +13,41 @@ export interface Produto {
   img?: string
   qtd?: number
 }
-export type ProdutoPayload = Omit<Produto, 'id'>;
+export type ProdutoPayload = Omit<Produto, 'id'>
 
 // Usuários ---
 export type Usuario = {
-  id: string;
-  nome: string;
-  sobrenome: string;
-  email: string;
+  id: string
+  nome: string
+  sobrenome: string
+  email: string
   cpf: string
-  is_admin: boolean;
-  telefone: string;
-  senha?: string;
-  enderecos?: Endereco;
-  token: string;
+  is_admin: boolean
+  telefone: string
+  senha?: string
+  enderecos?: Endereco
+  token: string
 };
 
 export type UsuarioEdicao = {
   email: string
-  novo_nome?: string;
-  novo_sobrenome?: string;
+  novo_nome?: string
+  novo_sobrenome?: string
   novo_email?: string
-  novo_telefone?: string;
-  novo_cpf?: string;
-};
+  novo_telefone?: string
+  novo_cpf?: string
+}
 
 // Endereços ---
 export type Endereco = {
-  bairro: string;
-  cep: string;
-  cidade: string;
-  complemento: string;
-  estado: string;
-  logradouro: string;
-  numero: string;
+  id?: string
+  bairro: string
+  cep: string
+  cidade: string
+  complemento: string
+  estado: string
+  logradouro: string
+  numero: string
 }
 
 

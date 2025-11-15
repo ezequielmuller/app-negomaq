@@ -1,12 +1,12 @@
 import { tratarErro } from 'src/utils/tratarErro';
 import api from './api';
 
-const VITE_ADMIN_TOKEN = import.meta.env.VITE_ADMIN_TOKEN;
+//const VITE_ADMIN_TOKEN = import.meta.env.VITE_ADMIN_TOKEN;
 
-export const CriarEndereco = async (data: object, usuarioId: string) => {
+export const CriarEndereco = async (data: object, usuarioId: string, token: string) => {
   try {
     const response = await api.post(`/usuarios/${usuarioId}/enderecos`, data, {
-      headers: { Authorization: VITE_ADMIN_TOKEN }
+      headers: { Authorization: token }
     });
     return response.data;
   } catch (err) {
@@ -14,10 +14,10 @@ export const CriarEndereco = async (data: object, usuarioId: string) => {
   }
 };
 
-export const EditarEndereco = async (enderecoId: string, data: object) => {
+export const EditarEndereco = async (enderecoId: string, data: object, token: string) => {
   try {
     const response = await api.put(`/enderecos/${enderecoId}`, data, {
-      headers: { Authorization: VITE_ADMIN_TOKEN }
+      headers: { Authorization: token }
     });
     return response.data;
   } catch (err) {
@@ -25,10 +25,10 @@ export const EditarEndereco = async (enderecoId: string, data: object) => {
   }
 };
 
-export const DeletarEndereco = async (enderecoId: string) => {
+export const DeletarEndereco = async (enderecoId: string, token: string) => {
   try {
     const response = await api.delete(`/enderecos/${enderecoId}`, {
-      headers: { Authorization: VITE_ADMIN_TOKEN }
+      headers: { Authorization: token }
     });
     return response.data;
   } catch (err) {
@@ -36,10 +36,10 @@ export const DeletarEndereco = async (enderecoId: string) => {
   }
 };
 
-export const ListarEnderecos = async (usuarioId: string) => {
+export const ListarEnderecos = async (usuarioId: string, token: string) => {
   try {
     const response = await api.get(`/usuarios/${usuarioId}/enderecos`, {
-      headers: { Authorization: VITE_ADMIN_TOKEN }
+      headers: { Authorization: token }
     });
     return response.data;
   } catch (err) {
@@ -47,10 +47,10 @@ export const ListarEnderecos = async (usuarioId: string) => {
   }
 };
 
-export const ObterEndereco = async (enderecoId: string) => {
+export const ObterEndereco = async (enderecoId: string, token: string) => {
   try {
     const response = await api.get(`/enderecos/${enderecoId}`, {
-      headers: { Authorization: VITE_ADMIN_TOKEN }
+      headers: { Authorization: token }
     });
     return response.data;
   } catch (err) {
