@@ -89,15 +89,16 @@ const entrarSistema = async () => {
     const data = {
       email: email.value,
       senha: senha.value
-    }
-    const result = await LogarUsuario(data)
-    if (!result) return
-    const tokenUsuario = result.token
-    const user = result.usuario
-    const usuarioCompleto = { ...user, token: tokenUsuario }
-    saveUser(usuarioCompleto)
-    cart.limparCarrinho()
-    await router.push('/home')
+    };
+    const result = await LogarUsuario(data);
+    if (!result) return;
+
+    const tokenUsuario = result.token;
+    const user = result.usuario;
+    const usuarioCompleto = { ...user, token: tokenUsuario };
+    saveUser(usuarioCompleto);
+    cart.limparCarrinho();
+    await router.push('/home');
   } finally {
     $q.loading.hide()
   }

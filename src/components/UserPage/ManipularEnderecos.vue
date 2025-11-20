@@ -76,54 +76,26 @@
       <q-card-section class="scroll" style="flex: 1; overflow-y: auto;">
         <div class="row q-col-gutter-sm">
           <div class="col-12">
-            <q-input dense flat outlined v-model="form.cep" label="CEP" mask="#####-###">
-              <template v-slot:prepend>
-                <q-icon name="pin_drop" />
-              </template>
-            </q-input>
+            <q-input dense flat outlined v-model="form.cep" label="CEP" mask="#####-###" />
           </div>
           <div class="col-12">
-            <q-input dense flat outlined v-model="form.logradouro" label="Logradouro">
-              <template v-slot:prepend>
-                <q-icon name="signpost" />
-              </template>
-            </q-input>
+            <q-input dense flat outlined v-model="form.logradouro" label="Logradouro" />
           </div>
           <div class="col-5">
-            <q-input dense flat outlined v-model="form.numero" label="Número">
-              <template v-slot:prepend>
-                <q-icon name="tag" />
-              </template>
-            </q-input>
+            <q-input dense flat outlined v-model="form.numero" label="Número" />
           </div>
           <div class="col-7">
-            <q-input dense flat outlined v-model="form.complemento" label="Complemento">
-              <template v-slot:prepend>
-                <q-icon name="home_work" />
-              </template>
-            </q-input>
+            <q-input dense flat outlined v-model="form.complemento" label="Complemento" />
           </div>
           <div class="col-12">
-            <q-input dense flat outlined v-model="form.bairro" label="Bairro">
-              <template v-slot:prepend>
-                <q-icon name="apartment" />
-              </template>
-            </q-input>
+            <q-input dense flat outlined v-model="form.bairro" label="Bairro" />
           </div>
           <div class="col-8">
-            <q-input dense flat outlined v-model="form.cidade" label="Cidade">
-              <template v-slot:prepend>
-                <q-icon name="location_city" />
-              </template>
-            </q-input>
+            <q-input dense flat outlined v-model="form.cidade" label="Cidade" />
           </div>
           <div class="col-4">
             <q-select dense flat outlined v-model="form.estado" :options="estadosBrasileiros" option-label="label"
-              option-value="value" emit-value map-options label="UF">
-              <template v-slot:prepend>
-                <q-icon name="map" />
-              </template>
-            </q-select>
+              option-value="value" emit-value map-options label="UF" />
           </div>
         </div>
       </q-card-section>
@@ -251,17 +223,9 @@
 import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { CriarEndereco, EditarEndereco, DeletarEndereco } from 'src/services/enderecoServices'
-// Interfaces ---
-interface Endereco {
-  bairro: string;
-  cep: string;
-  cidade: string;
-  complemento: string;
-  estado: string;
-  id?: string;
-  logradouro: string;
-  numero: string;
-}
+import type { Endereco, Usuario } from 'src/types/types';
+import { useAuth } from 'src/composables/useAuth';
+
 // Props ---
 const props = defineProps<{
   dialogListaEnderecos: boolean
@@ -269,7 +233,10 @@ const props = defineProps<{
   usuarioId: string
 }>()
 const emit = defineEmits(['update:dialogListaEnderecos', 'atualizarLista'])
-// Variaveis ---
+// Utils ---
+const { getUser } = useAuth()
+const user = getUser() as Usuario
+// Refs ---
 const dialogListaEnderecos = ref(props.dialogListaEnderecos)
 const dialogGravar = ref(false)
 const dialogEditar = ref(false)
@@ -442,7 +409,7 @@ const gravarEndereco = async () => {
       logradouro: form.value.logradouro.trim(),
       numero: form.value.numero.trim()
     }
-    await CriarEndereco(data, props.usuarioId)
+    await CriarEndereco(data, props.usuarioId, user.token)
     $q.notify({
       type: 'positive',
       message: 'Endereço cadastrado com sucesso!',
@@ -486,7 +453,7 @@ const editarEndereco = async () => {
       logradouro: form.value.logradouro.trim(),
       numero: form.value.numero.trim()
     }
-    await EditarEndereco(enderecoId.value, data)
+    await EditarEndereco(enderecoId.value, data, user.token)
     $q.notify({
       type: 'positive',
       message: 'Endereço atualizado com sucesso!',
@@ -520,7 +487,7 @@ const excluirEndereco = async () => {
   }
   try {
     excluindo.value = true
-    await DeletarEndereco(enderecoId.value)
+    await DeletarEndereco(enderecoId.value, user.token)
     $q.notify({
       type: 'positive',
       message: 'Endereço excluído com sucesso!',

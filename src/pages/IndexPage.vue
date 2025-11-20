@@ -10,12 +10,11 @@
         </q-carousel>
       </div>
     </div>
-    <q-separator style="height: 3px;" class="q-my-sm" />
-    <div class="text-h6 text-bold text-center" style="font-size: 24px;">
+    <q-separator style="height: 3px;" spaced />
+    <div class="text-h6 text-bold text-center q-mt-sm" style="font-size: 24px;">
       Consulte nosso <span class="text-primary">Catálogo de Produtos</span> e garanta já os melhores!
     </div>
-    <div class="col-12 text-bold q-mt-sm row justify-center"
-      style="font-size: 22px; margin-bottom: 0px; margin-top: 24px">
+    <div class="col-12 text-bold q-mt-md row justify-center" style="font-size: 22px; margin-bottom: 0px;">
       Categorias</div>
     <div class="row justify-center q-col-gutter-md categorias-container" style="margin-top: 0;">
       <div class="col-xs-12 col-sm-6 col-md-3" v-for="cat in categorias" :key="cat.nome" style="margin-top: 0;">

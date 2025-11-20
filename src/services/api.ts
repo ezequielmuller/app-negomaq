@@ -5,9 +5,12 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = import.meta.env.VITE_ADMIN_TOKEN;
-  config.headers.Authorization = `Bearer ${token}`;
+  if (!config.headers.Authorization) {
+    const adminToken = import.meta.env.VITE_ADMIN_TOKEN;
+    config.headers.Authorization = `Bearer ${adminToken}`;
+  }
   return config;
 });
+
 
 export default api;

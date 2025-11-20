@@ -1,6 +1,6 @@
 <template>
   <q-dialog v-model="dialogGravar" persistent>
-    <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
+    <q-card style="width: 400px; max-height: 70vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-primary text-white">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="add" size="md" />
@@ -22,6 +22,18 @@
           <div class="col-6">
             <q-select dense flat outlined v-model="form.categoria" :options="categorias" option-label="label"
               option-value="value" emit-value map-options label="Categoria" />
+          </div>
+          <div class="col-12">
+            <q-input dense flat outlined v-model="form.peso" label="Peso" type="number" />
+          </div>
+          <div class="col-12">
+            <q-input dense flat outlined v-model="form.largura" label="Largura" type="number" />
+          </div>
+          <div class="col-12">
+            <q-input dense flat outlined v-model="form.altura" label="Altura" type="number" />
+          </div>
+          <div class="col-12">
+            <q-input dense flat outlined v-model="form.comprimento" label="Comprimento" type="number" />
           </div>
           <div class="col-12">
             <q-file v-model="form.imgArquivos" label="Imagem" multiple accept="image/*" outlined flat dense>
@@ -67,6 +79,18 @@
               option-value="value" emit-value map-options label="Categoria" />
           </div>
           <div class="col-12">
+            <q-input dense flat outlined v-model="form.peso" label="Peso" type="number" />
+          </div>
+          <div class="col-12">
+            <q-input dense flat outlined v-model="form.largura" label="Largura" type="number" />
+          </div>
+          <div class="col-12">
+            <q-input dense flat outlined v-model="form.altura" label="Altura" type="number" />
+          </div>
+          <div class="col-12">
+            <q-input dense flat outlined v-model="form.comprimento" label="Comprimento" type="number" />
+          </div>
+          <div class="col-12">
             <q-file v-model="form.imgArquivos" label="Nova imagem (opcional)" multiple accept="image/*" outlined flat
               dense>
               <template v-slot:prepend>
@@ -74,9 +98,9 @@
               </template>
             </q-file>
           </div>
-          <div class="col-12" v-if="imgUrl">
-            <q-img :src="imgUrl" style="max-width: 100%; height: auto;" />
-          </div>
+        </div>
+        <div class="col-12" v-if="imgUrl">
+          <q-img :src="imgUrl" style="max-width: 100%; height: auto;" />
         </div>
       </q-card-section>
       <q-separator style="height: 3px;" class="bg-amber-9 q-mr-md q-ml-md" />
@@ -164,10 +188,9 @@ import { onMounted, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { criarProduto, atualizarProduto, deletarProduto, atualizarEstoque } from 'src/services/produtoServices'
 import type { Produto } from 'src/types/types'
-
 // Utils ---
-const $q = useQuasar()
 type ArquivosImagem = File[] | null
+const $q = useQuasar()
 const props = defineProps<{
   dialogGravar: boolean
   dialogEditar: boolean
@@ -176,15 +199,8 @@ const props = defineProps<{
   dialogPromocao: boolean
   produto?: Produto | null
 }>()
-const emit = defineEmits([
-  'update:dialogGravar',
-  'update:dialogEditar',
-  'update:dialogExcluir',
-  'update:dialogEstoque',
-  'update:dialogPromocao',
-  'atualizarLista'
-])
-// Refs ---
+const emit = defineEmits(['update:dialogGravar', 'update:dialogEditar', 'update:dialogExcluir', 'update:dialogEstoque', 'update:dialogPromocao', 'atualizarLista'])
+// Refs ----
 const dialogGravar = ref(props.dialogGravar)
 const dialogEditar = ref(props.dialogEditar)
 const dialogExcluir = ref(props.dialogExcluir)
@@ -198,6 +214,10 @@ const form = ref<{
   preco: number
   categoria: string
   estoque: number
+  peso: number
+  largura: number
+  altura: number
+  comprimento: number
   imgArquivos: ArquivosImagem
 }>({
   nome: '',
@@ -205,6 +225,10 @@ const form = ref<{
   preco: 0,
   categoria: '',
   estoque: 0,
+  peso: 0,
+  largura: 0,
+  altura: 0,
+  comprimento: 0,
   imgArquivos: null
 })
 const categorias = [
@@ -223,12 +247,16 @@ watch(() => props.produto, (novo) => {
       preco: novo.preco,
       categoria: novo.categoria,
       estoque: novo.estoque ?? 0,
+      peso: novo.peso,
+      largura: novo.largura,
+      altura: novo.altura,
+      comprimento: novo.comprimento,
       imgArquivos: null
     }
     produtoId.value = novo.id || null
     imgUrl.value = novo.img || null
   } else {
-    form.value = { nome: '', descricao: '', preco: 0, categoria: '', estoque: 0, imgArquivos: null }
+    form.value = { nome: '', descricao: '', preco: 0, categoria: '', estoque: 0, peso: 0, largura: 0, altura: 0, comprimento: 0, imgArquivos: null }
     produtoId.value = null
     imgUrl.value = null
   }
@@ -250,17 +278,10 @@ watch(() => props.dialogPromocao, val => { dialogPromocao.value = val })
 watch(dialogPromocao, val => { emit('update:dialogPromocao', val) })
 
 // Methods ---
-const formatarPreco = (valor: string | number): number => {
-  if (typeof valor === 'string') {
-    // remove pontos de milhar e troca vírgula por ponto
-    const convertido = parseFloat(valor.replace(/\./g, '').replace(',', '.'))
-    return Number(convertido.toFixed(2))
-  }
-  return Number(valor.toFixed(2))
-}
-
 const gravarProduto = async () => {
-  if (!form.value.nome || !form.value.descricao || !form.value.preco || !form.value.categoria) {
+  if (!form.value.nome || !form.value.descricao || !form.value.preco ||
+    !form.value.categoria || !form.value.peso || !form.value.largura ||
+    !form.value.altura || !form.value.comprimento) {
     return $q.notify({
       type: "warning",
       message: "Campos não preenchidos!",
@@ -275,10 +296,15 @@ const gravarProduto = async () => {
       descricao: form.value.descricao,
       preco: formatarPreco(form.value.preco),
       categoria: form.value.categoria,
-      estoque: Number(form.value.estoque)
+      estoque: Number(form.value.estoque),
+      peso: Number(form.value.peso),
+      largura: Math.round(form.value.largura),
+      altura: Math.round(form.value.altura),
+      comprimento: Math.round(form.value.comprimento),
     }
     const result = await criarProduto(data)
     if (!result) return
+
     emit("atualizarLista")
     dialogGravar.value = false
     $q.notify({
@@ -297,7 +323,11 @@ const editarProduto = async () => {
     !form.value.nome ||
     !form.value.descricao ||
     !form.value.preco ||
-    !form.value.categoria
+    !form.value.categoria ||
+    !form.value.peso ||
+    !form.value.largura ||
+    !form.value.altura ||
+    !form.value.comprimento
   ) {
     return $q.notify({
       type: "warning",
@@ -313,9 +343,13 @@ const editarProduto = async () => {
       descricao: form.value.descricao,
       preco: formatarPreco(form.value.preco),
       categoria: form.value.categoria,
-      estoque: Number(form.value.estoque)
-    }
-    const result = await atualizarProduto(produtoId.value, data)
+      estoque: Number(form.value.estoque),
+      peso: Number(form.value.peso),
+      largura: Math.round(form.value.largura),
+      altura: Math.round(form.value.altura),
+      comprimento: Math.round(form.value.comprimento),
+    };
+    const result = await atualizarProduto(produtoId.value, data);
     if (!result) return
     emit("atualizarLista")
     dialogEditar.value = false
@@ -324,7 +358,7 @@ const editarProduto = async () => {
       message: "Produto Editado com Sucesso!",
       position: "bottom",
       timeout: 1500
-    })
+    });
   } finally {
     $q.loading.hide()
   }
@@ -379,8 +413,18 @@ const atualizarEstoqueProduto = async () => {
       timeout: 1500
     })
   } finally {
-    $q.loading.hide();
+    $q.loading.hide()
   }
+}
+
+// Metodos uteis ---
+const formatarPreco = (valor: string | number): number => {
+  if (typeof valor === 'string') {
+    // remove pontos de milhar e troca vírgula por ponto
+    const convertido = parseFloat(valor.replace(/\./g, '').replace(',', '.'))
+    return Number(convertido.toFixed(2))
+  }
+  return Number(valor.toFixed(2))
 }
 
 // Mounted

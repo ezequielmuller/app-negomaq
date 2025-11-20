@@ -36,8 +36,8 @@
     <q-tabs v-model="tab" inline-label outside-arrows mobile-arrows class="bg-grey-4 text-primary shadow-2"
       style="border-radius: 16px;">
       <q-tab name="produtos" icon="inventory_2" label="Produtos" v-if="user?.is_admin" />
-      <q-tab name="pedidos" icon="sell" label="Pedidos" v-if="!user?.is_admin" />
-      <q-tab name="vendas" icon="payments" label="Vendas" v-if="!user?.is_admin" />
+      <q-tab name="pedidos" icon="sell" label="Pedidos" v-if="user?.is_admin" />
+      <q-tab name="vendas" icon="payments" label="Vendas" v-if="user?.is_admin" />
       <q-tab name="minhasCompras" icon="shopping_cart" label="Minhas Compras" />
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
@@ -204,15 +204,22 @@ const editarUsuario = async () => {
       message: 'Campos vazios, verifique!',
       position: 'bottom',
       timeout: 2500
-    });
-    return;
+    })
+    return
   }
   if (!validarEmail(email.value)) return;
   try {
     $q.loading.show({ message: 'Editando perfil...' })
-    const data: UsuarioEdicao = { novo_nome: nome.value.trim(), novo_sobrenome: sobrenome.value.trim(), novo_email: email.value.trim(), novo_telefone: telefone.value.trim(), novo_cpf: cpf.value, }
-    await EditarPerfil(data, user.token)
-    // atualizar localStorage
+    const data: UsuarioEdicao = {
+      email: user.email,
+      novo_nome: nome.value.trim(),
+      novo_sobrenome: sobrenome.value.trim(),
+      novo_email: email.value.trim(),
+      novo_telefone: telefone.value,
+      novo_cpf: cpf.value,
+    }
+    console.log(user.token)
+    const result = await EditarPerfil(data, user.token)
     const usuarioAtualizado = {
       ...user,
       nome: data.novo_nome || user.nome,
@@ -223,13 +230,31 @@ const editarUsuario = async () => {
     }
     removeUser()
     saveUser(usuarioAtualizado)
+    fecharDialogEditarUsuario()
+    if (!result) return
+    $q.loading.show({
+      message: 'Atualizando...',
+      spinnerSize: 140,
+    })
+
+    // pequeno delay só para mostrar o loading
+    setTimeout(() => {
+      window.location.reload()
+    }, 800)
     $q.notify({
       type: 'positive',
       message: 'Perfil atualizado com sucesso!',
       position: 'bottom',
       timeout: 2000
     })
-    fecharDialogEditarUsuario()
+  } catch (err) {
+    console.error('Erro ao atualizar perfil:', err)
+    $q.notify({
+      type: 'negative',
+      message: 'Não foi possivel editar o perfil!',
+      position: 'bottom',
+      timeout: 2500
+    })
   } finally {
     $q.loading.hide()
   }
@@ -248,7 +273,7 @@ const abrirDialogEnderecos = async () => {
 
 const buscarEnderecos = async () => {
   try {
-    const res = await ListarEnderecos(user.id)
+    const res = await ListarEnderecos(user.id, user.token)
     listaEnderecos.value = Array.isArray(res) ? res : []
   } catch (err) {
     console.error(err)
