@@ -1,13 +1,13 @@
 <template>
   <q-dialog v-model="dialogGravar" persistent>
     <q-card style="width: 400px; max-height: 70vh; border-radius: 20px;" class="column no-wrap">
-      <q-card-section class="bg-primary text-white">
+      <q-card-section class="bg-primary text-white" style="flex-shrink: 0;">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="add" size="md" />
           <div class="text-h6">Adicionar Produto</div>
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section style="flex: 1; overflow-y: auto;">
         <div class="row q-col-gutter-sm">
           <div class="col-12">
             <q-input dense flat outlined v-model="form.nome" label="Nome do Produto" />
@@ -44,8 +44,8 @@
           </div>
         </div>
       </q-card-section>
-      <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
-      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
+      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-primary q-mr-md q-ml-md" />
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
         <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" class="hover-scale"
           style="border-radius: 20px;" />
         <q-btn label="Gravar" color="primary" @click="gravarProduto" icon="save" class="hover-scale"
@@ -56,13 +56,13 @@
 
   <q-dialog v-model="dialogEditar" persistent>
     <q-card style="width: 400px; max-height: 70vh; border-radius: 20px;" class="column no-wrap">
-      <q-card-section class="bg-amber-9 text-white" style="position: sticky; top: 0; z-index: 1;">
+      <q-card-section class="bg-amber-9 text-white" style="flex-shrink: 0;">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="edit_square" size="md" />
           <div class="text-h6">Alterar Produto</div>
         </div>
       </q-card-section>
-      <q-card-section class="scroll" style="flex: 1; overflow-y: auto;">
+      <q-card-section style="flex: 1; overflow-y: auto;">
         <div class="row q-col-gutter-sm">
           <div class="col-12">
             <q-input dense flat outlined v-model="form.nome" label="Nome do Produto" />
@@ -98,13 +98,13 @@
               </template>
             </q-file>
           </div>
-        </div>
-        <div class="col-12" v-if="imgUrl">
-          <q-img :src="imgUrl" style="max-width: 100%; height: auto;" />
+          <div class="col-12" v-if="imgUrl">
+            <q-img :src="imgUrl" style="max-width: 100%; height: auto;" />
+          </div>
         </div>
       </q-card-section>
-      <q-separator style="height: 3px;" class="bg-amber-9 q-mr-md q-ml-md" />
-      <q-card-actions align="right" class="q-mr-sm q-mb-xs bg-white" style="position: sticky; bottom: 0; z-index: 1;">
+      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-amber-9 q-mr-md q-ml-md" />
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
         <q-btn outline label="Fechar" color="amber-9" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
         <q-btn label="Salvar" color="amber-9" @click="editarProduto" icon="save" style="border-radius: 20px;"
@@ -115,20 +115,20 @@
 
   <q-dialog v-model="dialogExcluir" persistent>
     <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
-      <q-card-section class="bg-primary text-white">
+      <q-card-section class="bg-primary text-white" style="flex-shrink: 0;">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="warning" size="md" />
           <div class="text-h6 text-bold"> - ATENÇÃO </div>
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section style="flex: 1;">
         <div style="font-size: 16px;" class="text-center">
           Você deseja excluir o produto "
           <strong>{{ produto?.nome }}</strong>"?
         </div>
       </q-card-section>
-      <q-separator style="height: 3px;" class="bg-primary q-mr-md q-ml-md" />
-      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
+      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-primary q-mr-md q-ml-md" />
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
         <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
         <q-btn label="Excluir" color="primary" @click="excluirProduto" icon="delete" style="border-radius: 20px;"
@@ -139,23 +139,22 @@
 
   <q-dialog v-model="dialogEstoque" persistent>
     <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
-      <q-card-section class="bg-blue-9 text-white">
+      <q-card-section class="bg-blue-9 text-white" style="flex-shrink: 0;">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="shelves" size="md" />
           <div class="text-h6 text-bold">Atualizar Estoque</div>
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section style="flex: 1;">
         <div style="font-size: 16px;" class="row justify-center text-center q-mb-md">
           Escreva a &nbsp;<strong>QUANTIDADE ATUAL</strong>&nbsp; presente no estoque
         </div>
-        <!-- <q-separator class="q-my-sm" /> -->
         <div class="col-12">
           <q-input v-model="form.estoque" dense outlined type="number" label="Quantidade Atual" />
         </div>
       </q-card-section>
-      <q-separator style="height: 3px;" class="bg-blue-9 q-mr-md q-ml-md" />
-      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
+      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-blue-9 q-mr-md q-ml-md" />
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
         <q-btn outline label="Fechar" color="blue-9" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
         <q-btn label="Salvar" color="blue-9" @click="atualizarEstoqueProduto" icon="save" style="border-radius: 20px;"
@@ -166,15 +165,15 @@
 
   <q-dialog v-model="dialogPromocao" persistent>
     <q-card style="width: 400px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
-      <q-card-section class="bg-green text-white">
+      <q-card-section class="bg-green text-white" style="flex-shrink: 0;">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="sell" size="md" />
           <div class="text-h6 text-bold">Promoção</div>
         </div>
       </q-card-section>
-      <q-card-section></q-card-section>
-      <q-separator style="height: 3px;" class="bg-green q-mr-md q-ml-md" />
-      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
+      <q-card-section style="flex: 1;"></q-card-section>
+      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-green q-mr-md q-ml-md" />
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
         <q-btn outline label="Fechar" color="green" v-close-popup icon="close" style="border-radius: 20px;"
           class="hover-scale" />
         <q-btn label="Salvar" color="green" v-close-popup icon="save" style="border-radius: 20px;"
