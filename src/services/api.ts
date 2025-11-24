@@ -5,12 +5,16 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  if (!config.headers.Authorization) {
-    const adminToken = import.meta.env.VITE_ADMIN_TOKEN;
-    config.headers.Authorization = `Bearer ${adminToken}`;
+  // Se já existe um token no header vindo da requisição, usa ele
+  if (config.headers && config.headers.Authorization) {
+    return config;
   }
+
+  // Caso NÃO exista token → usa o token admin
+  const adminToken = import.meta.env.VITE_ADMIN_TOKEN;
+  config.headers.Authorization = `Bearer ${adminToken}`;
+
   return config;
 });
-
 
 export default api;

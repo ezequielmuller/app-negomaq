@@ -23,8 +23,8 @@
           {{ user?.cpf || 'Sem CPF cadastrado' }}
         </div>
         <div class="row justify-center q-mt-md q-gutter-sm flex-wrap">
-          <q-btn color="amber-9" icon="home" label="Meus endereços" @click="abrirDialogEnderecos"
-            style="border-radius: 20px;" class="hover-scale" :loading="carregandoEnderecos" />
+          <q-btn color="teal" icon="home" label="Meus endereços" @click="abrirDialogEnderecos"
+            style="border-radius: 20px;" class="hover-scale" />
           <q-btn color="primary" icon="edit" label="Editar Perfil" @click="abrirDialogEditarUsuario"
             style="border-radius: 20px;" class="hover-scale" />
           <q-btn outline color="primary" icon="logout" label="Sair" @click="confirmarSaida" style="border-radius: 20px;"
