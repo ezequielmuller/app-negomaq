@@ -39,12 +39,24 @@
           <q-td key="estoque" :props="props">
             {{ props.row.estoque }}
           </q-td>
+          <q-td key="peso" :props="props">
+            {{ props.row.peso }}
+          </q-td>
+          <q-td key="comprimento" :props="props">
+            {{ props.row.comprimento }}
+          </q-td>
+          <q-td key="altura" :props="props">
+            {{ props.row.altura }}
+          </q-td>
+          <q-td key="largura" :props="props">
+            {{ props.row.largura }}
+          </q-td>
           <q-td key="actions" :props="props">
-            <q-btn flat round dense icon="sell" color="green" @click="abrirPromocaoProduto(props.row)">
+            <!-- <q-btn flat round dense icon="sell" color="green" @click="abrirPromocaoProduto(props.row)">
               <q-tooltip>
                 Adicionar Promoção
               </q-tooltip>
-            </q-btn>
+            </q-btn> -->
             <q-btn flat round dense icon="shelves" color="blue-9" @click="abrirEstoqueProduto(props.row)">
               <q-tooltip>
                 Atualizar Estoque
@@ -102,6 +114,10 @@ const columns: QTableProps['columns'] = [
   { name: 'preco', label: 'Preço', field: 'preco', align: 'center' },
   { name: 'categoria', label: 'Categoria', field: 'categoria', align: 'center' },
   { name: 'estoque', label: 'Estoque', field: 'estoque', align: 'center' },
+  { name: 'peso', label: 'Peso', field: 'peso', align: 'center' },
+  { name: 'comprimento', label: 'Comprimento', field: 'comprimento', align: 'center' },
+  { name: 'altura', label: 'Altura', field: 'altura', align: 'center' },
+  { name: 'largura', label: 'Largura', field: 'largura', align: 'center' },
   { name: 'actions', label: 'Ações', field: 'actions', align: 'center' }
 ]
 
@@ -131,10 +147,10 @@ const abrirEstoqueProduto = (produto: Produto) => {
   produtoSelecionado.value = { ...produto }
   dialogEstoque.value = true
 }
-const abrirPromocaoProduto = (produto: Produto) => {
-  produtoSelecionado.value = { ...produto }
-  dialogPromocao.value = true
-}
+// const abrirPromocaoProduto = (produto: Produto) => {
+//   produtoSelecionado.value = { ...produto }
+//   dialogPromocao.value = true
+// }
 
 const listarProdutosTela = async () => {
   try {

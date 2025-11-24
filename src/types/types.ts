@@ -13,6 +13,7 @@ export interface Produto {
   img?: string
   qtd?: number
 }
+
 export type ProdutoPayload = Omit<Produto, 'id'>
 
 // Usuários ---

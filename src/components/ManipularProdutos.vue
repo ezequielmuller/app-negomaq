@@ -44,11 +44,10 @@
           </div>
         </div>
       </q-card-section>
-      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-primary q-mr-md q-ml-md" />
+      <q-separator style="height: 2px; flex-shrink: 0;" class="bg-primary q-mr-md q-ml-md" />
       <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
-        <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" class="hover-scale"
-          style="border-radius: 20px;" />
-        <q-btn label="Gravar" color="primary" @click="gravarProduto" icon="save" class="hover-scale"
+        <q-btn flat label="Cancelar" color="grey-7" v-close-popup class="hover-scale" style="border-radius: 20px;" />
+        <q-btn label="Salvar" color="primary" @click="gravarProduto" icon="save" class="hover-scale"
           style="border-radius: 20px;" />
       </q-card-actions>
     </q-card>
@@ -103,10 +102,9 @@
           </div>
         </div>
       </q-card-section>
-      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-amber-9 q-mr-md q-ml-md" />
+      <q-separator style="height: 2px; flex-shrink: 0;" class="bg-amber-9 q-mr-md q-ml-md" />
       <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
-        <q-btn outline label="Fechar" color="amber-9" v-close-popup icon="close" style="border-radius: 20px;"
-          class="hover-scale" />
+        <q-btn flat label="Cancelar" color="grey-7" v-close-popup style="border-radius: 20px;" class="hover-scale" />
         <q-btn label="Salvar" color="amber-9" @click="editarProduto" icon="save" style="border-radius: 20px;"
           class="hover-scale" />
       </q-card-actions>
@@ -129,8 +127,7 @@
       </q-card-section>
       <q-separator style="height: 3px; flex-shrink: 0;" class="bg-primary q-mr-md q-ml-md" />
       <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
-        <q-btn outline label="Fechar" color="primary" v-close-popup icon="close" style="border-radius: 20px;"
-          class="hover-scale" />
+        <q-btn flat label="Cancelar" color="grey-7" v-close-popup style="border-radius: 20px;" class="hover-scale" />
         <q-btn label="Excluir" color="primary" @click="excluirProduto" icon="delete" style="border-radius: 20px;"
           class="hover-scale" />
       </q-card-actions>
@@ -153,10 +150,9 @@
           <q-input v-model="form.estoque" dense outlined type="number" label="Quantidade Atual" />
         </div>
       </q-card-section>
-      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-blue-9 q-mr-md q-ml-md" />
+      <q-separator style="height: 2px; flex-shrink: 0;" class="bg-blue-9 q-mr-md q-ml-md" />
       <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
-        <q-btn outline label="Fechar" color="blue-9" v-close-popup icon="close" style="border-radius: 20px;"
-          class="hover-scale" />
+        <q-btn flat label="Cancelar" color="grey-7" v-close-popup style="border-radius: 20px;" class="hover-scale" />
         <q-btn label="Salvar" color="blue-9" @click="atualizarEstoqueProduto" icon="save" style="border-radius: 20px;"
           class="hover-scale" />
       </q-card-actions>
@@ -172,10 +168,9 @@
         </div>
       </q-card-section>
       <q-card-section style="flex: 1;"></q-card-section>
-      <q-separator style="height: 3px; flex-shrink: 0;" class="bg-green q-mr-md q-ml-md" />
+      <q-separator style="height: 2px; flex-shrink: 0;" class="bg-green q-mr-md q-ml-md" />
       <q-card-actions align="right" class="q-mr-sm q-mb-xs" style="flex-shrink: 0;">
-        <q-btn outline label="Fechar" color="green" v-close-popup icon="close" style="border-radius: 20px;"
-          class="hover-scale" />
+        <q-btn flat label="Cancelar" color="grey-7" v-close-popup style="border-radius: 20px;" class="hover-scale" />
         <q-btn label="Salvar" color="green" v-close-popup icon="save" style="border-radius: 20px;"
           class="hover-scale" />
       </q-card-actions>
@@ -210,24 +205,24 @@ const imgUrl = ref<string | null>(null)
 const form = ref<{
   nome: string
   descricao: string
-  preco: number
+  preco: number | null
   categoria: string
-  estoque: number
-  peso: number
-  largura: number
-  altura: number
-  comprimento: number
+  estoque: number | null
+  peso: number | null
+  largura: number | null
+  altura: number | null
+  comprimento: number | null
   imgArquivos: ArquivosImagem
 }>({
   nome: '',
   descricao: '',
-  preco: 0,
+  preco: null,
   categoria: '',
-  estoque: 0,
-  peso: 0,
-  largura: 0,
-  altura: 0,
-  comprimento: 0,
+  estoque: null,
+  peso: null,
+  largura: null,
+  altura: null,
+  comprimento: null,
   imgArquivos: null
 })
 const categorias = [
@@ -255,7 +250,18 @@ watch(() => props.produto, (novo) => {
     produtoId.value = novo.id || null
     imgUrl.value = novo.img || null
   } else {
-    form.value = { nome: '', descricao: '', preco: 0, categoria: '', estoque: 0, peso: 0, largura: 0, altura: 0, comprimento: 0, imgArquivos: null }
+    form.value = {
+      nome: '',
+      descricao: '',
+      preco: null,
+      categoria: '',
+      estoque: null,
+      peso: null,
+      largura: null,
+      altura: null,
+      comprimento: null,
+      imgArquivos: null
+    }
     produtoId.value = null
     imgUrl.value = null
   }
@@ -301,7 +307,8 @@ const gravarProduto = async () => {
       altura: Math.round(form.value.altura),
       comprimento: Math.round(form.value.comprimento),
     }
-    const result = await criarProduto(data)
+
+    const result = await criarProduto(data, form.value.imgArquivos || undefined)
     if (!result) return
 
     emit("atualizarLista")
