@@ -1,4 +1,5 @@
 <template>
+  <!-- Dialog Lista de Endereços -->
   <q-dialog v-model="dialogListaEnderecos" persistent>
     <q-card style="width: 650px; max-height: 75vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-teal text-white" style="position: sticky; top: 0; z-index: 1;">
@@ -60,6 +61,7 @@
     </q-card>
   </q-dialog>
 
+  <!-- Dialog Gravar -->
   <q-dialog v-model="dialogGravar" persistent>
     <q-card style="width: 550px; max-height: 75vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-teal text-white">
@@ -104,6 +106,7 @@
     </q-card>
   </q-dialog>
 
+  <!-- Dialog Editar -->
   <q-dialog v-model="dialogEditar" persistent>
     <q-card style="width: 550px; max-height: 75vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-amber-9 text-white" style="position: sticky; top: 0; z-index: 1;">
@@ -148,6 +151,7 @@
     </q-card>
   </q-dialog>
 
+  <!-- Dialog Excluir -->
   <q-dialog v-model="dialogExcluir" persistent>
     <q-card style="width: 450px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-negative text-white">
@@ -181,6 +185,7 @@
     </q-card>
   </q-dialog>
 </template>
+
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
@@ -194,15 +199,20 @@ const props = defineProps<{
   enderecos?: Endereco[]
   usuarioId: string
 }>()
+
 const emit = defineEmits(['update:dialogListaEnderecos', 'atualizarLista'])
+
 // Utils ---
 const { getUser } = useAuth()
 const user = getUser() as Usuario
+const $q = useQuasar()
+
 // Refs ---
 const dialogListaEnderecos = ref(props.dialogListaEnderecos)
 const dialogGravar = ref(false)
 const dialogEditar = ref(false)
 const dialogExcluir = ref(false)
+
 const form = ref<Endereco>({
   bairro: '',
   cep: '',
@@ -212,11 +222,11 @@ const form = ref<Endereco>({
   logradouro: '',
   numero: ''
 })
+
 const enderecos = ref<Endereco[]>(props.enderecos || [])
 const enderecoSelecionado = ref<Endereco | null>(null)
 const enderecoId = ref<string | null>(null)
 
-const $q = useQuasar()
 const estadosBrasileiros = [
   { label: 'AC', value: 'AC' },
   { label: 'AL', value: 'AL' },
@@ -246,6 +256,7 @@ const estadosBrasileiros = [
   { label: 'SE', value: 'SE' },
   { label: 'TO', value: 'TO' }
 ]
+
 // Watch dos endereços ---
 watch(() => props.enderecos, (novos) => {
   if (novos) {
@@ -254,9 +265,15 @@ watch(() => props.enderecos, (novos) => {
 }, { immediate: true, deep: true })
 
 // Watch do Dialog Principal ---
-watch(() => props.dialogListaEnderecos, val => { dialogListaEnderecos.value = val })
-watch(dialogListaEnderecos, val => { emit('update:dialogListaEnderecos', val) })
+watch(() => props.dialogListaEnderecos, val => {
+  dialogListaEnderecos.value = val
+})
 
+watch(dialogListaEnderecos, val => {
+  emit('update:dialogListaEnderecos', val)
+})
+
+// Methods ---
 const abrirDialogAdicionar = () => {
   limparFormulario()
   dialogGravar.value = true
@@ -299,7 +316,7 @@ const fecharDialogExcluir = () => {
   enderecoId.value = null
 }
 
-// crud enderecos
+// CRUD Endereços
 const gravarEndereco = async () => {
   if (!validarCampos()) return
   try {
@@ -323,7 +340,13 @@ const gravarEndereco = async () => {
     emit('atualizarLista')
     fecharDialogGravar()
   } catch (err) {
-    console.log("Erro ao gravar endereço:", err)
+    console.error("Erro ao gravar endereço:", err)
+    $q.notify({
+      type: 'negative',
+      message: 'Erro ao salvar endereço',
+      timeout: 2000,
+      position: 'bottom',
+    })
   } finally {
     $q.loading.hide()
   }
@@ -335,7 +358,7 @@ const editarEndereco = async () => {
       type: 'warning',
       message: 'Endereço não encontrado!',
       timeout: 2000,
-      position: 'top',
+      position: 'bottom',
     })
     return
   }
@@ -361,7 +384,13 @@ const editarEndereco = async () => {
     emit('atualizarLista')
     fecharDialogEditar()
   } catch (err) {
-    console.log("Erro ao editar endereço:", err)
+    console.error("Erro ao editar endereço:", err)
+    $q.notify({
+      type: 'negative',
+      message: 'Erro ao atualizar endereço',
+      timeout: 2000,
+      position: 'bottom',
+    })
   } finally {
     $q.loading.hide()
   }
@@ -389,12 +418,19 @@ const excluirEndereco = async () => {
     emit('atualizarLista')
     fecharDialogExcluir()
   } catch (err) {
-    console.log("Erro ao excluir endereço:", err)
+    console.error("Erro ao excluir endereço:", err)
+    $q.notify({
+      type: 'negative',
+      message: 'Erro ao excluir endereço',
+      timeout: 2000,
+      position: 'bottom',
+    })
   } finally {
     $q.loading.hide()
   }
 }
-// metodos uteis ---
+
+// Métodos Uteis ---
 const formatarCEP = (cep: string): string => {
   if (!cep) return ''
   const apenasNumeros = cep.replace(/\D/g, '')
@@ -452,6 +488,7 @@ const validarCampos = (): boolean => {
   return true
 }
 </script>
+
 <style scoped>
 .hover-scale {
   transition: transform 0.2s ease;
