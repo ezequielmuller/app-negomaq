@@ -84,7 +84,8 @@ A aplicação utiliza uma API REST para gerenciar as operações. Consulte a doc
 
 ## 🌍 Deploy na Vercel
 
-O projeto está configurado para deploy contínuo na Vercel. Qualquer push para a branch principal acionará um novo build automaticamente.
+O projeto está configurado para deploy contínuo na Vercel.
+**Qualquer push para a branch principal acionará um novo build automaticamente, então por segurança faça um commit em uma nova branch e aguarde o Pull Request**.
 
 **Status**: ✅ Hospedado e em funcionamento na Vercel
 
