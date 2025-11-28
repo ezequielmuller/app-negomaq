@@ -16,13 +16,15 @@
     </div>
     <div class="col-12 text-bold q-mt-md row justify-center" style="font-size: 22px; margin-bottom: 0px;">
       Categorias</div>
-    <div class="row justify-center q-col-gutter-md categorias-container" style="margin-top: 0;">
-      <div class="col-xs-12 col-sm-6 col-md-3" v-for="cat in categorias" :key="cat.nome" style="margin-top: 0;">
-        <q-card class="categoria-card flex column items-center cursor-pointer"
-          style="border-radius: 20px; margin-top: 0;" @click="$router.push(cat.rota)">
-          <div class=" icone"><q-icon :color="cat.cor" :name="cat.icone" size="80px" /></div>
-          <div class="text-grey text-bold text-h6">{{ cat.nome }}</div>
-        </q-card>
+    <div class="categorias-wrapper">
+      <div class="categorias-scroll">
+        <div v-for="cat in categorias" :key="cat.nome" class="categoria-item">
+          <q-card class="categoria-card flex column items-center cursor-pointer"
+            style="border-radius: 20px; margin-top: 0;" @click="$router.push(cat.rota)">
+            <div class="icone"><q-icon :color="cat.cor" :name="cat.icone" size="80px" /></div>
+            <div class="text-grey text-bold text-h6">{{ cat.nome }}</div>
+          </q-card>
+        </div>
       </div>
     </div>
     <div class="col-12 text-bold q-mb-lg q-mt-sm row justify-center" style="font-size: 22px; margin-bottom: 14px;">
@@ -259,5 +261,56 @@ onMounted(async () => {
 .categoria-card:hover .icone,
 .categoria-card:hover .text-h6 {
   color: var(--q-primary) !important;
+}
+
+.categorias-wrapper {
+  width: 100%;
+  overflow: hidden;
+  margin: 0 auto 24px auto;
+}
+
+/* Container com scroll horizontal no mobile */
+.categorias-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 12px 16px;
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling no iOS */
+}
+
+/* Remove scrollbar visual */
+.categorias-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Cada item da categoria */
+.categoria-item {
+  flex-shrink: 0;
+  width: 120px;
+  min-width: 120px;
+}
+
+/* Desktop: volta ao grid normal */
+@media (min-width: 769px) {
+  .categorias-wrapper {
+    max-width: 1200px;
+    margin: 0 auto 24px auto;
+    width: 100%;
+  }
+
+  .categorias-scroll {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    overflow-x: visible;
+    padding: 0;
+  }
+
+  .categoria-item {
+    width: 100%;
+    min-width: unset;
+  }
 }
 </style>
