@@ -6,7 +6,7 @@ Sistema de vendas de facas desenvolvido com **Quasar Framework**, **Vue 3**, **T
 
 O aplicativo está hospedado na **Vercel** e está disponível para acesso imediato. 
 
-📚 **Link para acesso: (https://negomaq.vercel.app/home)**
+📚 **Link para acesso: https://negomaq.vercel.app/home**
 
 Acesse a documentação completa da API no Postman:
 
