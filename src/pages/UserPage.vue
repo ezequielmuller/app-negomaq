@@ -38,17 +38,14 @@
       <q-tab name="produtos" icon="inventory_2" label="Produtos" v-if="user?.is_admin" />
       <q-tab name="pedidos" icon="sell" label="Pedidos" v-if="user?.is_admin" />
       <q-tab name="vendas" icon="payments" label="Vendas" v-if="user?.is_admin" />
-      <q-tab name="minhasCompras" icon="shopping_cart" label="Minhas Compras" />
+      <q-tab name="minhasCompras" icon="shopping_cart" label="Minhas Compras" v-if="user?.is_admin === false" />
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="produtos">
         <ListaProdutosAdmin />
       </q-tab-panel>
       <q-tab-panel name="pedidos">
-        <div class="text-center q-pa-xl text-grey-6">
-          <q-icon name="pending_actions" size="64px" />
-          <div class="text-h6 q-mt-md">Pedidos em desenvolvimento</div>
-        </div>
+        <ListarPedidosRealizadosAdmin />
       </q-tab-panel>
       <q-tab-panel name="vendas">
         <div class="text-center q-pa-xl text-grey-6">
@@ -57,10 +54,7 @@
         </div>
       </q-tab-panel>
       <q-tab-panel name="minhasCompras">
-        <div class="text-center q-pa-xl text-grey-6">
-          <q-icon name="shopping_bag" size="64px" />
-          <div class="text-h6 q-mt-md">Minhas Compras em desenvolvimento</div>
-        </div>
+        <MinhasCompras />
       </q-tab-panel>
     </q-tab-panels>
     <!-- Componente Endereços -->
@@ -140,6 +134,8 @@ import { ListarEnderecos } from 'src/services/enderecoServices'
 import ListaProdutosAdmin from 'src/components/UserPage/ListaProdutosAdmin.vue'
 import ManipularEnderecos from 'src/components/UserPage/ManipularEnderecos.vue'
 import type { Endereco, Usuario, UsuarioEdicao } from 'src/types/types'
+import MinhasCompras from 'src/components/UserPage/MinhasCompras.vue'
+import ListarPedidosRealizadosAdmin from 'src/components/UserPage/ListarPedidosRealizadosAdmin.vue'
 // Utils ---
 const $q = useQuasar()
 const router = useRouter()
@@ -158,7 +154,7 @@ const telefone = ref('')
 const salvandoPerfil = ref(false)
 const carregandoEnderecos = ref(false)
 const listaEnderecos = ref<Endereco[]>([])
-const tab = ref(user?.is_admin ? 'produtos' : 'minhasCompras')
+const tab = ref(user?.is_admin ? 'pedidos' : 'minhasCompras')
 
 // Computed ---
 const nomeCompleto = computed(() =>

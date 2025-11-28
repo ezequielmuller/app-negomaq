@@ -196,7 +196,7 @@
                       Cartão de crédito, débito, Pix e mais
                     </div>
                   </div>
-                  <q-icon name="chevron_right" size="md" color="grey-6" />
+                  <q-icon name="credit_score" size="md" color="grey-6" />
                 </div>
               </q-card>
 
@@ -226,7 +226,6 @@
     </div>
   </q-page>
 </template>
-
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useQuasar } from 'quasar'
@@ -244,8 +243,10 @@ import {
 } from 'src/services/pedidoServices'
 import type { Produto, Endereco, Usuario } from 'src/types/types'
 import { formatPrice } from 'src/config/formatPrice'
+import { useRouter } from 'vue-router'
 
 // Utils ---
+const router = useRouter()
 const storeCart = useCartStore()
 const { getUser } = useAuth()
 const user = getUser() as Usuario
@@ -431,9 +432,7 @@ const finalizarCompra = async () => {
       position: 'bottom'
     })
     storeCart.limparCarrinho()
-    setTimeout(() => {
-      window.location.href = linkPagamento
-    }, 1500)
+    await router.push('/home-user-page')
   } catch (err) {
     console.error('Erro ao processar pagamento:', err)
     $q.notify({
