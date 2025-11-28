@@ -1,0 +1,11 @@
+{
+  "buildCommand": "quasar build -m spa",
+  "outputDirectory": "dist/spa",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
