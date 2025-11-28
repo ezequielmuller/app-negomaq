@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center" padding>
-    <q-card style="width: 350px; height: 500px; border-radius: 20px;">
+    <q-card style="width: 350px; height: 540px; border-radius: 20px;">
       <q-card-section class="flex flex-center">
         <img src="icons/app-logo-sfundo.png" alt="Logo da Empresa" style="width: 150px; height: 150px" />
       </q-card-section>
@@ -20,7 +20,13 @@
               @click="ocultarSenha = !ocultarSenha" />
           </template>
         </q-input>
-        <q-toggle label="Lembrar senha" color="primary" v-model="lembrarSenha" class="q-mt-sm" />
+        <div class="flex justify-between row items-center">
+          <q-toggle label="Lembrar senha" color="primary" v-model="lembrarSenha" class="" />
+          <span class="text-primary text-bold cursor-pointer hover-scale" @click="trocarSenha()"
+            style="text-decoration: underline;">
+            Esqueceu a senha?
+          </span>
+        </div>
       </q-card-section>
       <q-card-section class="flex flex-center column" style="margin-bottom: 0;">
         <q-btn color="primary" label="ENTRAR" class="full-width hover-scale " style="border-radius: 20px"
@@ -32,8 +38,9 @@
             Cadastre-se!
           </span>
         </div>
-        <div class=" q-mt-sm flex items-center justify-center"
-          style="width: 100%; font-size: 14px; text-decoration: underline;">
+      </q-card-section>
+      <q-card-section>
+        <div class="flex items-end justify-center" style="width: 100%; font-size: 14px; text-decoration: underline;">
           <span class="text-primary text-bold q-ml-xs cursor-pointer hover-scale" @click="router.push('/home')">
             Continuar Desconectado!
           </span>
@@ -122,6 +129,24 @@ const irParaCadastro = async () => {
   }
 }
 
+const trocarSenha = async () => {
+  try {
+    $q.loading.show({ message: 'Carregando...' })
+    await router.push('/home-recuperar-senha')
+    $q.loading.hide()
+  } catch (error) {
+    console.log(error)
+    $q.notify({
+      type: 'negative',
+      message: 'Não foi possivel ir para a recuperação da senha!',
+      position: 'bottom',
+      timeout: 2500
+    })
+  } finally {
+    $q.loading.hide()
+  }
+}
+
 // Metodos uteis ---
 const validarEmail = (val: string) => {
   const email = (val || '').trim()
@@ -139,7 +164,9 @@ const validarEmail = (val: string) => {
   return true
 }
 
+const { removeUser } = useAuth()
 onMounted(() => {
+  removeUser()
   const salvarLogin = localStorage.getItem('lembrarEmail')
   const salvarSenha = localStorage.getItem('lembrarSenha')
   if (salvarLogin) {
