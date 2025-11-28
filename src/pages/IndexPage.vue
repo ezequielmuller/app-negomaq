@@ -240,7 +240,6 @@ onMounted(async () => {
   width: 100%;
 }
 
-.categoria-card,
 .produto-card {
   border: 1mm solid gainsboro;
   transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s, color 0.2s;
@@ -263,6 +262,7 @@ onMounted(async () => {
   color: var(--q-primary) !important;
 }
 
+/* Wrapper das categorias */
 .categorias-wrapper {
   width: 100%;
   overflow: hidden;
@@ -285,14 +285,43 @@ onMounted(async () => {
   display: none;
 }
 
-/* Cada item da categoria */
+/* Cada item da categoria - 2 POR LINHA */
 .categoria-item {
   flex-shrink: 0;
-  width: 120px;
-  min-width: 120px;
+  width: calc(50% - 6px);
+  min-width: calc(50% - 6px);
 }
 
-/* Desktop: volta ao grid normal */
+/* Card com altura fixa */
+.categoria-card {
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1mm solid gainsboro;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+}
+
+.categoria-card .icone {
+  flex-shrink: 0;
+}
+
+.categoria-card .text-h6 {
+  margin-top: auto;
+  text-align: center;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: 14px !important;
+}
+
+/* Desktop: 4 colunas */
 @media (min-width: 769px) {
   .categorias-wrapper {
     max-width: 1200px;
@@ -302,7 +331,7 @@ onMounted(async () => {
 
   .categorias-scroll {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     overflow-x: visible;
     padding: 0;
@@ -312,5 +341,16 @@ onMounted(async () => {
     width: 100%;
     min-width: unset;
   }
+
+  .categoria-card {
+    height: auto;
+    padding: 20px;
+  }
+
+  .categoria-card .text-h6 {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+  }
+
 }
 </style>
