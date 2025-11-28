@@ -157,6 +157,12 @@ const cadastrar = async () => {
     const result = await CadastrarUsuario(data);
 
     if (!result) return;
+    $q.notify({
+      type: "positive",
+      message: "Usuário cadastrado com sucesso!",
+      position: "bottom",
+      timeout: 2500
+    });
     await router.push("/login");
   } finally {
     $q.loading.hide();

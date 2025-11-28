@@ -72,9 +72,9 @@ const store = useCartStore()
 const produtos = ref<Produto[]>([])
 const slide = ref(0)
 const imagens = [
-  "/src/assets/banner1.jpg",
-  "/src/assets/banner2.jpeg",
-  "/src/assets/banner3.jpeg",
+  "/icons/banner1.jpg",
+  "/icons/banner2.jpeg",
+  "/icons//banner3.jpeg",
 ]
 const categorias = [
   { nome: 'Facas', icone: 'restaurant', cor: 'grey', rota: 'home-facas-page' },

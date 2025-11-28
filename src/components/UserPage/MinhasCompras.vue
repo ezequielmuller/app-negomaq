@@ -112,7 +112,8 @@
           <q-separator class="q-my-md" />
           <div class="row q-gutter-md justify-end">
             <q-btn outline color="primary" label="Ver Detalhes" icon="info"
-              style="border-radius: 20px; text-transform: none; font-weight: 600;" class="action-btn" />
+              style="border-radius: 20px; text-transform: none; font-weight: 600;" class="action-btn"
+              @click="verDetalhes(pedido.pedido_id)" />
             <q-btn v-if="pedido.status === 'PENDENTE'" color="primary" label="Pagar Agora" icon="payment"
               style="border-radius: 20px; text-transform: none; font-weight: 600; background: linear-gradient(135deg, #1a237e, #283593);"
               class="action-btn shadow-3" />
@@ -123,13 +124,126 @@
       </q-expansion-item>
     </div>
   </q-card>
+  <!-- Dialog Detalhes do Pedido -->
+  <q-dialog v-model="dialogDetalhes" persistent>
+    <q-card style="width: 500px; max-height: 70vh; border-radius: 20px;" class="column no-wrap">
+      <q-card-section class="bg-primary text-white">
+        <div class="row items-center" style="gap: 8px">
+          <q-icon name="info" size="md" />
+          <div class="text-h6">Detalhes do Pedido</div>
+        </div>
+      </q-card-section>
+      <q-card-section class="scroll" style="flex: 1; overflow-y: auto;">
+        <div v-if="pedidoSelecionado" class="column q-gutter-md">
+          <!-- ID do Pedido -->
+          <div>
+            <div class="text-grey-7">ID do Pedido</div>
+            <div class="text-body2">{{ pedidoSelecionado.pedido_id }}</div>
+          </div>
+          <q-separator />
+          <!-- Nome do Usuário -->
+          <div>
+            <div class="text-grey-7">Nome do Usuário</div>
+            <div class="text-body2">{{ pedidoSelecionado.nome_usuario + ' ' + pedidoSelecionado.sobrenome_usuario }}
+            </div>
+          </div>
+          <q-separator />
+          <!-- Status -->
+          <div>
+            <div class="text-grey-7">Status</div>
+            <q-chip :color="obterCorStatus(pedidoSelecionado.status)" text-color="white"
+              :label="obterLabelStatus(pedidoSelecionado.status)" size="md" />
+          </div>
+          <q-separator />
+          <!-- Itens do Pedido -->
+          <div>
+            <div class="text-grey-7 text-bold q-mb-sm">Itens do Pedido</div>
+            <div v-for="(item, index) in pedidoSelecionado.itens" :key="index"
+              class="bg-grey-2 q-pa-md rounded-borders q-mb-sm">
+              <div class="row justify-between items-center">
+                <div>
+                  <div class="text-caption text-grey-7">Produto</div>
+                  <!-- <div class="text-body2">{{ item.produto_id }}</div> -->
+                  <div class="text-body2">{{ item.produto_nome }}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-caption text-grey-7">Quantidade</div>
+                  <div class="text-body2 text-bold">{{ item.quantidade }}x</div>
+                </div>
+              </div>
+              <q-separator spaced />
+              <div class="text-right">
+                <div class="text-caption text-grey-7">Preço Unitário</div>
+                <div class="text-h6 text-primary">R$ {{ formatarValor(item.preco_unitario) }}</div>
+              </div>
+            </div>
+          </div>
+          <q-separator />
+          <!-- Frete -->
+          <div>
+            <div class="text-grey-7 text-bold">Informações de Frete</div>
+            <div class="q-mt-sm">
+              <div class="row justify-between q-mb-xs">
+                <span class=" text-grey-7">Tipo de Frete:</span>
+                <span class="text-body2">{{ pedidoSelecionado.frete_tipo }}</span>
+              </div>
+              <div class="row justify-between">
+                <span class=" text-grey-7">Valor do Frete:</span>
+                <span class="text-body2 text-primary text-bold">R$ {{ formatarValor(pedidoSelecionado.frete_valor)
+                  }}</span>
+              </div>
+            </div>
+          </div>
+          <q-separator />
+          <!-- Transações -->
+          <div v-if="pedidoSelecionado.transacoes && pedidoSelecionado.transacoes.length > 0">
+            <div class="text-grey-7 text-bold q-mb-sm">Transações</div>
+            <div v-for="(transacao, index) in pedidoSelecionado.transacoes" :key="index"
+              class="bg-grey-2 q-pa-md rounded-borders q-mb-sm">
+              <div class="row justify-between items-center q-mb-xs">
+                <span class="text-grey-7">ID Transação:</span>
+                <span class="">{{ transacao.id }}</span>
+              </div>
+              <div class="row justify-between items-center q-mb-xs">
+                <span class="text-grey-7">Método:</span>
+                <q-chip size="md" color="info" text-color="white" :label="transacao.metodo_pagamento.toUpperCase()" />
+              </div>
+              <div class="row justify-between items-center q-mb-xs">
+                <span class="text-grey-7">Status:</span>
+                <q-chip size="md" :color="obterCorStatusTransacao(transacao.status)" text-color="white"
+                  :label="transacao.status" />
+              </div>
+              <div class="row justify-between items-center">
+                <span class="text-grey-7">Valor:</span>
+                <span class="text-body2 text-bold">R$ {{ formatarValor(transacao.valor) }}</span>
+              </div>
+            </div>
+          </div>
+          <q-separator />
+          <!-- Valor Total -->
+          <div class="bg-red-1 text-primary q-pa-md rounded-borders">
+            <div class="row justify-between items-center">
+              <span class="text-body1 text-bold">Valor Total do Pedido:</span>
+              <span class="text-h5 text-bold">R$ {{ formatarValor(pedidoSelecionado.valor_total) }}</span>
+            </div>
+          </div>
+        </div>
+      </q-card-section>
+      <q-separator spaced />
+      <q-card-actions align="right" class="q-mr-sm q-mb-xs">
+        <q-btn outline label="Fechar" color="primary" @click="dialogDetalhes = false" style="border-radius: 20px;"
+          icon="close" class="hover-scale" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 // import { useRouter } from 'vue-router'
 import { useAuth } from 'src/composables/useAuth'
-import { ListarPedidos } from 'src/services/pedidoServices'
+import { ListarPedidos, ObterPedido } from 'src/services/pedidoServices'
+
 interface Pedido {
   criado_em: string
   frete_valor: number
@@ -138,6 +252,36 @@ interface Pedido {
   tem_rastreio: boolean
   valor_total: number
 }
+
+interface ItemPedido {
+  produto_id: string
+  produto_nome: string
+  quantidade: number
+  preco_unitario: number
+}
+
+interface Transacao {
+  id: string
+  metodo_pagamento: string
+  status: string
+  valor: number
+}
+
+interface Pedido {
+  pedido_id: string
+  nome_usuario: string
+  sobrenome_usuario: string
+  usuario_id: string
+  status: string
+  itens: ItemPedido[]
+  frete_tipo: string
+  frete_valor: number
+  transacoes: Transacao[]
+  valor_total: number
+}
+
+const dialogDetalhes = ref(false)
+const pedidoSelecionado = ref<Pedido | null>(null)
 
 const $q = useQuasar()
 //const router = useRouter()
@@ -222,6 +366,33 @@ const obterLabelStatus = (status: string | undefined) => {
     CANCELADO: 'Cancelado'
   }
   return labels[normalizado] || status
+}
+
+
+const verDetalhes = async (pedidoId: string) => {
+  await detalharPedido(pedidoId)
+  dialogDetalhes.value = true
+}
+const detalharPedido = async (pedidoId: string) => {
+  try {
+    $q.loading.show({ message: 'Carregando detalhes do pedido...' })
+    const data = await ObterPedido(pedidoId, user.token)
+    pedidoSelecionado.value = data
+  } catch (err) {
+    console.error('Erro ao detalhar pedido: ', err)
+  } finally {
+    $q.loading.hide()
+  }
+}
+
+const obterCorStatusTransacao = (status: string): string => {
+  const cores: Record<string, string> = {
+    'pending': 'amber-8',
+    'approved': 'green',
+    'rejected': 'red',
+    'cancelled': 'red'
+  }
+  return cores[status] || 'grey'
 }
 
 // const verDetalhes = async (pedidoId: string) => {

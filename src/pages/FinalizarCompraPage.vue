@@ -109,7 +109,8 @@
                 </div>
                 <div v-else class="q-gutter-md">
                   <q-card v-for="frete in fretes" :key="frete.id" bordered
-                    :class="{ 'bg-green-1': fretesSelecionado?.id === frete.id }"
+                    :class="{ 'bg-red-1': fretesSelecionado?.id === frete.id }"
+                    :style="fretesSelecionado?.id === frete.id ? 'border-radius: 12px; border: 1px solid #b81414;' : 'border-radius:12px'"
                     class="cursor-pointer hover-card q-pa-md" style="border-radius: 12px;"
                     @click="selecionarFrete(frete)">
                     <div class="row items-center">
@@ -185,7 +186,7 @@
               <!-- Método de Pagamento -->
               <q-card class="q-pa-md q-mb-md" style="border-radius: 12px;">
                 <div class="text-bold q-mb-md">Método de Pagamento</div>
-                <div class="row items-center q-pa-md bg-blue-1" style="border-radius: 8px;">
+                <div class="row items-center q-pa-md bg-red-1" style="border-radius: 12px;border: 1px solid #b81414;">
                   <q-icon name="payment" size="md" color="primary" class="q-mr-md" />
                   <div class="col">
                     <div class="text-bold">Mercado Pago</div>
@@ -421,10 +422,11 @@ const finalizarCompra = async () => {
     }
     const linkPagamento = resultadoPagamento.checkout_url
     if (!linkPagamento) {
-      console.error('Resposta do pagamento:', resultadoPagamento)
+      //console.error('Resposta do pagamento:', resultadoPagamento)
       throw new Error('Link de pagamento não foi retornado pela API')
     }
-    console.log('Link de pagamento recebido:', linkPagamento)
+    // console.log('Link de pagamento recebido:', linkPagamento)
+    window.open(linkPagamento, '_blank')
     $q.notify({
       type: 'positive',
       message: 'Redirecionando para o Mercado Pago...',
