@@ -256,9 +256,21 @@ const totalCarrinho = computed(() => {
   return cartStore.carrinho.reduce((sum, item) => sum + (item.preco * (item.qtd ?? 1)), 0)
 })
 const finalizarCompra = async () => {
-  $q.loading.show({ message: 'Carregando...' })
-  await router.push({ name: 'home-finalizar-venda' })
-  $q.loading.hide()
+  // console.log(user)
+  if (user) {
+    $q.loading.show({ message: 'Carregando...' })
+    await router.push({ name: 'home-finalizar-venda' })
+    $q.loading.hide()
+  } else {
+    $q.notify({
+      type: 'warning',
+      message: 'Você precisa estar logado para finalizar a compra!',
+      position: 'bottom',
+      timeout: 2000
+    })
+    //await router.push({ name: 'login' })
+  }
+
 }
 
 // Botoes fixos
