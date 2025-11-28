@@ -153,7 +153,7 @@
 
   <!-- Dialog Excluir -->
   <q-dialog v-model="dialogExcluir" persistent>
-    <q-card style="width: 450px; max-height: 50vh; border-radius: 20px;" class="column no-wrap">
+    <q-card style="width: 450px; max-height: 55vh; border-radius: 20px;" class="column no-wrap">
       <q-card-section class="bg-negative text-white">
         <div class="row items-center" style="gap: 8px">
           <q-icon name="warning" size="md" />
