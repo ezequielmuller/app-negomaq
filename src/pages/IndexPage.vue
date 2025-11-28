@@ -16,15 +16,13 @@
     </div>
     <div class="col-12 text-bold q-mt-md row justify-center" style="font-size: 22px; margin-bottom: 0px;">
       Categorias</div>
-    <div class="categorias-wrapper">
-      <div class="categorias-scroll">
-        <div v-for="cat in categorias" :key="cat.nome" class="categoria-item">
-          <q-card class="categoria-card flex column items-center cursor-pointer"
-            style="border-radius: 20px; margin-top: 0;" @click="$router.push(cat.rota)">
-            <div class="icone"><q-icon :color="cat.cor" :name="cat.icone" size="80px" /></div>
-            <div class="text-grey text-bold text-h6">{{ cat.nome }}</div>
-          </q-card>
-        </div>
+    <div class="row justify-center q-col-gutter-md categorias-container" style="margin-top: 0;">
+      <div class="col-xs-12 col-sm-6 col-md-3" v-for="cat in categorias" :key="cat.nome" style="margin-top: 0;">
+        <q-card class="categoria-card flex column items-center cursor-pointer"
+          style="border-radius: 20px; margin-top: 0;" @click="$router.push(cat.rota)">
+          <div class=" icone"><q-icon :color="cat.cor" :name="cat.icone" size="80px" /></div>
+          <div class="text-grey text-bold text-h6">{{ cat.nome }}</div>
+        </q-card>
       </div>
     </div>
     <div class="col-12 text-bold q-mb-lg q-mt-sm row justify-center" style="font-size: 22px; margin-bottom: 14px;">
@@ -76,7 +74,7 @@ const slide = ref(0)
 const imagens = [
   "/icons/banner1.jpg",
   "/icons/banner2.jpeg",
-  "/icons//banner3.jpeg",
+  "/icons/banner3.jpeg",
 ]
 const categorias = [
   { nome: 'Facas', icone: 'restaurant', cor: 'grey', rota: 'home-facas-page' },
@@ -145,6 +143,7 @@ onMounted(async () => {
   overflow: visible;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
+  /* garante que controles fiquem posicionados corretamente */
 }
 
 .carousel-slide {
@@ -162,6 +161,7 @@ onMounted(async () => {
   transform: scale(1.2);
   z-index: 1;
   pointer-events: none;
+  /* evita que o background intercepts cliques nas setas */
 }
 
 .slide-img {
@@ -171,21 +171,31 @@ onMounted(async () => {
   object-fit: contain;
   z-index: 2;
   padding: 16px;
+}
+
+.slide-img {
   border-radius: 12px;
+  /* bordas arredondadas na própria imagem */
   background-color: transparent;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
+/* garante que o wrapper com borda arredondada esconda excessos
+   enquanto o carrossel interno pode mostrar controles além da área */
 .carousel-container {
   border-radius: 16px;
   overflow: hidden;
 }
 
+/* Força as setas do Quasar a aparecerem na frente e permitirem cliques */
 .carousel-responsive :deep(.q-carousel__arrow) {
   z-index: 1000;
   pointer-events: auto;
 }
 
+
+
+/* Ajustes responsivos */
 @media (max-width: 1024px) {
   .carousel-responsive {
     aspect-ratio: 16 / 10;
@@ -221,109 +231,14 @@ onMounted(async () => {
   border-radius: 16px;
 }
 
-/* ========== CATEGORIAS ========== */
-.categorias-wrapper {
-  width: 100%;
-  overflow: hidden;
+/* Centraliza as categorias e limita largura */
+.categorias-container {
+  max-width: 1200px;
   margin: 0 auto 24px auto;
-  padding: 0 16px;
-}
-
-.categorias-scroll {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  padding: 16px;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-.categorias-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.categoria-item {
   width: 100%;
 }
 
-.categoria-card {
-  height: 150px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  gap: 8px;
-  border: 1mm solid gainsboro;
-  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s, color 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border-radius: 20px;
-}
-
-.categoria-card .icone {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.categoria-card .text-h6 {
-  text-align: center;
-  word-wrap: break-word;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  font-size: 14px !important;
-  line-height: 1.2;
-  max-width: 100%;
-}
-
-.categoria-card:hover {
-  border-color: var(--q-primary);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
-  z-index: 2;
-  transform: translateY(-4px) scale(1.05);
-}
-
-.categoria-card:hover .icone,
-.categoria-card:hover .text-h6 {
-  color: var(--q-primary) !important;
-}
-
-@media (min-width: 769px) {
-  .categorias-wrapper {
-    max-width: 1200px;
-    margin: 0 auto 24px auto;
-    width: 100%;
-    padding: 0;
-  }
-
-  .categorias-scroll {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    padding: 0;
-  }
-
-  .categoria-item {
-    width: 100%;
-  }
-
-  .categoria-card {
-    height: auto;
-    padding: 20px;
-  }
-
-  .categoria-card .text-h6 {
-    -webkit-line-clamp: unset;
-    overflow: visible;
-    font-size: 16px !important;
-  }
-}
-
-/* ========== PRODUTOS ========== */
+.categoria-card,
 .produto-card {
   border: 1mm solid gainsboro;
   transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s, color 0.2s;
@@ -331,10 +246,18 @@ onMounted(async () => {
   border-radius: 20px;
 }
 
+/* Hover geral dos cards */
+.categoria-card:hover,
 .produto-card:hover {
   border-color: var(--q-primary);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
   z-index: 2;
   transform: translateY(-4px) scale(1.05);
+}
+
+/* Ícone e texto dentro da categoria ficam vermelhos no hover */
+.categoria-card:hover .icone,
+.categoria-card:hover .text-h6 {
+  color: var(--q-primary) !important;
 }
 </style>
