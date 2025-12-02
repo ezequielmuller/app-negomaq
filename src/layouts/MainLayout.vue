@@ -183,7 +183,7 @@
                   <div class="text-body2 q-mt-sm">Fique por dentro dos leilões e ofertas exclusivas.</div>
                 </div>
                 <div class="col flex flex-center flex-column">
-                  <img src="/public/icons/leilao-fundo.png" alt="Leilão"
+                  <img src="/icons/leilao-fundo.png" alt="Leilão"
                     style="width: 110px; height: 100px; border-radius: 8px;" />
                   <q-btn color="green" class="full-width q-mt-sm hover-scale" @click="abrirGrupoLeilao"
                     style="border-radius: 20px;">
