@@ -426,7 +426,7 @@ const finalizarCompra = async () => {
       throw new Error('Link de pagamento não foi retornado pela API')
     }
     // console.log('Link de pagamento recebido:', linkPagamento)
-    window.open(linkPagamento, '_blank')
+    window.open(linkPagamento, '_self')
     $q.notify({
       type: 'positive',
       message: 'Redirecionando para o Mercado Pago...',
