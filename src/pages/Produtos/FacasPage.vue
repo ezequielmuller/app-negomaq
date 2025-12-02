@@ -5,7 +5,7 @@
     </div>
     <div class="row q-col-gutter-sm justify-center q-mt-md">
       <div class="col-xs-12 col-sm-6 col-md-3 q-pa-sm">
-        <q-input flat v-model="pesquisa" label="Pesquise por Produtos!" class="input-pesquisa" clearable dense
+        <q-input flat v-model="pesquisa" label="Pesquise por Produtos!" class="input-pesquisa" dense
           style="width: 100%;">
           <template #prepend>
             <q-icon name="search" @click="listarProdutos" class="cursor-pointer" />
