@@ -1,54 +1,74 @@
-## Vale ressaltar que o sistema hospedado encontra-se indisponível para uso no momento, porém ainda é possível acessar o sistema. Pelo fato de que o banco de dados atingiu o limite de uso do plano gratuito do servidor. Diante disso, nossa equipe optou por não manter o banco de dados hospedado, uma vez que isso acarretaria custos adicionais.
+
+## ⚠️ Observação Importante
+
+O sistema hospedado pode estar temporariamente indisponível, pois o banco de dados atingiu o limite do plano gratuito do servidor. Diante disso, nossa equipe optou-se por não manter o banco de dados hospedado para evitar custos adicionais.
+
+---
 
 # 🔪 NegoMaq App (app-negomaq)
 
-Sistema de vendas de facas desenvolvido com **Quasar Framework**, **Vue 3**, **TypeScript** e **Composition API**.
+Aplicação web para **gestão e vendas de facas**, desenvolvida com foco em desempenho, escalabilidade e boa experiência do usuário. O projeto utiliza tecnologias modernas do ecossistema Vue, com arquitetura baseada em componentes e boas práticas de desenvolvimento frontend.
 
-## Tecnologias
+---
 
-- [Quasar Framework](https://quasar.dev/)
-- [Vue 3](https://vuejs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- Composition API
+## 🚀 Tecnologias Utilizadas
 
-## Instalação
+- **Quasar Framework** – Framework Vue para criação de aplicações SPA, PWA, Mobile e Desktop
+- **Vue 3** – Framework JavaScript progressivo
+- **TypeScript** – Tipagem estática para maior segurança e manutenibilidade
+- **Composition API** – Organização de lógica reutilizável e escalável
+- **Vue Router** – Gerenciamento de rotas
+- **Pinia** – Gerenciamento de estado
+
+---
+
+## 📦 Pré-requisitos
+
+Antes de iniciar, certifique-se de ter instalado em sua máquina:
+
+- **Node.js** (versão recomendada: LTS)
+- **Yarn** ou **npm**
+- **Quasar CLI**
+
+Instalação do Quasar CLI:
+
+npm install -g @quasar/cli
+
+---
+
+## ⚙️ Instalação
 
 Clone o repositório e instale as dependências:
 
-```bash
 yarn
-# ou
+ou
 npm install
-```
 
-## Desenvolvimento
+---
 
-Execute o app em modo de desenvolvimento:
+## 🧪 Ambiente de Desenvolvimento
 
-```bash
+Para executar a aplicação em modo de desenvolvimento:
+
 quasar dev
-```
 
-## Comandos
+---
+
+## 🛠️ Comandos Úteis
 
 ### Lint
-
-```bash
 yarn lint
-# ou
+ou
 npm run lint
-```
 
 ### Format
-
-```bash
 yarn format
-# ou
+ou
 npm run format
-```
 
 ### Build (produção)
-
-```bash
 quasar build
-```
+
+---
+
+Desenvolvido por Ezequiel Henrique Gazolla Muller.
