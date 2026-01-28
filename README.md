@@ -1,4 +1,4 @@
-## Vale ressaltar que o sistema hospedado encontra-se temporariamente indisponível, pois o banco de dados atingiu o limite de uso do plano gratuito do servidor. Diante disso, nossa equipe optou por não manter o banco de dados hospedado, uma vez que isso acarretaria custos adicionais.
+## Vale ressaltar que o sistema hospedado encontra-se indisponível para uso no momento, porém ainda é possível acessar o sistema. Pelo fato de que o banco de dados atingiu o limite de uso do plano gratuito do servidor. Diante disso, nossa equipe optou por não manter o banco de dados hospedado, uma vez que isso acarretaria custos adicionais.
 
 # 🔪 NegoMaq App (app-negomaq)
 
