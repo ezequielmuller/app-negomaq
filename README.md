@@ -1,7 +1,7 @@
 # 🔪 NegoMaq App (app-negomaq)
 
 Sistema de vendas de facas desenvolvido com **Quasar Framework**, **Vue 3**, **TypeScript** e **Composition API**.
-
+**Vale a pena ressaltar que não esta funcionando o sistema hospedado, por conta do banco de dados hospedado ter dado o limite de uso gratuito no servidor, optamos por não manter o banco hospedado pelo fato de gerar custos...
 ## Tecnologias
 
 - [Quasar Framework](https://quasar.dev/)
