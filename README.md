@@ -1,7 +1,7 @@
 
 ## ⚠️ Observação Importante
 
-O sistema hospedado pode estar temporariamente indisponível, pois o banco de dados atingiu o limite do plano gratuito do servidor. Diante disso, nossa equipe optou-se por não manter o banco de dados hospedado para evitar custos adicionais.
+O sistema hospedado pode estar temporariamente indisponível, pois o banco de dados atingiu o limite do plano gratuito do servidor. Diante disso, nossa equipe optou por não manter o banco de dados hospedado para evitar custos adicionais.
 
 ---
 
