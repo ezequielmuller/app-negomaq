@@ -279,8 +279,8 @@ const abrirNotificacao = () => {
   dialogNotificacao.value = true
 }
 const enviarWhatsapp = () => {
-  const nome = 'Lucas'
-  const numero = '555484495095'
+  const nome = 'Ezequiel'
+  const numero = '5554999228928'
   const mensagem = `Olá, *${nome}*, tudo bem?\nTeste de contato com o whatsapp do negomaq`
   const mensagemCodificada = encodeURIComponent(mensagem)
   window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${mensagemCodificada}`, '_blank')
